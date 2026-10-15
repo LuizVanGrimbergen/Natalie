@@ -1,0 +1,220 @@
+---
+// TODO(Natalie): personal text below is sample copy awaiting her approval; swap the placeholder for her portrait.
+---
+
+<section class="scene welcomes" style="--pin: 800px; z-index: 4" data-scene="welcomes" data-enter="light" aria-labelledby="welcomes-title">
+  <div class="stage">
+    <div class="exit-dim exit-dim--light" aria-hidden="true"></div>
+    <div class="window-light" aria-hidden="true"></div>
+    <div class="grid">
+      <div class="text">
+        <p class="label text__label" data-reveal="1">Wie je ontvangt</p>
+        <h2 id="welcomes-title" class="display text__h" data-reveal="2">
+          Ik ben er niet om je de weg te wijzen. <em>Wel om de deur open te houden.</em>
+        </h2>
+        <p class="text__body" data-reveal="3">
+          Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag
+          zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
+        </p>
+        <p class="display text__sign" data-reveal="4"><em>Natalie Vandervoort</em></p>
+      </div>
+      <figure class="portrait" data-unveil>
+        <div class="portrait__frame" role="img" aria-label="Placeholder voor portretfoto van Natalie Vandervoort">
+          <div class="portrait__light" aria-hidden="true"></div>
+          <span class="label portrait__note" aria-hidden="true">[Foto van Natalie]</span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .welcomes,
+  .stage {
+    background: var(--color-ivory);
+    color: var(--color-bronze-900);
+  }
+  /* Soft window light falling diagonally across the wall. */
+  .window-light {
+    position: absolute;
+    right: -14%;
+    top: -18%;
+    width: 80vw;
+    height: 110%;
+    background: radial-gradient(ellipse 50% 32% at 50% 50%, rgb(255 252 246 / 0.9), rgb(255 252 246 / 0.35) 45%, rgb(255 252 246 / 0) 70%);
+    transform: rotate(-28deg);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 6fr 5fr;
+    gap: 5vw;
+    align-items: center;
+    padding: 0 6vw;
+  }
+  .text {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .text__label {
+    color: var(--color-copper-700);
+  }
+  .text__h {
+    font-size: clamp(34px, 4.2vw, 72px);
+    line-height: 1.04;
+  }
+  .text__h em {
+    color: var(--color-copper-700);
+  }
+  .text__body {
+    max-width: 460px;
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--color-body-on-ivory);
+  }
+  .text__sign {
+    font-size: 32px;
+    letter-spacing: 0;
+  }
+
+  .portrait {
+    position: relative;
+    height: min(76%, 720px);
+    aspect-ratio: 4 / 5;
+    justify-self: end;
+    will-change: clip-path, transform;
+  }
+  .portrait__frame {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(165deg, #e6ded2, #cfc3b4);
+  }
+  .portrait__light {
+    position: absolute;
+    inset: -10%;
+    background: linear-gradient(115deg, rgb(255 252 246 / 0) 30%, rgb(255 252 246 / 0.35) 45%, rgb(255 252 246 / 0) 62%);
+  }
+  .portrait__note {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
+    .window-light {
+      width: 120vw;
+      right: -40%;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 24px;
+      padding: 72px 24px 24px;
+    }
+    .text {
+      gap: 14px;
+    }
+    .text__h {
+      font-size: 30px;
+    }
+    .text__body {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .text__sign {
+      font-size: 26px;
+    }
+    .portrait {
+      height: min(28vh, 240px);
+      justify-self: start;
+      order: -1;
+    }
+    .portrait__note {
+      left: 12px;
+      bottom: 12px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+    }
+  }
+  @media (min-width: 600px) and (max-width: 820px) and (min-height: 521px) {
+    .grid {
+      padding: 96px 48px 48px;
+    }
+    .text__h {
+      font-size: 44px;
+    }
+    .text__body {
+      font-size: 18px;
+    }
+    .portrait {
+      height: min(30vh, 320px);
+    }
+  }
+  @media (max-width: 559px) and (max-height: 700px), (max-width: 820px) and (min-height: 521px) and (max-height: 700px) {
+    .grid {
+      padding: 56px 20px 16px;
+      gap: 14px;
+    }
+    .portrait {
+      height: min(18vh, 120px);
+    }
+    .text__h {
+      font-size: 24px;
+    }
+    .text__body {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .text__sign {
+      font-size: 22px;
+    }
+  }
+  @media (min-width: 560px) and (max-height: 520px) {
+    .text {
+      gap: 10px;
+    }
+    .text__h {
+      font-size: clamp(20px, 7vh, 36px);
+    }
+    .text__body {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .text__sign {
+      font-size: 20px;
+    }
+    .portrait {
+      height: 78%;
+    }
+  }
+  @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    .grid {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 28px;
+      padding: 10vh 10vw 6vh;
+    }
+    .portrait {
+      height: min(30vh, 380px);
+      justify-self: start;
+      order: -1;
+    }
+    .text__h {
+      font-size: clamp(40px, 5.8vw, 58px);
+    }
+    .text__body {
+      font-size: clamp(18px, 2.3vw, 21px);
+      max-width: none;
+    }
+  }
+</style>
