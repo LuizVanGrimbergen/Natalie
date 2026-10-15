@@ -4,6 +4,7 @@ import { build, draw, fade, rise, type Timeline } from './tweens';
 /* 04 · Ivory arrives, then two voices draw themselves into a pair of eighth notes. */
 export function perspectives(scene: HTMLElement): Timeline {
   const tl = build();
+  // Ends at 0.17 = data-tint-lift on the section, so Safari's bars lift to ivory with it.
   tl.fromTo(one(scene, '[data-warmth]'), { opacity: 1 }, { opacity: 0, duration: 0.17 }, 0);
 
   draw(tl, path(scene, '[data-draw="self"]'), 0.16, 0.19);

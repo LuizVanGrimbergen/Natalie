@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import { all, one } from './dom';
 import { onStep, type Step } from './input';
-import { applyTint } from './tint';
+import { tintNow, tintTo } from './tint';
 import { prime, type Timeline } from './tweens';
 
 /** Seconds a scene takes to build itself once it is on screen. */
@@ -50,7 +50,8 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     });
   }
 
-  const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: BUILD[scenes[i].dataset.scene!] ?? 2, ease });
+  const seconds = (i: number) => BUILD[scenes[i].dataset.scene!] ?? 2;
+  const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: seconds(i), ease });
 
   function forward() {
     if (current > last) return;
@@ -66,7 +67,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       onstage(current, to);
       builds[to].progress(0);
       tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
-        .call(() => applyTint(scenes[to].dataset.tint), [], FADE / 2)
+        .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }), 0)
         .add(play(to), FADE * 0.5);
       if (current === 0) tl.to(header, { autoAlpha: 0, duration: 0.4 }, 0);
     }
@@ -83,7 +84,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     } else {
       // The scene we return to keeps its finished composition.
       onstage(from - 1, from);
-      tl.add(fades[from - 1].tweenTo(0, { duration: BACK, ease }), 0).call(() => applyTint(scenes[from - 1].dataset.tint), [], BACK / 2);
+      tl.add(fades[from - 1].tweenTo(0, { duration: BACK, ease }), 0).add(tintTo(scenes[from - 1], BACK), 0);
       if (from === 1) tl.to(header, { autoAlpha: 1, duration: 0.4 }, BACK / 2);
     }
     current = from - 1;
@@ -112,9 +113,9 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       for (let i = 0; i < to; i++) fades[i].progress(1);
     };
     gsap.set(header, { autoAlpha: 0 });
-    applyTint(scenes[to].dataset.tint);
     current = to;
     if (instant) {
+      tintNow(scenes[to]);
       settle();
       builds[to].progress(1);
       onstage(to);
@@ -123,12 +124,19 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     onstage(0, current, to);
     builds[to].progress(0);
     const tl = gsap.timeline();
-    tl.to(scenes[to], { opacity: 1, duration: FADE, ease, onComplete: settle }, 0).add(play(to), FADE * 0.5);
+    tl.to(scenes[to], { opacity: 1, duration: FADE, ease, onComplete: settle }, 0)
+      .add(tintTo(scenes[to], FADE), 0)
+      .add(play(to), FADE * 0.5);
     run(tl);
   }
 
   onstage(0);
-  run(builds[0].tweenFromTo(0, builds[0].duration(), { duration: BUILD.hero, ease, delay: HERO_DELAY }));
+  run(
+    gsap
+      .timeline({ delay: HERO_DELAY })
+      .add(play(0), 0)
+      .add(tintTo(scenes[0], 0, { seconds: seconds(0), length: builds[0].duration(), ease }), 0),
+  );
   onStep(step);
 
   // In-page links and keyboard focus bring their scene on screen.

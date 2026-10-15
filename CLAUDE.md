@@ -62,7 +62,7 @@ src/
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes
-    tint.ts                         # browser bar color follows the scene on screen
+    tint.ts                         # Safari bar color, tweened together with the crossfades
     hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
   styles/
     global.css                      # imports only
@@ -217,7 +217,10 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Real `<a>`/`<button>`, visible focus style (copper outline), touch targets ≥ 44px.
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
-- Safari bars: `viewport-fit=cover`; each scene has `data-tint`, and `scripts/scenes/tint.ts` sets `--tint` (page background) + `theme-color` to the scene on screen. Pages pass `tint` to `Base`.
+- Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
+  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#343335`, wooden room `#140B05`, ivory scenes `#F7F3ED`) — re-measure if a scene's top changes.
+  - A scene that arrives in another color and then lifts (hero: dusk → light, perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
+  - Pages pass `tint` to `Base` for the first paint (story: the hero at dusk, `#201E1D`).
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
