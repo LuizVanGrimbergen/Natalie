@@ -111,14 +111,14 @@ Typography:
 Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, wooden room 2.2s, perspectives 2.6s, Natalie 1.8s, invitation 1.8s.
 
 ### Transitions between scenes
-- **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. Forward 0.9s (`FADE`), back 0.6s (`BACK`).
+- **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. 0.9s both ways (`FADE`); the footer slides back down in 0.6s (`BACK`).
 - Dark transitions (hero → wood → perspectives): true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
 - Light transitions (perspectives → Natalie → invitation): the previous first fades to ivory (0–55% of the transition), then the new one appears (40–100%), so texts never overlap.
 - All content of a scene is fully built **before** the next scene starts dissolving in.
 
 ### One step per screen (desktop and touch alike)
 - **One scroll gesture, swipe, or arrow/Page key = one screen.** A trackpad flick with momentum still counts once (`input.ts`: a gesture ends after 180ms without wheel events).
-- A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. Step back returns to the earlier scene as it was left.
+- A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`).
 - The hero completes its sentence by itself after the load intro.
 - **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.

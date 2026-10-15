@@ -30,9 +30,16 @@ function timeAt(p: number, ease: string) {
  * duration and ease). A scene that arrives in another color (data-tint-enter,
  * e.g. copper-brown) and then lifts to its final data-tint is followed
  * exactly: data-tint-lift is where that lift ends in the scene's own build
- * timeline, which starts halfway through the crossfade.
+ * timeline, which starts halfway through the crossfade. `shown` reads how much
+ * of the scene is actually visible (0–1) from the crossfade itself, so this
+ * holds in both directions and for dark and light crossfades alike.
  */
-export function tintTo(scene: HTMLElement, fade: number, build?: { seconds: number; length: number; ease: string }) {
+export function tintTo(
+  scene: HTMLElement,
+  fade: number,
+  build?: { seconds: number; length: number; ease: string },
+  shown?: () => number,
+) {
   const ease = 'power1.inOut';
   const { tint, tintEnter, tintLift } = scene.dataset;
   if (!tintEnter || !build) return gsap.to(bar, { color: tint, duration: fade, ease, onUpdate: apply });
@@ -53,10 +60,10 @@ export function tintTo(scene: HTMLElement, fade: number, build?: { seconds: numb
       from = bar.color;
     },
     onUpdate: () => {
-      const shown = fade ? fadeCurve(Math.min(1, clock.t / fade)) : 1;
+      const visible = shown ? shown() : fade ? fadeCurve(Math.min(1, clock.t / fade)) : 1;
       const progress = Math.max(0, clock.t - start) / build.seconds;
       const color = lift(Math.min(1, buildCurve(Math.min(1, progress)) / end));
-      bar.color = gsap.utils.interpolate(from, color, shown);
+      bar.color = gsap.utils.interpolate(from, color, visible);
       apply();
     },
   });

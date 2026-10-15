@@ -7,7 +7,7 @@ import { prime, type Timeline } from './tweens';
 
 /** Seconds a scene takes to build itself once it is on screen. */
 const BUILD: Record<string, number> = { hero: 1.8, listening: 2.2, perspectives: 2.6, welcomes: 1.8, invitation: 1.8 };
-/** Seconds of the crossfade into the next scene, and back. */
+/** Seconds of the crossfade between scenes (both ways), and of the footer sliding back down. */
 const FADE = 0.9;
 const BACK = 0.6;
 /** The hero completes its sentence by itself, after the load intro. */
@@ -56,6 +56,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     });
   }
 
+  const opacity = (element: Element) => Number(gsap.getProperty(element, 'opacity'));
   const seconds = (i: number) => BUILD[scenes[i].dataset.scene!] ?? 2;
   const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: seconds(i), ease });
 
@@ -76,7 +77,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       onstage(current, to);
       builds[to].progress(0);
       tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
-        .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }), 0)
+        .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => opacity(scenes[to])), 0)
         .add(play(to), FADE * 0.5);
       if (current === 0) tl.to(header, { autoAlpha: 0, duration: 0.4 }, 0);
     }
@@ -91,10 +92,21 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     if (from > last) {
       tl.to(footer, { yPercent: 0, duration: BACK, ease }, 0).to(one(scenes[last], '[data-footer-shift]'), { y: 0, duration: BACK, ease }, 0);
     } else {
-      // The scene we return to keeps its finished composition.
-      onstage(from - 1, from);
-      tl.add(fades[from - 1].tweenTo(0, { duration: BACK, ease }), 0).add(tintTo(scenes[from - 1], BACK), 0);
-      if (from === 1) tl.to(header, { autoAlpha: 1, duration: 0.4 }, BACK / 2);
+      // A mirror of a step forward: the earlier scene dissolves back in and builds itself again.
+      const to = from - 1;
+      onstage(to, from);
+      builds[to].progress(0);
+      tl.add(fades[to].tweenTo(0, { duration: FADE, ease }), 0)
+        .add(
+          tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => {
+            // Revealed as the later scene fades out and this one's own dim lifts.
+            const dim = scenes[to].querySelector('.exit-dim');
+            return (1 - opacity(scenes[from])) * (1 - (dim ? opacity(dim) : 0));
+          }),
+          0,
+        )
+        .add(play(to), FADE * 0.5);
+      if (to === 0) tl.to(header, { autoAlpha: 1, duration: 0.4 }, FADE / 2);
     }
     current = from - 1;
     run(tl);
