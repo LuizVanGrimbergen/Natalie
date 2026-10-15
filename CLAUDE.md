@@ -43,6 +43,7 @@ src/
   components/
     SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     CtaLink.astro                   # outline pill button with pulse + hover fill
+    EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
     ScrollCue.astro                 # equalizer bars + "SCROLL" + falling drop of light
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 04)
@@ -218,10 +219,11 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
-  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#343335`, wooden room `#140B05`, ivory scenes `#F5F1E9`) — re-measure if a scene's top changes.
+  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#12100D`, wooden room `#120A05`, ivory scenes `#F5F1E9`).
+  - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. Light scenes are flat ivory at the edges already.
   - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the footer and the booking page are ivory too). Nothing may cast a shadow into the screen edges.
-  - A scene that arrives in another color and then lifts (hero: dusk → light, perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
-  - Pages pass `tint` to `Base` for the first paint (story: the hero at dusk, `#201E1D`).
+  - A scene that arrives in another color and then lifts (perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
+  - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge).
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 

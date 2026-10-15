@@ -5,7 +5,6 @@ import { build, fade, rise, type Timeline } from './tweens';
 export function hero(scene: HTMLElement): Timeline {
   const tl = build();
   // The first line is already there (load intro); then the dusk lifts right away.
-  // Safari's bars lift with it until 0.3 (data-tint-lift on the section).
   tl.fromTo(one(scene, '[data-hero-img]'), { scale: 1.22 }, { scale: 1, duration: 0.5 }, 0)
     .fromTo(one(scene, '[data-hero-dark]'), { opacity: 0.5 }, { opacity: 0, duration: 0.22 }, 0)
     .fromTo(one(scene, '[data-hero-warm]'), { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.1);

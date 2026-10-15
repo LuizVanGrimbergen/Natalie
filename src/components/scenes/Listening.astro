@@ -1,9 +1,10 @@
 ---
 import { Picture } from 'astro:assets';
 import interior from '../../assets/interior.avif';
+import EdgeFade from '../EdgeFade.astro';
 ---
 
-<section class="scene listening" style="z-index: 2" data-tint="#140B05" data-scene="listening" data-enter="dark" aria-labelledby="listening-title">
+<section class="scene listening" style="z-index: 2" data-tint="#120A05" data-scene="listening" data-enter="dark" aria-labelledby="listening-title">
   <div class="stage">
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <Picture
@@ -19,6 +20,7 @@ import interior from '../../assets/interior.avif';
     />
     <div class="room__dim" aria-hidden="true" data-room-dim></div>
     <div class="room__scrim" aria-hidden="true"></div>
+    <EdgeFade color="#120A05" />
 
     <div class="frame">
       <div class="copy">
