@@ -7,6 +7,7 @@ import { hero } from './hero';
 import { invitation } from './invitation';
 import { listening } from './listening';
 import { perspectives } from './perspectives';
+import { followTint } from './tint';
 import { enter } from './transition';
 import { HOLD, type Timeline } from './tweens';
 import { welcomes } from './welcomes';
@@ -45,6 +46,7 @@ export function initScenes() {
     if (i > 0) enter(scenes[i - 1], scene);
     builders[scene.dataset.scene!]?.(scene).to({}, { duration: HOLD });
   });
+  followTint(scenes);
 
   // In-page links land on the finished composition of their scene, not its empty first frame.
   for (const link of all(document, 'a[href^="#"]')) {

@@ -7,7 +7,7 @@ import ScrollCue from '../ScrollCue.astro';
 const firstLine = 'Niet alles wat je raakt,'.split(' ');
 ---
 
-<section class="scene hero" style="--pin: 900px; z-index: 1" data-scene="hero" aria-labelledby="hero-title">
+<section class="scene hero" style="--pin: 900px; z-index: 1" data-tint="#12100D" data-scene="hero" aria-labelledby="hero-title">
   <div class="stage">
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="hero__drift" aria-hidden="true">
@@ -31,20 +31,22 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     <div class="hero__vignette" aria-hidden="true"></div>
     <div class="hero__pulse" aria-hidden="true"></div>
 
-    <h1 id="hero-title" class="sr-only">Niet alles wat je raakt, kun je meteen begrijpen.</h1>
-    <p class="display hero__l1" aria-hidden="true">
-      {
-        firstLine.map((word, i) => (
-          <>
-            <span class="hero__word" style={`--i: ${i}`}>{word}</span>{' '}
-          </>
-        ))
-      }
-    </p>
-    <p class="display hero__l2" aria-hidden="true" data-reveal="2"><em>kun je meteen begrijpen.</em></p>
-    <p class="hero__sub" data-reveal="3">Soms begint een nieuw perspectief met luisteren naar wat je voelt.</p>
+    <div class="frame">
+      <h1 id="hero-title" class="sr-only">Niet alles wat je raakt, kun je meteen begrijpen.</h1>
+      <p class="display hero__l1" aria-hidden="true">
+        {
+          firstLine.map((word, i) => (
+            <>
+              <span class="hero__word" style={`--i: ${i}`}>{word}</span>{' '}
+            </>
+          ))
+        }
+      </p>
+      <p class="display hero__l2" aria-hidden="true" data-reveal="2"><em>kun je meteen begrijpen.</em></p>
+      <p class="hero__sub" data-reveal="3">Soms begint een nieuw perspectief met luisteren naar wat je voelt.</p>
 
-    <ScrollCue />
+      <ScrollCue />
+    </div>
   </div>
 </section>
 

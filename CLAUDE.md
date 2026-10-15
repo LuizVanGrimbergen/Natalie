@@ -59,6 +59,7 @@ src/
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, HOLD
     transition.ts                   # dissolve between scenes, DISSOLVE
+    tint.ts                         # browser bar color follows the scene on screen
     hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one timeline per scene
   styles/
     global.css                      # imports only
@@ -102,7 +103,7 @@ Typography:
 
 ## Scenes (in order; Dutch copy used VERBATIM)
 
-Each scene is a **pinned, full-screen stage** (`100svh`) that stays put while its content builds up. Build lengths (`--pin`): hero 900px, wooden room 1500px, perspectives 1600px, Natalie 800px, invitation 700px. After the last tween only a short hold remains (`HOLD`), so there is no dead scroll.
+Each scene is a **pinned, full-screen stage** (`100lvh`, content in a `100svh` frame) that stays put while its content builds up. Build lengths (`--pin`): hero 900px, wooden room 1500px, perspectives 1600px, Natalie 800px, invitation 700px. After the last tween only a short hold remains (`HOLD`), so there is no dead scroll.
 
 ### Transitions between scenes
 - **No slide.** The next scene **dissolves in place** over the previous one: the new stage holds still and fades 0 → 1, the previous stays pinned and dims. The dissolve takes 60% of a viewport of scroll (`--dissolve` in `styles/scenes.css` = `DISSOLVE` in `scripts/scenes/transition.ts`; keep in sync).
@@ -188,7 +189,7 @@ Deliberately removed. Do not bring back.
 
 Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 1024×768, 1280×720, 1920×1080, 844×390 (phone landscape).
 
-- Stages always `100svh` (no max height; otherwise a dark bar on large screens).
+- Stages are `100lvh` so they stay full screen when Safari's toolbars collapse; their content sits in `.frame` (`100svh`) so nothing hides behind the toolbars. No max height.
 - **Phone** (`≤ 559px`, or `≤ 820px` and taller than 520px): stacked, left aligned.
 - **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type, 8–12vw margins.
 - **Phone landscape** (`≥ 560px` wide and `≤ 520px` high): desktop layout with compact, `vh`-based type and smaller images.
@@ -203,6 +204,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Real `<a>`/`<button>`, visible focus style (copper outline), touch targets ≥ 44px.
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during scroll — they made the prototype stutter); Lighthouse ≥ 95 on all four.
+- Safari bars: `viewport-fit=cover`; each scene has `data-tint`, and `scripts/scenes/tint.ts` sets `--tint` (page background) + `theme-color` to the scene on screen. Pages pass `tint` to `Base`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
 ---

@@ -4,29 +4,31 @@ import door from '../../assets/door.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
-<section id="invitation" class="scene invitation" style="--pin: 700px; z-index: 5" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
+<section id="invitation" class="scene invitation" style="--pin: 700px; z-index: 5" data-tint="#F5F1E9" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
   <div class="stage">
     <div class="glow" aria-hidden="true"></div>
-    <div class="grid">
-      <div class="text">
-        <h2 id="invitation-title" class="display text__h" data-reveal="1">Misschien is dit iets <em>voor jou.</em></h2>
-        <p class="text__p" data-reveal="2">
-          Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor
-          openstaat.
-        </p>
-        <div data-reveal="3">
-          <CtaLink href="/booking">Afspraak maken</CtaLink>
+    <div class="frame">
+      <div class="grid">
+        <div class="text">
+          <h2 id="invitation-title" class="display text__h" data-reveal="1">Misschien is dit iets <em>voor jou.</em></h2>
+          <p class="text__p" data-reveal="2">
+            Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor
+            openstaat.
+          </p>
+          <div data-reveal="3">
+            <CtaLink href="/booking">Afspraak maken</CtaLink>
+          </div>
         </div>
+        <figure class="door" aria-hidden="true" data-unveil>
+          <Picture class="door__img" src={door} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[330]} sizes="330px" />
+        </figure>
       </div>
-      <figure class="door" aria-hidden="true" data-unveil>
-        <Picture class="door__img" src={door} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[330]} sizes="330px" />
-      </figure>
+      <footer class="foot">
+        <span class="display foot__name"><em>Natalie Vandervoort</em></span>
+        <span>[LOCATIE]</span>
+        <span>[CONTACTGEGEVENS]</span>
+      </footer>
     </div>
-    <footer class="foot">
-      <span class="display foot__name"><em>Natalie Vandervoort</em></span>
-      <span>[LOCATIE]</span>
-      <span>[CONTACTGEGEVENS]</span>
-    </footer>
   </div>
 </section>
 

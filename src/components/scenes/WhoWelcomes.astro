@@ -2,28 +2,30 @@
 // TODO(Natalie): personal text below is sample copy awaiting her approval; swap the placeholder for her portrait.
 ---
 
-<section class="scene welcomes" style="--pin: 800px; z-index: 4" data-scene="welcomes" data-enter="light" aria-labelledby="welcomes-title">
+<section class="scene welcomes" style="--pin: 800px; z-index: 4" data-tint="#F5F1E9" data-scene="welcomes" data-enter="light" aria-labelledby="welcomes-title">
   <div class="stage">
     <div class="exit-dim exit-dim--light" aria-hidden="true"></div>
     <div class="window-light" aria-hidden="true"></div>
-    <div class="grid">
-      <div class="text">
-        <p class="label text__label" data-reveal="1">Wie je ontvangt</p>
-        <h2 id="welcomes-title" class="display text__h" data-reveal="2">
-          Ik ben er niet om je de weg te wijzen. <em>Wel om de deur open te houden.</em>
-        </h2>
-        <p class="text__body" data-reveal="3">
-          Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag
-          zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
-        </p>
-        <p class="display text__sign" data-reveal="4"><em>Natalie Vandervoort</em></p>
-      </div>
-      <figure class="portrait" data-unveil>
-        <div class="portrait__frame" role="img" aria-label="Placeholder voor portretfoto van Natalie Vandervoort">
-          <div class="portrait__light" aria-hidden="true"></div>
-          <span class="label portrait__note" aria-hidden="true">[Foto van Natalie]</span>
+    <div class="frame">
+      <div class="grid">
+        <div class="text">
+          <p class="label text__label" data-reveal="1">Wie je ontvangt</p>
+          <h2 id="welcomes-title" class="display text__h" data-reveal="2">
+            Ik ben er niet om je de weg te wijzen. <em>Wel om de deur open te houden.</em>
+          </h2>
+          <p class="text__body" data-reveal="3">
+            Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag
+            zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
+          </p>
+          <p class="display text__sign" data-reveal="4"><em>Natalie Vandervoort</em></p>
         </div>
-      </figure>
+        <figure class="portrait" data-unveil>
+          <div class="portrait__frame" role="img" aria-label="Placeholder voor portretfoto van Natalie Vandervoort">
+            <div class="portrait__light" aria-hidden="true"></div>
+            <span class="label portrait__note" aria-hidden="true">[Foto van Natalie]</span>
+          </div>
+        </figure>
+      </div>
     </div>
   </div>
 </section>

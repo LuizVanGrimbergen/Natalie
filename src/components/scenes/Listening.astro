@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import interior from '../../assets/interior.avif';
 ---
 
-<section class="scene listening" style="--pin: 1500px; z-index: 2" data-scene="listening" data-enter="dark" aria-labelledby="listening-title">
+<section class="scene listening" style="--pin: 1500px; z-index: 2" data-tint="#120A05" data-scene="listening" data-enter="dark" aria-labelledby="listening-title">
   <div class="stage">
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <Picture
@@ -20,16 +20,18 @@ import interior from '../../assets/interior.avif';
     <div class="room__dim" aria-hidden="true" data-room-dim></div>
     <div class="room__scrim" aria-hidden="true"></div>
 
-    <div class="copy">
-      <h2 id="listening-title" class="display copy__h" data-reveal="1">Soms hoef je alleen maar te luisteren.</h2>
-      <p class="copy__a" data-reveal="2">
-        In een bijzondere geometrische ruimte, met speciaal op maat gemaakte luidsprekers, word je van alle kanten omringd door
-        muziek.
-      </p>
-      <p class="copy__b" data-reveal="3">Een geluidservaring die je nauwelijks kunt bevatten, maar des te meer kunt voelen.</p>
-      <p class="display copy__c" data-reveal="4">
-        <em>Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.</em>
-      </p>
+    <div class="frame">
+      <div class="copy">
+        <h2 id="listening-title" class="display copy__h" data-reveal="1">Soms hoef je alleen maar te luisteren.</h2>
+        <p class="copy__a" data-reveal="2">
+          In een bijzondere geometrische ruimte, met speciaal op maat gemaakte luidsprekers, word je van alle kanten omringd door
+          muziek.
+        </p>
+        <p class="copy__b" data-reveal="3">Een geluidservaring die je nauwelijks kunt bevatten, maar des te meer kunt voelen.</p>
+        <p class="display copy__c" data-reveal="4">
+          <em>Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.</em>
+        </p>
+      </div>
     </div>
   </div>
 </section>

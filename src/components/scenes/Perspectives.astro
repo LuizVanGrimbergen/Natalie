@@ -2,18 +2,20 @@
 import NotesSvg from '../NotesSvg.astro';
 ---
 
-<section class="scene perspectives" style="--pin: 1600px; z-index: 3" data-scene="perspectives" data-enter="dark" aria-labelledby="perspectives-title">
+<section class="scene perspectives" style="--pin: 1600px; z-index: 3" data-tint="#F5F1E9" data-scene="perspectives" data-enter="dark" aria-labelledby="perspectives-title">
   <div class="stage">
     <div class="exit-dim exit-dim--light" aria-hidden="true"></div>
     <div class="warmth" aria-hidden="true" data-warmth></div>
-    <NotesSvg class="notes" />
-    <div class="text">
-      <p class="label text__label" data-reveal="1">Nieuwe perspectieven</p>
-      <h2 id="perspectives-title" class="display text__h" data-reveal="1">Er is meer dan één manier <em>om te voelen.</em></h2>
-      <p class="text__p" data-reveal="2">Een veilige plek waar je met jezelf kunt connecteren, experimenteren en luisteren.</p>
-      <p class="text__p" data-reveal="3">
-        Als je een bijkomende behoefte hebt, kun je die ook delen met Natalie, zodat je samen een begeleidend project kunt aangaan.
-      </p>
+    <div class="frame">
+      <NotesSvg class="notes" />
+      <div class="text">
+        <p class="label text__label" data-reveal="1">Nieuwe perspectieven</p>
+        <h2 id="perspectives-title" class="display text__h" data-reveal="1">Er is meer dan één manier <em>om te voelen.</em></h2>
+        <p class="text__p" data-reveal="2">Een veilige plek waar je met jezelf kunt connecteren, experimenteren en luisteren.</p>
+        <p class="text__p" data-reveal="3">
+          Als je een bijkomende behoefte hebt, kun je die ook delen met Natalie, zodat je samen een begeleidend project kunt aangaan.
+        </p>
+      </div>
     </div>
   </div>
 </section>

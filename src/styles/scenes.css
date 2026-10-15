@@ -8,23 +8,31 @@
   .scene {
     position: relative;
   }
+  /* The stage fills the largest viewport, so it stays full screen when Safari's
+     toolbars collapse; its content sits in .frame, the smallest viewport, so
+     nothing hides behind the toolbars when they are shown. */
   .stage {
     position: relative;
-    height: 100svh;
+    height: 100lvh;
     overflow: hidden;
+  }
+  .frame {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 100svh;
   }
   /* --dissolve: scroll distance of the crossfade into the next scene (keep in sync with DISSOLVE in scripts/scenes/transition.ts). */
   html.motion {
     --dissolve: 60svh;
   }
   html.motion .scene {
-    height: calc(var(--pin) + var(--dissolve) + 100svh);
+    height: calc(var(--pin) + var(--dissolve) + 100lvh);
   }
   html.motion .scene:last-child {
-    height: calc(var(--pin) + 100svh);
+    height: calc(var(--pin) + 100lvh);
   }
   html.motion .scene + .scene {
-    margin-top: -100svh;
+    margin-top: -100lvh;
   }
   html.motion .stage {
     position: sticky;
