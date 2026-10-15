@@ -117,11 +117,12 @@
       width: 120vw;
       right: -40%;
     }
+    /* The portrait takes all the height the text leaves free. */
     .grid {
       grid-template-columns: 1fr;
-      align-content: center;
+      grid-template-rows: minmax(0, 1fr) auto;
       gap: 24px;
-      padding: 72px 24px 24px;
+      padding: 72px 24px 32px;
     }
     .text {
       gap: 14px;
@@ -137,7 +138,10 @@
       font-size: 26px;
     }
     .portrait {
-      height: min(28vh, 240px);
+      height: 100%;
+      max-height: 460px;
+      max-width: 100%;
+      align-self: end;
       justify-self: start;
       order: -1;
     }
@@ -158,17 +162,11 @@
     .text__body {
       font-size: 18px;
     }
-    .portrait {
-      height: min(30vh, 320px);
-    }
   }
   @media (max-width: 559px) and (max-height: 700px), (max-width: 820px) and (min-height: 521px) and (max-height: 700px) {
     .grid {
-      padding: 56px 20px 16px;
+      padding: 56px 20px 20px;
       gap: 14px;
-    }
-    .portrait {
-      height: min(18vh, 120px);
     }
     .text__h {
       font-size: 24px;
@@ -202,12 +200,14 @@
   @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
     .grid {
       grid-template-columns: 1fr;
+      grid-template-rows: none;
       align-content: center;
       gap: 28px;
       padding: 10vh 10vw 6vh;
     }
     .portrait {
       height: min(30vh, 380px);
+      max-height: none;
       justify-self: start;
       order: -1;
     }
