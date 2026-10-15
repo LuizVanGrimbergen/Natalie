@@ -1,0 +1,46 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/scenes/Hero.astro';
+import Listening from '../components/scenes/Listening.astro';
+import Perspectives from '../components/scenes/Perspectives.astro';
+import WhoWelcomes from '../components/scenes/WhoWelcomes.astro';
+import Invitation from '../components/scenes/Invitation.astro';
+import hero from '../assets/hero.avif';
+
+// Same widths/sizes as the hero <Image>, so the preload is reused.
+const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1600], sizes: '100vw', format: 'avif' });
+---
+
+<Base
+  story
+  title="Natalie — Niet alles wat je raakt, kun je meteen begrijpen."
+  description="Immersieve muziek in een houten, geometrische koepel in het bos, gevolgd door persoonlijke begeleiding. Een plek om je eigen perspectief te ontdekken."
+>
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={heroPreload.src}
+    imagesrcset={heroPreload.srcSet.attribute}
+    imagesizes="100vw"
+    type="image/avif"
+    fetchpriority="high"
+  />
+
+  <SiteHeader href="#invitation">Kom het zelf ontdekken&nbsp;→</SiteHeader>
+
+  <main>
+    <Hero />
+    <Listening />
+    <Perspectives />
+    <WhoWelcomes />
+    <Invitation />
+  </main>
+</Base>
+
+<script>
+  import { initScenes } from '../scripts/scenes';
+  if (document.documentElement.classList.contains('motion')) initScenes();
+</script>
