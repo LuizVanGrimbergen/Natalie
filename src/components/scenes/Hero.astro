@@ -2,7 +2,6 @@
 import { Picture } from 'astro:assets';
 import hero from '../../assets/hero.avif';
 import EdgeFade from '../EdgeFade.astro';
-import ScrollCue from '../ScrollCue.astro';
 
 // The first line arrives on load, word by word; the comma leaves the sentence open so scrolling finishes it.
 const firstLine = 'Niet alles wat je raakt,'.split(' ');
@@ -46,20 +45,11 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
       </p>
       <p class="display hero__l2" aria-hidden="true" data-reveal="2"><em>kun je meteen begrijpen.</em></p>
       <p class="hero__sub" data-reveal="3">Soms begint een nieuw perspectief met luisteren naar wat je voelt.</p>
-
-      <ScrollCue />
     </div>
   </div>
 </section>
 
 <style>
-  .hero {
-    --cue-room: 0px;
-  }
-  /* The scroll cue stays under the finished sentence until the first step, so stacked text moves up to make room. */
-  :global(html.motion) .hero {
-    --cue-room: 64px;
-  }
   .stage {
     background: radial-gradient(ellipse 120% 90% at 50% 55%, #1a1511 0%, #12100d 55%, #0a0807 100%);
   }
@@ -201,12 +191,12 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     }
     .hero__l2 {
       right: 24px;
-      bottom: calc(8% + 118px + var(--cue-room));
+      bottom: calc(8% + 118px);
     }
     .hero__sub {
       left: 24px;
       right: 24px;
-      bottom: calc(8% + var(--cue-room));
+      bottom: 8%;
       font-size: 16px;
     }
   }
@@ -232,7 +222,7 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
       top: 15%;
     }
     .hero__l2 {
-      bottom: calc(8% + 96px + var(--cue-room));
+      bottom: calc(8% + 96px);
     }
     .hero__sub {
       font-size: 15px;
@@ -263,11 +253,11 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     }
     .hero__l2 {
       right: 8vw;
-      bottom: calc(8% + 150px + var(--cue-room));
+      bottom: calc(8% + 150px);
     }
     .hero__sub {
       left: 8vw;
-      bottom: calc(8% + var(--cue-room));
+      bottom: 8%;
       font-size: clamp(18px, 2.3vw, 21px);
       max-width: 440px;
     }

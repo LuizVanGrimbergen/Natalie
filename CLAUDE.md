@@ -43,8 +43,8 @@ src/
   components/
     SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     CtaLink.astro                   # outline pill button with pulse + hover fill
+    NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring, Scroll/Swipe
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
-    ScrollCue.astro                 # equalizer bars + "SCROLL" + falling drop of light
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 04)
     scenes/
@@ -60,6 +60,7 @@ src/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
     navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
     input.ts                        # wheel / touch / keys → single steps (trackpad momentum = still one step)
+    cue.ts                          # shows/hides the NextCue, light or dark per scene
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes
@@ -87,7 +88,7 @@ Colors (tuned to the dome: bronze, copper, wood, ivory):
 | `bronze-900` | `#1E1712` | dark text on ivory, button |
 | `wood-950` | `#120A05` | wooden scene background |
 | `copper-700` | `#9C5530` | accents on ivory (italic accent words, labels, line 1) |
-| `copper-300` | `#D49A72` | accent on dark (scroll cue bars) |
+| `copper-300` | `#D49A72` | accent on dark (next cue pulse) |
 | `clay` | `#C88F80` | second line / note (the guide) |
 | `copper-brown` | `#6B4A36` | transition color into ivory in scene 04 |
 | `ivory` | `#F5F1E9` | light base, text on dark |
@@ -119,7 +120,8 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - **One scroll gesture, swipe, or arrow/Page key = one screen.** A trackpad flick with momentum still counts once (`input.ts`: a gesture ends after 180ms without wheel events).
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. Step back returns to the earlier scene as it was left.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`).
-- The hero completes its sentence by itself after the load intro; the scroll cue stays until the first step.
+- The hero completes its sentence by itself after the load intro.
+- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
 - A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays ivory. The header fades out after the hero.
 - Links to `#invitation` (header link, or opening the page with the hash) dissolve straight to the finished scene; keyboard focus on a later scene (Tab to the button) brings it on screen.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
@@ -138,7 +140,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
   - Semantically one `<h1>`: "Niet alles wat je raakt, kun je meteen begrijpen." (visually split, `aria-hidden` on the visual parts).
 - On load (time-based, CSS): the dome is visible at dusk, the photo drifts slowly, a warm copper glow breathes on the dome, and line 1 fades in word by word. The comma leaves the sentence open; it completes itself a moment later.
 - Then (time-based, ~1.2s after load): the dusk lifts, the photo zooms out from `scale(1.22)` → 1, a warm glow comes up, then line 2 and the subtext rise (fade + 48px rise).
-- **Scroll cue**, bottom center, appears after line 1: 5 copper bars (4px wide, 38px high, 6px gap) moving like an equalizer (1.4s, different delays) + "SCROLL" + a thin line with a falling drop of light. Stays until the first step (compact, without the line, in stacked layouts so it never covers the text).
+- The next cue (see above) appears once the sentence is complete.
 
 ### 02 · (removed)
 Deliberately removed. Do not bring back.

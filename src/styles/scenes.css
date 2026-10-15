@@ -36,6 +36,11 @@
     position: fixed;
     inset: 0;
   }
+  /* Room at the bottom for the "next" cue (NextCue.astro), so it never covers
+     content; the last scene has no cue and keeps the full height. */
+  html.motion .scene:not(:last-child) .frame {
+    height: calc(100svh - 72px);
+  }
   /* Scenes under the one on screen pause their CSS loops (drift, breathing glow). */
   html.motion [data-offstage] * {
     animation-play-state: paused !important;

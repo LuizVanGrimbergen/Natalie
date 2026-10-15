@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { initCue } from './cue';
 import { all, one } from './dom';
 import { onStep, type Step } from './input';
 import { tintNow, tintTo } from './tint';
@@ -29,6 +30,9 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
   const footer = one(document, '[data-footer]');
   const last = scenes.length - 1;
 
+  // Shown once a screen is complete; the last scene ends on its own call to action.
+  const cue = initCue(() => step(1));
+
   /** Index of the scene on screen; last + 1 means the footer is up. */
   let current = 0;
   let active: gsap.core.Animation | null = null;
@@ -41,12 +45,14 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
 
   function run(animation: gsap.core.Animation) {
     active = animation;
+    cue.hide();
     animation.eventCallback('onComplete', () => {
       active = null;
       onstage(Math.min(current, last));
       const next = queued;
       queued = null;
       if (next) step(next);
+      else if (current < last) cue.show(scenes[current]);
     });
   }
 
@@ -122,6 +128,8 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       settle();
       builds[to].progress(1);
       onstage(to);
+      if (to < last) cue.show(scenes[to]);
+      else cue.hide();
       return;
     }
     onstage(0, current, to);
