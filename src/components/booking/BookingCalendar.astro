@@ -1,0 +1,68 @@
+---
+// Google Calendar appointment schedule embed URL (…/appointments/schedules/…?gv=true).
+const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL?.trim();
+---
+
+<section class="calendar" aria-label="Kies een moment">
+  {
+    bookingUrl ? (
+      <iframe class="calendar__frame" src={bookingUrl} title="Afsprakenplanning van Natalie (Google Agenda)" loading="lazy" />
+    ) : (
+      <div class="calendar__empty">
+        <p class="label calendar__label">Agenda</p>
+        <p class="display calendar__title">
+          Binnenkort kun je hier <em>een moment kiezen.</em>
+        </p>
+        <p class="calendar__text">De online afsprakenplanning wordt nog gekoppeld. Tot dan kun je Natalie rechtstreeks contacteren.</p>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .calendar {
+    display: flex;
+    min-height: 620px;
+    overflow: hidden;
+    background: rgb(255 253 248 / 0.7);
+    border: 1px solid rgb(156 85 48 / 0.18);
+    border-radius: 4px;
+    box-shadow: 0 40px 120px -30px rgb(200 143 128 / 0.45);
+  }
+  .calendar__frame {
+    flex: 1;
+    width: 100%;
+    min-height: 720px;
+    border: 0;
+  }
+  .calendar__empty {
+    margin: auto;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 440px;
+  }
+  .calendar__label,
+  .calendar__title em {
+    color: var(--color-copper-700);
+  }
+  .calendar__title {
+    font-size: clamp(32px, 3vw, 44px);
+    line-height: 1.05;
+  }
+  .calendar__text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-body-on-ivory);
+  }
+
+  @media (max-width: 900px) {
+    .calendar {
+      min-height: 420px;
+    }
+    .calendar__empty {
+      padding: 32px 24px;
+    }
+  }
+</style>
