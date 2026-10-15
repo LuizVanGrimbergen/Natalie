@@ -52,7 +52,12 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
 
 <style>
   .hero {
+    --cue-room: 0px;
     background: var(--color-bronze-950);
+  }
+  /* Touch screens keep the scroll cue under the finished sentence, so stacked text moves up to make room. */
+  :global(html.paged) .hero {
+    --cue-room: 64px;
   }
   .stage {
     background: radial-gradient(ellipse 120% 90% at 50% 55%, #1a1511 0%, #12100d 55%, #0a0807 100%);
@@ -195,12 +200,12 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     }
     .hero__l2 {
       right: 24px;
-      bottom: calc(8% + 118px);
+      bottom: calc(8% + 118px + var(--cue-room));
     }
     .hero__sub {
       left: 24px;
       right: 24px;
-      bottom: 8%;
+      bottom: calc(8% + var(--cue-room));
       font-size: 16px;
     }
   }
@@ -226,7 +231,7 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
       top: 15%;
     }
     .hero__l2 {
-      bottom: calc(8% + 96px);
+      bottom: calc(8% + 96px + var(--cue-room));
     }
     .hero__sub {
       font-size: 15px;
@@ -257,10 +262,11 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     }
     .hero__l2 {
       right: 8vw;
-      bottom: calc(8% + 150px);
+      bottom: calc(8% + 150px + var(--cue-room));
     }
     .hero__sub {
       left: 8vw;
+      bottom: calc(8% + var(--cue-room));
       font-size: clamp(18px, 2.3vw, 21px);
       max-width: 440px;
     }

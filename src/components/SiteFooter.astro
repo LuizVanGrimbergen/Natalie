@@ -2,7 +2,7 @@
 // TODO(Natalie): fill in contact details.
 ---
 
-<footer class="footer">
+<footer class="footer" data-footer>
   <span class="display footer__name"><em>Natalie Vandervoort</em></span>
   <span>Schoten</span>
   <span>[CONTACTGEGEVENS]</span>
@@ -22,6 +22,14 @@
     box-shadow: inset 0 1px 0 rgb(156 85 48 / 0.25);
     font-size: 14px;
     color: var(--color-muted);
+  }
+  /* Touch screens: waits just below the screen until the last swipe brings it up (paged.ts). */
+  :global(html.paged) .footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 6;
   }
   .footer__name {
     font-size: 20px;

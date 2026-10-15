@@ -92,6 +92,13 @@
     20% { opacity: 1; }
     100% { transform: translateY(66px); opacity: 0; }
   }
+  /* Touch screens: it stays until the first swipe, so it is kept compact under the text. */
+  :global(html.paged) .cue {
+    bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  :global(html.paged) .cue__line {
+    display: none;
+  }
   @media (max-height: 700px) {
     .cue { bottom: 16px; }
     .cue__inner { gap: 10px; }

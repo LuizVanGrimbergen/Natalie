@@ -3,7 +3,7 @@ import { build, fade, rise, type Timeline } from './tweens';
 
 /* 01 · Dusk lifts, the photo settles, and the sentence completes itself. */
 export function hero(scene: HTMLElement): Timeline {
-  const tl = build(scene);
+  const tl = build();
   // The first line is already there (load intro); the first scroll lifts the dusk right away.
   tl.fromTo(one(scene, '[data-cue]'), { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.08 }, 0)
     .fromTo(one(scene, '[data-hero-img]'), { scale: 1.22 }, { scale: 1, duration: 0.5 }, 0)

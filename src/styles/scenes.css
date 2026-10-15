@@ -38,6 +38,27 @@
     position: sticky;
     top: 0;
   }
+  /* Touch screens (html.paged, set in public/motion.js): no long scroll. The
+     scenes lie on top of each other, one screen each, and scripts/scenes/paged.ts
+     dissolves from one to the next per swipe. */
+  html.paged,
+  html.paged body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  html.paged body {
+    touch-action: pinch-zoom;
+  }
+  html.motion.paged .scene {
+    position: fixed;
+    inset: 0;
+    height: auto;
+    margin: 0;
+  }
+  html.motion.paged .stage {
+    position: relative;
+  }
   /* Hidden until GSAP takes over, so nothing flashes before the first frame. */
   html.motion .scene + .scene,
   html.motion [data-reveal] {

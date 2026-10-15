@@ -56,12 +56,14 @@ src/
       BookingDetails.astro          # title, intro, location/duration/price/contact
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   scripts/scenes/
-    index.ts                        # initScenes(): Lenis, wires scenes + transitions, in-page links
+    index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
+    scroll.ts                       # desktop: Lenis + ScrollTrigger, scrubbed builds, in-page links
+    paged.ts                        # touch: one swipe per screen, builds play in time (GSAP Observer)
     dom.ts                          # query helpers
-    tweens.ts                       # build() + rise/fade/unveil/draw, HOLD
-    transition.ts                   # dissolve between scenes, DISSOLVE
+    tweens.ts                       # build() + rise/fade/unveil/draw, prime, HOLD
+    transition.ts                   # crossfade between scenes
     tint.ts                         # browser bar color follows the scene on screen
-    hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one timeline per scene
+    hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
   styles/
     global.css                      # imports only
     tokens.css                      # design tokens (@theme)
@@ -104,13 +106,19 @@ Typography:
 
 ## Scenes (in order; Dutch copy used VERBATIM)
 
-Each scene is a **pinned, full-screen stage** (`100lvh`, content in a `100svh` frame) that stays put while its content builds up. Build lengths (`--pin`): hero 900px, wooden room 1500px, perspectives 1600px, Natalie 800px, invitation 700px. After the last tween only a short hold remains (`HOLD`), so there is no dead scroll.
+On desktop each scene is a **pinned, full-screen stage** (`100lvh`, content in a `100svh` frame) that stays put while its content builds up. Build lengths (`--pin`): hero 900px, wooden room 1500px, perspectives 1600px, Natalie 800px, invitation 700px. After the last tween only a short hold remains (`HOLD`), so there is no dead scroll.
 
 ### Transitions between scenes
-- **No slide.** The next scene **dissolves in place** over the previous one: the new stage holds still and fades 0 → 1, the previous stays pinned and dims. The dissolve takes 60% of a viewport of scroll (`--dissolve` in `styles/scenes.css` = `DISSOLVE` in `scripts/scenes/transition.ts`; keep in sync).
+- **No slide.** The next scene **dissolves in place** over the previous one: the new stage holds still and fades 0 → 1, the previous stays pinned and dims. On desktop the dissolve takes 60% of a viewport of scroll (`--dissolve` in `styles/scenes.css` = `DISSOLVE` in `scripts/scenes/scroll.ts`; keep in sync); on touch it takes 0.9s.
 - Dark transitions (hero → wood → perspectives): true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
 - Light transitions (perspectives → Natalie → invitation): the previous first fades to ivory (0–55% of the transition), then the new one appears (40–100%), so texts never overlap.
 - All content of a scene is fully built **before** the next scene starts dissolving in.
+
+### Two ways to move through the story
+`public/motion.js` (blocking, in `<head>`) sets the mode before first paint:
+- **Desktop / mouse** (`html.motion`): one long scroll. Each scene's build is scrubbed over its `--pin`; scenes dissolve into each other while scrolling (below).
+- **Touch screens** (`html.motion.paged`, `(hover: none) and (pointer: coarse)`, so phones and tablets): **one swipe = one screen**. The page itself doesn't scroll; scenes lie on top of each other. A swipe up crossfades to the next scene (0.9s) and then its build **plays by itself** (1.8–2.6s, `BUILD` in `paged.ts`); swipes are ignored until it is done, so every screen is shown complete. Swipe down goes back (the earlier scene keeps its finished composition). The hero completes its sentence by itself after the load intro; the scroll cue stays until the first swipe. A last swipe after the invitation brings up the footer. The header fades out after the hero. Arrow keys / Page keys work too.
+- The scene timelines are the same in both modes (relative positions); only how they are driven differs.
 
 ### Header (scrolls away, not sticky)
 - Left: wordmark *Natalie* (Cormorant italic).
@@ -206,7 +214,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during scroll — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars: `viewport-fit=cover`; each scene has `data-tint`, and `scripts/scenes/tint.ts` sets `--tint` (page background) + `theme-color` to the scene on screen. Pages pass `tint` to `Base`.
-- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style="--pin…"` attributes. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
+- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style="--pin…"` attributes. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
 ---

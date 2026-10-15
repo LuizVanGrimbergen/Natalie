@@ -1,5 +1,5 @@
 ---
-/** Wordmark plus one link; sits on top of the page and scrolls away with it. */
+/** Wordmark plus one link; sits on top of the page and scrolls away with it (on touch screens it fades with the hero). */
 interface Props {
   href: string;
   /** Text color: ivory on the dark story page, bronze on light pages. */
@@ -8,7 +8,7 @@ interface Props {
 const { href, tone = 'light' } = Astro.props;
 ---
 
-<header class:list={['header', `header--${tone}`]}>
+<header class:list={['header', `header--${tone}`]} data-header>
   <a class="header__wordmark" href="/">Natalie</a>
   <a class="header__link" href={href}><slot /></a>
 </header>
