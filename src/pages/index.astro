@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import Hero from '../components/scenes/Hero.astro';
 import Listening from '../components/scenes/Listening.astro';
 import Perspectives from '../components/scenes/Perspectives.astro';
@@ -38,6 +39,8 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1600], sizes
     <WhoWelcomes />
     <Invitation />
   </main>
+
+  <SiteFooter />
 </Base>
 
 <script>

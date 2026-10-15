@@ -44,6 +44,7 @@ src/
     SiteHeader.astro                # wordmark + one link, scrolls away with the page
     CtaLink.astro                   # outline pill button with pulse + hover fill
     ScrollCue.astro                 # equalizer bars + "SCROLL" + falling drop of light
+    SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 04)
     scenes/
       Hero.astro                    # 01
@@ -174,7 +175,7 @@ Deliberately removed. Do not bring back.
   - Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor openstaat.
   - Button: **Afspraak maken** → `/booking`
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Footer at the bottom of the scene: *Natalie Vandervoort* · `[LOCATIE]` · `[CONTACTGEGEVENS]`.
+- Footer (`SiteFooter`) **below** the invitation scene, in normal flow: *Natalie Vandervoort* · `[LOCATIE]` · `[CONTACTGEGEVENS]`.
 - Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
