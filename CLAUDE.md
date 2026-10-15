@@ -215,7 +215,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 
 ## Quality & accessibility
 
-- `prefers-reduced-motion: reduce` → no step navigation, a normal scrolling page, everything visible in its final composition, no pulse, no equalizer, no intro.
+- `prefers-reduced-motion: reduce` → no step navigation, a normal scrolling page, everything visible in its final composition, no pulse, no next cue, no intro.
 - Without JavaScript: the page is fully readable (final composition, normal flow). `html.motion` is only set from `<head>` when motion is allowed; a safety timeout removes it if the scene script never loads.
 - Real `<a>`/`<button>`, visible focus style (copper outline), touch targets ≥ 44px.
 - Decorative images/SVG `aria-hidden`; portrait with a label.
