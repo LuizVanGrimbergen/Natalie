@@ -1,0 +1,80 @@
+---
+/** Outline pill with a soft copper pulse; on hover bronze fills it from the left and an arrow slides in. */
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+
+<a class="cta" href={href}><span><slot /></span><span class="cta__arrow" aria-hidden="true">→</span></a>
+
+<style>
+  .cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 22px;
+    border: 1px solid rgb(30 23 18 / 0.55);
+    border-radius: 999px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--color-bronze-900);
+    text-decoration: none;
+    transition:
+      color 0.45s,
+      border-color 0.45s;
+    animation: cta-pulse 3.2s ease-out infinite;
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--color-bronze-900);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.55s cubic-bezier(0.6, 0, 0.2, 1);
+  }
+  .cta__arrow {
+    display: inline-block;
+    max-width: 0;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition:
+      max-width 0.45s ease,
+      opacity 0.35s ease,
+      transform 0.45s ease,
+      margin 0.45s ease;
+  }
+  .cta:hover,
+  .cta:focus-visible {
+    color: var(--color-ivory);
+    border-color: var(--color-bronze-900);
+  }
+  .cta:hover::before,
+  .cta:focus-visible::before {
+    transform: scaleX(1);
+  }
+  .cta:hover .cta__arrow,
+  .cta:focus-visible .cta__arrow {
+    max-width: 20px;
+    opacity: 1;
+    transform: none;
+    margin-left: 10px;
+  }
+  @keyframes cta-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgb(156 85 48 / 0.35);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 14px rgb(156 85 48 / 0);
+    }
+  }
+</style>
