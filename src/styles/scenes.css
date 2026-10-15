@@ -2,15 +2,14 @@
   /* ---- Scene mechanics ----------------------------------------------
      Base state (no JS, reduced motion): every scene is one screen in
      normal flow, showing its final composition.
-     html.motion (set in <head> when motion is allowed): each scene gets
-     its build length (--pin) plus room for the next scene to dissolve in
-     on top of it (--dissolve), and the stage sticks while the content builds up. */
+     html.motion (set in <head> by public/motion.js): the page doesn't scroll.
+     The scenes lie on top of each other, one screen each, and
+     scripts/scenes/navigation.ts dissolves from one to the next per step. */
   .scene {
     position: relative;
   }
-  /* The stage fills the largest viewport, so it stays full screen when Safari's
-     toolbars collapse; its content sits in .frame, the smallest viewport, so
-     nothing hides behind the toolbars when they are shown. */
+  /* The stage fills the largest viewport, so it runs under Safari's toolbars;
+     its content sits in .frame, the smallest viewport, so nothing hides behind them. */
   .stage {
     position: relative;
     height: 100lvh;
@@ -21,43 +20,22 @@
     inset: 0 0 auto;
     height: 100svh;
   }
-  /* --dissolve: scroll distance of the crossfade into the next scene (keep in sync with DISSOLVE in scripts/scenes/transition.ts). */
-  html.motion {
-    --dissolve: 60svh;
-  }
-  html.motion .scene {
-    height: calc(var(--pin) + var(--dissolve) + 100lvh);
-  }
-  html.motion .scene:last-child {
-    height: calc(var(--pin) + 100lvh);
-  }
-  html.motion .scene + .scene {
-    margin-top: -100lvh;
-  }
-  html.motion .stage {
-    position: sticky;
-    top: 0;
-  }
-  /* Touch screens (html.paged, set in public/motion.js): no long scroll. The
-     scenes lie on top of each other, one screen each, and scripts/scenes/paged.ts
-     dissolves from one to the next per swipe. */
-  html.paged,
-  html.paged body {
+  html.motion,
+  html.motion body {
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
   }
-  html.paged body {
+  html.motion body {
     touch-action: pinch-zoom;
   }
-  html.motion.paged .scene {
+  html.motion .scene {
     position: fixed;
     inset: 0;
-    height: auto;
-    margin: 0;
   }
-  html.motion.paged .stage {
-    position: relative;
+  /* Scenes under the one on screen pause their CSS loops (drift, breathing glow). */
+  html.motion [data-offstage] * {
+    animation-play-state: paused !important;
   }
   /* Hidden until GSAP takes over, so nothing flashes before the first frame. */
   html.motion .scene + .scene,

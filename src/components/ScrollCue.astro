@@ -19,11 +19,11 @@
     width: max-content;
     z-index: 5;
   }
-  /* Without motion nothing scrubs, so there is nothing to cue. */
+  /* Without motion the page scrolls normally, so there is nothing to cue. */
   :global(html:not(.motion)) .cue {
     display: none;
   }
-  /* Arrives once the first line has settled (GSAP fades the outer .cue on scroll). */
+  /* Arrives once the first line has settled; it leaves with the hero at the first step. */
   .cue__inner {
     display: flex;
     flex-direction: column;
@@ -92,12 +92,14 @@
     20% { opacity: 1; }
     100% { transform: translateY(66px); opacity: 0; }
   }
-  /* Touch screens: it stays until the first swipe, so it is kept compact under the text. */
-  :global(html.paged) .cue {
-    bottom: max(20px, env(safe-area-inset-bottom));
-  }
-  :global(html.paged) .cue__line {
-    display: none;
+  /* Stacked layouts (phone, tablet portrait): it stays until the first step, so it is kept compact under the text. */
+  @media (max-width: 559px), (max-width: 820px) and (min-height: 521px), (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    .cue {
+      bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    .cue__line {
+      display: none;
+    }
   }
   @media (max-height: 700px) {
     .cue { bottom: 16px; }

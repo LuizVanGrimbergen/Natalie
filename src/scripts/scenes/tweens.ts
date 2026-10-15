@@ -2,22 +2,15 @@ import gsap from 'gsap';
 
 export type Timeline = gsap.core.Timeline;
 
-/**
- * A scene's build timeline. Positions in the scene files are relative: on
- * desktop the timeline is scrubbed over the scene's --pin length (scroll.ts),
- * on touch screens it plays by itself once the scene is on screen (paged.ts).
- */
+/** A scene's build timeline. Positions in the scene files are relative; navigation.ts plays it in time once the scene is on screen. */
 export function build(): Timeline {
   return gsap.timeline({ paused: true, defaults: { ease: 'none' } });
 }
 
-/** Scrolled after the last tween, so there is no dead scroll before the next scene dissolves in. */
-export const HOLD = 0.1;
-
 /**
- * Put every tween of a timeline in its start state right away. A scrubbed
- * timeline otherwise only renders once its scroll range is reached, so a scene
- * would dissolve in already finished and then jump back.
+ * Put every tween of a timeline in its start state right away. A paused
+ * timeline otherwise renders nothing until it plays, so a scene would
+ * dissolve in already finished and then jump back.
  */
 export function prime(tl: Timeline): Timeline {
   return tl.progress(1).progress(0);
@@ -42,7 +35,7 @@ export function unveil(tl: Timeline, target: gsap.TweenTarget, at: number, durat
   );
 }
 
-/** Draw a stroke along with the scroll, using its real length so every pixel of scroll moves the pen. */
+/** Draw a stroke over its real length (never pathLength="1": GSAP rounds that to a jump). */
 export function draw(tl: Timeline, path: SVGGeometryElement, at: number, duration: number) {
   const length = path.getTotalLength();
   tl.fromTo(path, { strokeDasharray: length, strokeDashoffset: length }, { strokeDashoffset: 0, duration }, at);

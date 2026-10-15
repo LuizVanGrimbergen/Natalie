@@ -1,6 +1,6 @@
 # Natalie — website
 
-A single scrolling story of five scenes plus a separate booking page, for Natalie Vandervoort.
+A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
 Natalie invites young people (20–30) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
@@ -21,8 +21,8 @@ The original HTML prototype has been fully rebuilt in this codebase; **the code 
 |---|---|---|
 | Framework | **Astro**, TypeScript | Static HTML, minimal JS, fast, good SEO |
 | Styling | **Tailwind CSS** v4 | Design tokens as theme values (`styles/tokens.css`); component styles scoped in `.astro` files |
-| Animation | **GSAP + ScrollTrigger** | Cross-browser (incl. Safari), scrubbing, timelines |
-| Smooth scroll | **Lenis** | Linked to ScrollTrigger (`lenis.on('scroll', ScrollTrigger.update)` + gsap ticker) |
+| Animation | **GSAP** (core only) | Cross-browser (incl. Safari), timelines, transform/opacity only |
+| Navigation | Own gesture handling (`scripts/scenes/input.ts`) | One wheel/trackpad gesture or swipe = exactly one step |
 | Images | **astro:assets** `<Picture>` | AVIF + WebP, JPG fallback, responsive `srcset`; hero preloaded, the rest lazy |
 | Fonts | `@fontsource` (self-hosted) | Cormorant Garamond (300, 400, italic) + Figtree (300, 400, 500), latin subset |
 | Booking | Google Calendar appointment schedule | Embedded on `/booking` via `PUBLIC_BOOKING_URL` |
@@ -41,7 +41,7 @@ src/
     index.astro                     # the story: header + the five scenes, starts the scene script
     booking.astro                   # booking page
   components/
-    SiteHeader.astro                # wordmark + one link, scrolls away with the page
+    SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     CtaLink.astro                   # outline pill button with pulse + hover fill
     ScrollCue.astro                 # equalizer bars + "SCROLL" + falling drop of light
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
@@ -57,10 +57,10 @@ src/
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
-    scroll.ts                       # desktop: Lenis + ScrollTrigger, scrubbed builds, in-page links
-    paged.ts                        # touch: one swipe per screen, builds play in time (GSAP Observer)
+    navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
+    input.ts                        # wheel / touch / keys → single steps (trackpad momentum = still one step)
     dom.ts                          # query helpers
-    tweens.ts                       # build() + rise/fade/unveil/draw, prime, HOLD
+    tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes
     tint.ts                         # browser bar color follows the scene on screen
     hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
@@ -106,21 +106,25 @@ Typography:
 
 ## Scenes (in order; Dutch copy used VERBATIM)
 
-On desktop each scene is a **pinned, full-screen stage** (`100lvh`, content in a `100svh` frame) that stays put while its content builds up. Build lengths (`--pin`): hero 900px, wooden room 1500px, perspectives 1600px, Natalie 800px, invitation 700px. After the last tween only a short hold remains (`HOLD`), so there is no dead scroll.
+Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, wooden room 2.2s, perspectives 2.6s, Natalie 1.8s, invitation 1.8s.
 
 ### Transitions between scenes
-- **No slide.** The next scene **dissolves in place** over the previous one: the new stage holds still and fades 0 → 1, the previous stays pinned and dims. On desktop the dissolve takes 60% of a viewport of scroll (`--dissolve` in `styles/scenes.css` = `DISSOLVE` in `scripts/scenes/scroll.ts`; keep in sync); on touch it takes 0.9s.
+- **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. Forward 0.9s (`FADE`), back 0.6s (`BACK`).
 - Dark transitions (hero → wood → perspectives): true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
 - Light transitions (perspectives → Natalie → invitation): the previous first fades to ivory (0–55% of the transition), then the new one appears (40–100%), so texts never overlap.
 - All content of a scene is fully built **before** the next scene starts dissolving in.
 
-### Two ways to move through the story
-`public/motion.js` (blocking, in `<head>`) sets the mode before first paint:
-- **Desktop / mouse** (`html.motion`): one long scroll. Each scene's build is scrubbed over its `--pin`; scenes dissolve into each other while scrolling (below).
-- **Touch screens** (`html.motion.paged`, `(hover: none) and (pointer: coarse)`, so phones and tablets): **one swipe = one screen**. The page itself doesn't scroll; scenes lie on top of each other. A swipe up crossfades to the next scene (0.9s) and then its build **plays by itself** (1.8–2.6s, `BUILD` in `paged.ts`); swipes are ignored until it is done, so every screen is shown complete. Swipe down goes back (the earlier scene keeps its finished composition). The hero completes its sentence by itself after the load intro; the scroll cue stays until the first swipe. A last swipe after the invitation brings up the footer. The header fades out after the hero. Arrow keys / Page keys work too.
-- The scene timelines are the same in both modes (relative positions); only how they are driven differs.
+### One step per screen (desktop and touch alike)
+- **One scroll gesture, swipe, or arrow/Page key = one screen.** A trackpad flick with momentum still counts once (`input.ts`: a gesture ends after 180ms without wheel events).
+- A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. Step back returns to the earlier scene as it was left.
+- A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`).
+- The hero completes its sentence by itself after the load intro; the scroll cue stays until the first step.
+- A last step after the invitation slides the footer up. The header fades out after the hero.
+- Links to `#invitation` (header link, or opening the page with the hash) dissolve straight to the finished scene; keyboard focus on a later scene (Tab to the button) brings it on screen.
+- Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
+- The scene timelines are relative (positions 0–1); `navigation.ts` gives them their duration.
 
-### Header (scrolls away, not sticky)
+### Header (not sticky; fades out after the hero)
 - Left: wordmark *Natalie* (Cormorant italic).
 - Right: link **"Kom het zelf ontdekken →"** to `#invitation`; lands on the finished invitation scene.
 
@@ -131,9 +135,9 @@ On desktop each scene is a **pinned, full-screen stage** (`100lvh`, content in a
   - (bottom right, large, italic) **kun je meteen begrijpen.**
   - (bottom left, small) Soms begint een nieuw perspectief met luisteren naar wat je voelt.
   - Semantically one `<h1>`: "Niet alles wat je raakt, kun je meteen begrijpen." (visually split, `aria-hidden` on the visual parts).
-- On load (time-based, CSS): the dome is visible at dusk, the photo drifts slowly, a warm copper glow breathes on the dome, and line 1 fades in word by word. The comma leaves the sentence open, so scrolling finishes it.
-- On scroll (scrub): the dusk lifts immediately, the photo zooms out from `scale(1.22)` → 1, a warm glow comes up, then line 2 and the subtext rise (fade + 48px rise).
-- **Scroll cue**, bottom center, appears after line 1: 5 copper bars (4px wide, 38px high, 6px gap) moving like an equalizer (1.4s, different delays) + "SCROLL" + a thin line with a falling drop of light. Disappears in the first ~8% of scrolling.
+- On load (time-based, CSS): the dome is visible at dusk, the photo drifts slowly, a warm copper glow breathes on the dome, and line 1 fades in word by word. The comma leaves the sentence open; it completes itself a moment later.
+- Then (time-based, ~1.2s after load): the dusk lifts, the photo zooms out from `scale(1.22)` → 1, a warm glow comes up, then line 2 and the subtext rise (fade + 48px rise).
+- **Scroll cue**, bottom center, appears after line 1: 5 copper bars (4px wide, 38px high, 6px gap) moving like an equalizer (1.4s, different delays) + "SCROLL" + a thin line with a falling drop of light. Stays until the first step (compact, without the line, in stacked layouts so it never covers the text).
 
 ### 02 · (removed)
 Deliberately removed. Do not bring back.
@@ -151,11 +155,11 @@ Deliberately removed. Do not bring back.
 
 ### 04 · New perspectives — guiding, not fixing
 - Background goes from copper-brown `#6B4A36` → ivory in the first ~17% of the build; only then text.
-- Visual: SVG with **two lines that end in a pair of eighth notes**. The lines **draw themselves along with the scroll** (stroke-dashoffset over each path's real length — never `pathLength="1"`, GSAP rounds that to a jump):
+- Visual: SVG with **two lines that end in a pair of eighth notes**. The lines **draw themselves** (stroke-dashoffset over each path's real length — never `pathLength="1"`, GSAP rounds that to a jump):
   1. Copper line (`#9C5530`) draws, hesitates, makes a loop → note head → stem.
   2. Then a clay line (`#C88F80`) walks alongside without touching the first → second note head → stem.
   3. Finally a **beam** joins both notes.
-  Meaning: two separate voices sounding together = guiding without fixing. Timing is linear and directly tied to the scroll (no glide, no swelling, no floating).
+  Meaning: two separate voices sounding together = guiding without fixing. Each stroke draws at an even pace (no glide, no swelling, no floating).
 - Copy (to the right of the notes on desktop; below the notes on phone/tablet portrait):
   - label: NIEUWE PERSPECTIEVEN
   - h2: **Er is meer dan één manier** *om te voelen.* (accent italic in copper)
@@ -208,13 +212,13 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 
 ## Quality & accessibility
 
-- `prefers-reduced-motion: reduce` → no pinning/scrub, everything visible in its final composition, no pulse, no equalizer, no intro.
+- `prefers-reduced-motion: reduce` → no step navigation, a normal scrolling page, everything visible in its final composition, no pulse, no equalizer, no intro.
 - Without JavaScript: the page is fully readable (final composition, normal flow). `html.motion` is only set from `<head>` when motion is allowed; a safety timeout removes it if the scene script never loads.
 - Real `<a>`/`<button>`, visible focus style (copper outline), touch targets ≥ 44px.
 - Decorative images/SVG `aria-hidden`; portrait with a label.
-- Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during scroll — they made the prototype stutter); Lighthouse ≥ 95 on all four.
+- Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars: `viewport-fit=cover`; each scene has `data-tint`, and `scripts/scenes/tint.ts` sets `--tint` (page background) + `theme-color` to the scene on screen. Pages pass `tint` to `Base`.
-- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style="--pin…"` attributes. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
+- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
 ---

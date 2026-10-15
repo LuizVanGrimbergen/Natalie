@@ -4,7 +4,7 @@ import type { Timeline } from './tweens';
 
 /**
  * The next scene dissolves in place over the previous one (no slide), and the
- * previous one dims. Relative timeline (0–1), driven by scroll or by time.
+ * previous one dims. Relative timeline (0–1), played by navigation.ts.
  *  dark  — true crossfade, previous dims to warm dark brown.
  *  light — previous fades to ivory first (0–55%), then the next appears (40–100%).
  */
