@@ -9,7 +9,7 @@ import { listening } from './listening';
 import { perspectives } from './perspectives';
 import { followTint } from './tint';
 import { enter } from './transition';
-import { HOLD, type Timeline } from './tweens';
+import { HOLD, prime, type Timeline } from './tweens';
 import { welcomes } from './welcomes';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -44,7 +44,8 @@ export function initScenes() {
   const scenes = [...all(document, '[data-scene]')];
   scenes.forEach((scene, i) => {
     if (i > 0) enter(scenes[i - 1], scene);
-    builders[scene.dataset.scene!]?.(scene).to({}, { duration: HOLD });
+    const tl = builders[scene.dataset.scene!]?.(scene);
+    if (tl) prime(tl.to({}, { duration: HOLD }));
   });
   followTint(scenes);
 
@@ -60,8 +61,14 @@ export function initScenes() {
 
   const initial = location.hash && document.getElementById(location.hash.slice(1));
   if (initial && initial.matches('[data-scene]')) {
-    ScrollTrigger.refresh();
-    lenis.scrollTo(sceneEnd(initial), { immediate: true });
+    // After load, so the browser's own anchor jump (to the scene's first frame) can't override it.
+    const land = () =>
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        lenis.scrollTo(sceneEnd(initial), { immediate: true, force: true });
+      });
+    if (document.readyState === 'complete') land();
+    else addEventListener('load', land, { once: true });
   }
 
   window.__scenesReady = true;

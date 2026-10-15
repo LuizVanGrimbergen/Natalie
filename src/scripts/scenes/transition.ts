@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { one } from './dom';
+import { prime } from './tweens';
 
 /** Share of the viewport scrolled during a crossfade (matches --dissolve in styles/scenes.css). */
 const DISSOLVE = 0.6;
@@ -23,4 +24,5 @@ export function enter(prev: HTMLElement, next: HTMLElement) {
   } else {
     tl.fromTo(dim, { opacity: 0 }, { opacity: 0.55, duration: 1 }, 0).fromTo(next, { opacity: 0 }, { opacity: 1, duration: 1 }, 0);
   }
+  prime(tl);
 }

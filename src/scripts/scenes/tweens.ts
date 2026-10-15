@@ -18,6 +18,15 @@ export function build(scene: HTMLElement): Timeline {
   });
 }
 
+/**
+ * Put every tween of a timeline in its start state right away. A scrubbed
+ * timeline otherwise only renders once its scroll range is reached, so a scene
+ * would dissolve in already finished and then jump back.
+ */
+export function prime(tl: Timeline): Timeline {
+  return tl.progress(1).progress(0);
+}
+
 export function rise(tl: Timeline, targets: gsap.TweenTarget, at: number, duration: number) {
   tl.fromTo(targets, { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration, ease: 'power2.out' }, at);
 }
