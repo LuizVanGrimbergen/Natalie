@@ -1,0 +1,266 @@
+---
+import { Picture } from 'astro:assets';
+import hero from '../../assets/hero.avif';
+import ScrollCue from '../ScrollCue.astro';
+
+// The first line arrives on load, word by word; the comma leaves the sentence open so scrolling finishes it.
+const firstLine = 'Niet alles wat je raakt,'.split(' ');
+---
+
+<section class="scene hero" style="--pin: 900px; z-index: 1" data-scene="hero" aria-labelledby="hero-title">
+  <div class="stage">
+    <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
+    <div class="hero__drift" aria-hidden="true">
+      <Picture
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        class="hero__img"
+        src={hero}
+        alt=""
+        aria-hidden="true"
+        widths={[800, 1200, 1600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        data-hero-img
+      />
+    </div>
+    <div class="hero__warm" aria-hidden="true" data-hero-warm></div>
+    <div class="hero__night" aria-hidden="true"></div>
+    <div class="hero__dark" aria-hidden="true" data-hero-dark></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+    <div class="hero__pulse" aria-hidden="true"></div>
+
+    <h1 id="hero-title" class="sr-only">Niet alles wat je raakt, kun je meteen begrijpen.</h1>
+    <p class="display hero__l1" aria-hidden="true">
+      {
+        firstLine.map((word, i) => (
+          <>
+            <span class="hero__word" style={`--i: ${i}`}>{word}</span>{' '}
+          </>
+        ))
+      }
+    </p>
+    <p class="display hero__l2" aria-hidden="true" data-reveal="2"><em>kun je meteen begrijpen.</em></p>
+    <p class="hero__sub" data-reveal="3">Soms begint een nieuw perspectief met luisteren naar wat je voelt.</p>
+
+    <ScrollCue />
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--color-bronze-950);
+  }
+  .stage {
+    background: radial-gradient(ellipse 120% 90% at 50% 55%, #1a1511 0%, #12100d 55%, #0a0807 100%);
+  }
+  /* Slow breath of the camera, separate from the scroll zoom on the image itself. */
+  .hero__drift {
+    position: absolute;
+    inset: 0;
+  }
+  :global(html.motion) .hero__drift {
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.05) translate3d(-0.8%, -0.6%, 0);
+    }
+  }
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 42% 50%;
+    will-change: transform;
+  }
+  .hero__warm,
+  .hero__night,
+  .hero__dark,
+  .hero__vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .hero__warm {
+    background: radial-gradient(ellipse 30% 38% at 45% 50%, rgb(232 150 100 / 0.22), rgb(200 143 128 / 0) 70%);
+  }
+  /* Final night: ~60% of a bronze wash. The extra layer starts the scene deeper (~95%). */
+  .hero__night {
+    background: linear-gradient(180deg, rgb(18 16 13 / 0.7), rgb(18 16 13 / 0.45) 45%, rgb(18 16 13 / 0.8));
+    opacity: 0.75;
+  }
+  .hero__dark {
+    background: var(--color-bronze-950);
+    opacity: 0;
+  }
+  .hero__vignette {
+    background: radial-gradient(ellipse 75% 70% at 50% 50%, rgb(18 16 13 / 0) 40%, rgb(8 6 5 / 0.85) 100%);
+  }
+
+  /* Warm light breathing out of the dome, as if the music is already playing. */
+  .hero__pulse {
+    position: absolute;
+    left: 41%;
+    top: 43%;
+    width: 76vmin;
+    height: 76vmin;
+    margin: -38vmin 0 0 -38vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(240 160 105 / 0.32), rgb(212 154 114 / 0.1) 38%, rgb(212 154 114 / 0) 66%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  :global(html.motion) .hero__pulse {
+    animation: dome-breath 4.2s ease-in-out infinite;
+  }
+  @keyframes dome-breath {
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(0.94);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  :global(html.motion) .hero__word {
+    display: inline-block;
+    animation: word-in 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.35s + var(--i) * 0.16s);
+  }
+  @keyframes word-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.35em);
+    }
+  }
+
+  .hero__l1,
+  .hero__l2,
+  .hero__sub {
+    position: absolute;
+    z-index: 2;
+    color: var(--color-ivory);
+    text-shadow:
+      0 2px 30px rgb(12 9 7 / 0.85),
+      0 0 2px rgb(12 9 7 / 0.5);
+  }
+  .hero__l1,
+  .hero__l2 {
+    font-size: clamp(46px, 6.4vw, 112px);
+    line-height: 0.98;
+  }
+  .hero__l1 {
+    left: 6vw;
+    top: 16%;
+    max-width: 38vw;
+  }
+  .hero__l2 {
+    right: 6vw;
+    bottom: 18%;
+    max-width: 40vw;
+    text-align: right;
+    color: #ead3c2;
+  }
+  .hero__sub {
+    left: 6vw;
+    bottom: 8%;
+    max-width: 360px;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  /* phone */
+  @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
+    .hero__l1,
+    .hero__l2 {
+      font-size: clamp(36px, 11vw, 60px);
+      max-width: 80vw;
+    }
+    .hero__l1 {
+      left: 24px;
+      top: 18%;
+    }
+    .hero__l2 {
+      right: 24px;
+      bottom: calc(8% + 118px);
+    }
+    .hero__sub {
+      left: 24px;
+      right: 24px;
+      bottom: 8%;
+      font-size: 16px;
+    }
+  }
+  @media (min-width: 600px) and (max-width: 820px) and (min-height: 521px) {
+    .hero__l1,
+    .hero__l2 {
+      font-size: 64px;
+    }
+    .hero__l1 {
+      left: 48px;
+    }
+    .hero__l2 {
+      right: 48px;
+    }
+    .hero__sub {
+      left: 48px;
+      font-size: 18px;
+    }
+  }
+  /* iPhone SE and other short phones */
+  @media (max-width: 559px) and (max-height: 700px), (max-width: 820px) and (min-height: 521px) and (max-height: 700px) {
+    .hero__l1 {
+      top: 15%;
+    }
+    .hero__l2 {
+      bottom: calc(8% + 96px);
+    }
+    .hero__sub {
+      font-size: 15px;
+    }
+  }
+  /* phone landscape */
+  @media (min-width: 560px) and (max-height: 520px) {
+    .hero__l1,
+    .hero__l2 {
+      font-size: clamp(30px, 11vh, 60px);
+      max-width: 46vw;
+    }
+    .hero__sub {
+      font-size: 14px;
+      max-width: 300px;
+    }
+  }
+  /* tablet portrait */
+  @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    .hero__l1,
+    .hero__l2 {
+      font-size: clamp(64px, 9vw, 96px);
+      max-width: 72vw;
+    }
+    .hero__l1 {
+      left: 8vw;
+      top: 18%;
+    }
+    .hero__l2 {
+      right: 8vw;
+      bottom: calc(8% + 150px);
+    }
+    .hero__sub {
+      left: 8vw;
+      font-size: clamp(18px, 2.3vw, 21px);
+      max-width: 440px;
+    }
+  }
+</style>
