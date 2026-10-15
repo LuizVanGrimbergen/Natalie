@@ -1,5 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
+import Analytics from '@vercel/analytics/astro';
 import '@fontsource/cormorant-garamond/latin-300.css';
 import '@fontsource/cormorant-garamond/latin-300-italic.css';
 import '@fontsource/cormorant-garamond/latin-400.css';
@@ -50,6 +51,8 @@ const ogUrl = new URL(og.src, Astro.site);
       // A file, not inline, so the Content-Security-Policy can forbid inline scripts.
       story && <script is:inline src="/motion.js"></script>
     }
+    <!-- Cookieless visitor stats (Vercel Web Analytics): no consent banner needed; served from /_vercel, so the CSP stays 'self'. -->
+    <Analytics />
     <slot name="head" />
   </head>
   <body>

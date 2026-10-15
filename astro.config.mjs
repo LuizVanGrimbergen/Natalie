@@ -13,5 +13,7 @@ export default defineConfig({
   site,
   vite: {
     plugins: [tailwindcss()],
+    // Never inline small scripts into the HTML: the Content-Security-Policy (vercel.json) only allows script files.
+    build: { assetsInlineLimit: 0 },
   },
 });
