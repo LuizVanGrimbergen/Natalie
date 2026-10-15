@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import BookingDetails from '../components/booking/BookingDetails.astro';
+import BookingCalendar from '../components/booking/BookingCalendar.astro';
+---
+
+<Base
+  title="Afspraak maken — Natalie"
+  description="Plan een moment in de koepel: immersieve muziek en persoonlijke begeleiding bij Natalie Vandervoort."
+>
+  <div class="page">
+    <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
+    <main class="layout">
+      <BookingDetails />
+      <BookingCalendar />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page {
+    position: relative;
+    min-height: 100svh;
+    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 70%, var(--color-ivory-warm-2) 100%);
+    color: var(--color-bronze-900);
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    gap: 6vw;
+    align-items: start;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(120px, 16vh, 180px) 6vw 80px;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      padding: 104px 24px 56px;
+    }
+  }
+  @media (min-width: 600px) and (max-width: 900px) {
+    .layout {
+      padding: 120px 48px 72px;
+    }
+  }
+</style>
