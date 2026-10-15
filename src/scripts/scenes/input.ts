@@ -12,23 +12,40 @@ const SWIPE_MIN = 36;
  * Turns wheel, touch and keyboard input into single steps: one gesture is
  * exactly one step, however long the trackpad keeps scrolling or the finger
  * keeps moving. The page itself never scrolls.
+ *
+ * A trackpad keeps sending ever smaller events after the fingers let go
+ * (momentum), often without a gap before the next gesture. So a new gesture
+ * also starts when the direction flips, or when the deltas grow again while
+ * the momentum was dying down (a fresh push).
  */
 export function onStep(step: (dir: Step) => void) {
   let last = 0;
   let sum = 0;
   let used = false;
+  let sign = 0;
+  let peak = 0;
+  let previous = 0;
   addEventListener(
     'wheel',
     (event) => {
       event.preventDefault();
       const now = performance.now();
-      if (now - last > WHEEL_GAP) {
+      const delta = event.deltaY;
+      const size = Math.abs(delta);
+      const dir = Math.sign(delta);
+      const fading = peak > 0 && previous < peak * 0.7;
+      const fresh = now - last > WHEEL_GAP || (dir !== 0 && dir !== sign) || (fading && size > previous * 1.6 && size > 6);
+      if (fresh) {
         sum = 0;
         used = false;
+        sign = dir;
+        peak = 0;
       }
       last = now;
+      previous = size;
+      peak = Math.max(peak, size);
       if (used) return;
-      sum += event.deltaY;
+      sum += delta;
       if (Math.abs(sum) < WHEEL_MIN) return;
       used = true;
       step(sum > 0 ? 1 : -1);

@@ -117,9 +117,9 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - All content of a scene is fully built **before** the next scene starts dissolving in.
 
 ### One step per screen (desktop and touch alike)
-- **One scroll gesture, swipe, or arrow/Page key = one screen.** A trackpad flick with momentum still counts once (`input.ts`: a gesture ends after 180ms without wheel events).
+- **One scroll gesture, swipe, or arrow/Page key = one screen.** A trackpad flick with momentum still counts once (`input.ts`: a gesture ends after 180ms without wheel events — or as soon as the direction flips, or a fresh push makes the dying momentum grow again, so scrolling back the other way right away always works).
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
-- A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`).
+- A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`); up to 3 quick steps are remembered (`QUEUE`).
 - The hero completes its sentence by itself after the load intro.
 - **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
 - A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays ivory. The header fades out after the hero.

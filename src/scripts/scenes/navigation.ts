@@ -14,6 +14,8 @@ const BACK = 0.6;
 const HERO_DELAY = 1.2;
 /** A step asked for while another runs speeds that one up by this much, then follows. */
 const HURRY = 3;
+/** Steps remembered while one runs (a few quick swipes in a row all count). */
+const QUEUE = 3;
 
 const ease = 'power1.inOut';
 
@@ -36,7 +38,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
   /** Index of the scene on screen; last + 1 means the footer is up. */
   let current = 0;
   let active: gsap.core.Animation | null = null;
-  let queued: Step | null = null;
+  const queued: Step[] = [];
 
   /** Only the scenes taking part in a step keep their CSS loops (drift, breathing glow) running. */
   function onstage(...visible: number[]) {
@@ -45,12 +47,12 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
 
   function run(animation: gsap.core.Animation) {
     active = animation;
+    if (queued.length) animation.timeScale(HURRY);
     cue.hide();
     animation.eventCallback('onComplete', () => {
       active = null;
       onstage(Math.min(current, last));
-      const next = queued;
-      queued = null;
+      const next = queued.shift();
       if (next) step(next);
       else if (current < last) cue.show(scenes[current]);
     });
@@ -114,7 +116,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
 
   function step(dir: Step) {
     if (active) {
-      queued = dir;
+      if (queued.length < QUEUE) queued.push(dir);
       active.timeScale(HURRY);
       return;
     }
@@ -126,7 +128,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
   function jump(to: number, instant = false) {
     if (to <= current || current > last) return;
     // Whatever is still playing (e.g. the hero's own build) finishes at once.
-    queued = null;
+    queued.length = 0;
     active?.progress(1);
     if (to === current + 1 && !instant) return forward();
     const settle = () => {
