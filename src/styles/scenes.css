@@ -1,0 +1,52 @@
+@layer components {
+  /* ---- Scene mechanics ----------------------------------------------
+     Base state (no JS, reduced motion): every scene is one screen in
+     normal flow, showing its final composition.
+     html.motion (set in <head> when motion is allowed): each scene gets
+     its build length (--pin) plus room for the next scene to dissolve in
+     on top of it (--dissolve), and the stage sticks while the content builds up. */
+  .scene {
+    position: relative;
+  }
+  .stage {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+  }
+  /* --dissolve: scroll distance of the crossfade into the next scene (keep in sync with DISSOLVE in scripts/scenes/transition.ts). */
+  html.motion {
+    --dissolve: 60svh;
+  }
+  html.motion .scene {
+    height: calc(var(--pin) + var(--dissolve) + 100svh);
+  }
+  html.motion .scene:last-child {
+    height: calc(var(--pin) + 100svh);
+  }
+  html.motion .scene + .scene {
+    margin-top: -100svh;
+  }
+  html.motion .stage {
+    position: sticky;
+    top: 0;
+  }
+  /* Hidden until GSAP takes over, so nothing flashes before the first frame. */
+  html.motion .scene + .scene,
+  html.motion [data-reveal] {
+    opacity: 0;
+  }
+
+  .exit-dim {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .exit-dim--dark {
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, #2a1e16, #120d0a);
+  }
+  .exit-dim--light {
+    background: var(--color-ivory);
+  }
+}
