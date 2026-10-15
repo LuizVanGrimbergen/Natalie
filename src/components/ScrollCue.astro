@@ -1,0 +1,105 @@
+---
+---
+
+<div class="cue" aria-hidden="true" data-cue>
+  <div class="cue__inner">
+    <span class="cue__bars"><i></i><i></i><i></i><i></i><i></i></span>
+    <span class="cue__label">Scroll</span>
+    <span class="cue__line"><b></b></span>
+  </div>
+</div>
+
+<style>
+  .cue {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 28px;
+    margin: 0 auto;
+    width: max-content;
+    z-index: 5;
+  }
+  /* Without motion nothing scrubs, so there is nothing to cue. */
+  :global(html:not(.motion)) .cue {
+    display: none;
+  }
+  /* Arrives once the first line has settled (GSAP fades the outer .cue on scroll). */
+  .cue__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    animation: cue-in 1.2s ease-out 1.6s both;
+  }
+  .cue__bars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+  }
+  .cue__bars i {
+    display: block;
+    width: 4px;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--color-copper-300);
+    box-shadow: 0 0 12px rgb(212 154 114 / 0.55);
+    transform: scaleY(0.25);
+    animation: eq 1.4s ease-in-out infinite;
+  }
+  .cue__bars i:nth-child(2) { animation-delay: -0.3s; }
+  .cue__bars i:nth-child(3) { animation-delay: -0.7s; }
+  .cue__bars i:nth-child(4) { animation-delay: -0.2s; }
+  .cue__bars i:nth-child(5) { animation-delay: -0.9s; }
+  .cue__label {
+    font-size: 14px;
+    letter-spacing: 0.34em;
+    margin-right: -0.34em;
+    text-transform: uppercase;
+    color: var(--color-ivory);
+    font-weight: 400;
+    text-shadow: 0 1px 12px rgb(12 9 7 / 0.8);
+  }
+  /* A drop of light falling down a thin line: this way. */
+  .cue__line {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 56px;
+    overflow: hidden;
+    background: rgb(245 241 233 / 0.28);
+  }
+  .cue__line b {
+    position: absolute;
+    left: -2px;
+    top: -10px;
+    width: 5px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-ivory);
+    box-shadow: 0 0 8px rgb(245 241 233 / 0.9);
+    animation: drop 2.2s cubic-bezier(0.6, 0, 0.3, 1) 2.2s infinite;
+  }
+  @keyframes eq {
+    0%, 100% { transform: scaleY(0.25); }
+    50% { transform: scaleY(1); }
+  }
+  @keyframes cue-in {
+    from { opacity: 0; transform: translateY(14px); }
+  }
+  @keyframes drop {
+    0% { transform: translateY(0); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(66px); opacity: 0; }
+  }
+  @media (max-height: 700px) {
+    .cue { bottom: 16px; }
+    .cue__inner { gap: 10px; }
+    .cue__line { height: 36px; }
+  }
+  @media (min-width: 560px) and (max-height: 520px) {
+    .cue { bottom: 10px; }
+    .cue__bars { height: 26px; }
+    .cue__line { display: none; }
+  }
+</style>
