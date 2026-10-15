@@ -25,7 +25,7 @@ The original HTML prototype has been fully rebuilt in this codebase; **the code 
 | Navigation | Own gesture handling (`scripts/scenes/input.ts`) | One wheel/trackpad gesture or swipe = exactly one step |
 | Images | **astro:assets** `<Picture>` | AVIF + WebP, JPG fallback, responsive `srcset`; hero preloaded, the rest lazy |
 | Fonts | `@fontsource` (self-hosted) | Cormorant Garamond (300, 400, italic) + Figtree (300, 400, 500), latin subset |
-| Visitor stats | **Vercel Web Analytics** (`@vercel/analytics`, `<Analytics />` in `Base`) | Cookieless (no consent banner), same-origin script, visitors / referrers / countries / devices / UTM |
+| Visitor stats | **Vercel Web Analytics** (`@vercel/analytics`, `<Analytics />` in `Base`) | Cookieless (no consent banner), same-origin script, visitors / referrers / countries / devices / UTM. Each scene reached counts once per visit as a page `/scene/<name>` (`track.ts`), so the Pages list shows how far people get; `/booking` shows who clicked through. Time per scene would need custom events (Pro plan). |
 | Booking | Google Calendar appointment schedule | Embedded on `/booking` via `PUBLIC_BOOKING_URL` |
 | Hosting | Vercel (preview links for the client) or own VPS via Ploi | Static output (`astro build`) |
 
@@ -62,6 +62,7 @@ src/
     navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
     input.ts                        # wheel / touch / keys → single steps (trackpad momentum = still one step)
     cue.ts                          # shows/hides the NextCue, light or dark per scene
+    track.ts                        # counts each reached scene once per visit as /scene/<name> (Vercel Web Analytics)
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes

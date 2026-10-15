@@ -3,6 +3,7 @@ import { initCue } from './cue';
 import { all, one } from './dom';
 import { onStep, type Step } from './input';
 import { tintNow, tintTo } from './tint';
+import { trackScene } from './track';
 import { prime, type Timeline } from './tweens';
 
 /** Seconds a scene takes to build itself once it is on screen. */
@@ -77,6 +78,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       );
     } else {
       onstage(current, to);
+      trackScene(scenes[to]);
       builds[to].progress(0);
       tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
         .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => opacity(scenes[to])), 0)
@@ -137,6 +139,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     };
     gsap.set(header, { autoAlpha: 0 });
     current = to;
+    trackScene(scenes[to]);
     if (instant) {
       tintNow(scenes[to]);
       settle();
