@@ -5,8 +5,11 @@
      html.motion (set in <head> by public/motion.js): the page doesn't scroll.
      The scenes lie on top of each other, one screen each, and
      scripts/scenes/navigation.ts dissolves from one to the next per step. */
+  /* Safari colors its bars from fixed elements at the screen edges too, so every
+     scene's own background is the animated bar color (its stage covers it). */
   .scene {
     position: relative;
+    background-color: var(--tint);
   }
   /* The stage fills the largest viewport, so it runs under Safari's toolbars;
      its content sits in .frame, the smallest viewport, so nothing hides behind them. */

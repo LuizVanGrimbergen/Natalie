@@ -9,7 +9,7 @@
 </footer>
 
 <style>
-  /* Continues the warm ivory at the bottom of the invitation scene. */
+  /* Plain ivory like the edges of the invitation scene, so Safari's bottom bar matches. */
   .footer {
     position: relative;
     display: flex;
@@ -18,12 +18,13 @@
     align-items: baseline;
     gap: 8px 48px;
     padding: 32px 6vw max(40px, calc(env(safe-area-inset-bottom) + 24px));
-    background: var(--color-ivory-warm-2);
+    background: var(--color-ivory);
     box-shadow: inset 0 1px 0 rgb(156 85 48 / 0.25);
     font-size: 14px;
     color: var(--color-muted);
   }
-  /* With motion: waits just below the screen until the last step brings it up (navigation.ts). */
+  /* With motion: waits just below the screen until the last step slides it up over
+     the bottom of the invitation (navigation.ts); the scene itself stays put. */
   :global(html.motion) .footer {
     position: fixed;
     left: 0;

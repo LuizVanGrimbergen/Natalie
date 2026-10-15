@@ -19,8 +19,8 @@ const ease = 'power1.inOut';
 /**
  * One scroll or swipe is one screen. The scenes lie on top of each other;
  * the next one dissolves in and then builds itself in time, so every step
- * shows a complete composition. A last step after the invitation brings up
- * the footer.
+ * shows a complete composition. A last step after the invitation slides the
+ * footer up over its bottom edge.
  */
 export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades: Timeline[]) {
   builds.forEach(prime);
@@ -58,9 +58,12 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     const to = current + 1;
     const tl = gsap.timeline();
     if (to > last) {
-      tl.to(scenes[last], { y: () => -footer.offsetHeight, duration: 0.7, ease: 'power2.out' }, 0).to(
-        footer,
-        { yPercent: -100, duration: 0.7, ease: 'power2.out' },
+      // On short screens the invitation's content moves up just enough to stay clear of the footer.
+      const clear = one(scenes[last], '[data-footer-clear]').getBoundingClientRect().bottom;
+      const room = Math.max(0, clear + 24 - (window.innerHeight - footer.offsetHeight));
+      tl.to(footer, { yPercent: -100, duration: 0.7, ease: 'power2.out' }, 0).to(
+        one(scenes[last], '[data-footer-shift]'),
+        { y: -room, duration: 0.7, ease: 'power2.out' },
         0,
       );
     } else {
@@ -80,7 +83,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     const from = current;
     const tl = gsap.timeline();
     if (from > last) {
-      tl.to(scenes[last], { y: 0, duration: BACK, ease }, 0).to(footer, { yPercent: 0, duration: BACK, ease }, 0);
+      tl.to(footer, { yPercent: 0, duration: BACK, ease }, 0).to(one(scenes[last], '[data-footer-shift]'), { y: 0, duration: BACK, ease }, 0);
     } else {
       // The scene we return to keeps its finished composition.
       onstage(from - 1, from);

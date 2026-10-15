@@ -4,12 +4,12 @@ import door from '../../assets/door.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
-<section id="invitation" class="scene invitation" style="z-index: 5" data-tint="#F7F3ED" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
+<section id="invitation" class="scene invitation" style="z-index: 5" data-tint="#F5F1E9" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
   <div class="stage">
     <div class="glow" aria-hidden="true"></div>
     <div class="frame">
-      <div class="grid">
-        <div class="text">
+      <div class="grid" data-footer-shift>
+        <div class="text" data-footer-clear>
           <h2 id="invitation-title" class="display text__h" data-reveal="1">Misschien is dit iets <em>voor jou.</em></h2>
           <p class="text__p" data-reveal="2">
             Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor
@@ -28,12 +28,16 @@ import CtaLink from '../CtaLink.astro';
 </section>
 
 <style>
-  .invitation {
-    background: var(--color-ivory-warm-2);
-  }
+  /* Warm in the middle, plain ivory at the top and bottom edges, where Safari's bars meet the page. */
   .stage {
-    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 60%, var(--color-ivory-warm-2) 100%);
+    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 35%, var(--color-ivory-warm-2) 60%, var(--color-ivory) 100%);
     color: var(--color-bronze-900);
+  }
+  /* When the footer comes up, the content may move up to stay clear of it; it then
+     fades out softly at the top, so the top edge (and Safari's bar) stays ivory. */
+  :global(html.motion) .frame {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40px);
+    mask-image: linear-gradient(to bottom, transparent, #000 40px);
   }
   .glow {
     position: absolute;

@@ -119,7 +119,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. Step back returns to the earlier scene as it was left.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`).
 - The hero completes its sentence by itself after the load intro; the scroll cue stays until the first step.
-- A last step after the invitation slides the footer up. The header fades out after the hero.
+- A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays ivory. The header fades out after the hero.
 - Links to `#invitation` (header link, or opening the page with the hash) dissolve straight to the finished scene; keyboard focus on a later scene (Tab to the button) brings it on screen.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
 - The scene timelines are relative (positions 0–1); `navigation.ts` gives them their duration.
@@ -179,7 +179,7 @@ Deliberately removed. Do not bring back.
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
 ### 06 · The invitation (`id="invitation"`)
-- Warm ivory gradient, soft clay glow.
+- Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
 - Image: `door.avif` = the glowing opening of the dome with the orange lamp, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
 - Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
@@ -218,7 +218,8 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
-  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#343335`, wooden room `#140B05`, ivory scenes `#F7F3ED`) — re-measure if a scene's top changes.
+  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#343335`, wooden room `#140B05`, ivory scenes `#F5F1E9`) — re-measure if a scene's top changes.
+  - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the footer and the booking page are ivory too). Nothing may cast a shadow into the screen edges.
   - A scene that arrives in another color and then lifts (hero: dusk → light, perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
   - Pages pass `tint` to `Base` for the first paint (story: the hero at dusk, `#201E1D`).
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. A new external service (e.g. analytics) must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
