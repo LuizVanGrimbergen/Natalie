@@ -178,17 +178,17 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     font-weight: 400;
   }
 
-  /* Light theme: the photo stays clear, in full color. Light only where the words sit
-     (a soft ivory glow behind each block, top left and bottom) and at the top and bottom
-     edges (EdgeFade, for Safari's bars); the dome in the middle has no veil. */
+  /* Light theme: the photo stays clear, in full color. A soft warm-brown glow only where
+     the words sit (ivory on it), ivory only at the top and bottom edges (EdgeFade, for
+     Safari's bars); the dome in the middle has no veil. */
   :global([data-theme='light']) .stage {
     background: var(--color-ivory);
   }
   :global([data-theme='light']) .hero__night {
     background:
-      radial-gradient(ellipse 50% 36% at 20% 24%, rgb(245 241 233 / 0.94), rgb(245 241 233 / 0.6) 45%, rgb(245 241 233 / 0) 75%),
-      radial-gradient(ellipse 44% 30% at 80% 72%, rgb(245 241 233 / 0.94), rgb(245 241 233 / 0.6) 45%, rgb(245 241 233 / 0) 75%),
-      radial-gradient(ellipse 42% 22% at 18% 88%, rgb(245 241 233 / 0.94), rgb(245 241 233 / 0.6) 45%, rgb(245 241 233 / 0) 75%);
+      radial-gradient(ellipse 50% 36% at 20% 24%, rgb(58 34 18 / 0.7), rgb(58 34 18 / 0.4) 45%, rgb(58 34 18 / 0) 75%),
+      radial-gradient(ellipse 44% 30% at 80% 72%, rgb(58 34 18 / 0.7), rgb(58 34 18 / 0.4) 45%, rgb(58 34 18 / 0) 75%),
+      radial-gradient(ellipse 42% 22% at 18% 88%, rgb(58 34 18 / 0.7), rgb(58 34 18 / 0.4) 45%, rgb(58 34 18 / 0) 75%);
     opacity: 1;
   }
   /* Phone: the words sit in a band at the top and one at the bottom; the dome between stays clear. */
@@ -196,12 +196,12 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     :global([data-theme='light']) .hero__night {
       background: linear-gradient(
         180deg,
-        rgb(245 241 233 / 0.92) 0%,
-        rgb(245 241 233 / 0.85) 18%,
-        rgb(245 241 233 / 0) 34%,
-        rgb(245 241 233 / 0) 52%,
-        rgb(245 241 233 / 0.85) 66%,
-        rgb(245 241 233 / 0.94) 100%
+        rgb(58 34 18 / 0.72) 0%,
+        rgb(58 34 18 / 0.62) 18%,
+        rgb(58 34 18 / 0) 34%,
+        rgb(58 34 18 / 0) 52%,
+        rgb(58 34 18 / 0.62) 66%,
+        rgb(58 34 18 / 0.78) 100%
       );
     }
   }
@@ -210,17 +210,6 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
   }
   :global([data-theme='light']) .hero__vignette {
     background: none;
-  }
-  :global([data-theme='light']) .hero__l1,
-  :global([data-theme='light']) .hero__l2,
-  :global([data-theme='light']) .hero__sub {
-    color: var(--fg);
-    text-shadow:
-      0 0 28px rgb(245 241 233 / 0.95),
-      0 0 2px rgb(245 241 233 / 0.8);
-  }
-  :global([data-theme='light']) .hero__l2 {
-    color: var(--fg);
   }
 
   /* phone */
