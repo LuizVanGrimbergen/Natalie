@@ -4,7 +4,7 @@ import interior from '../../assets/interior.avif';
 import EdgeFade from '../EdgeFade.astro';
 ---
 
-<section id="luisteren" class="scene listening" style="z-index: 3" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="listening" aria-labelledby="listening-title">
+<section id="luisteren" class="scene listening" style="z-index: 3" data-tint="#120A05" data-tint-light="#6B4A36" data-scene="listening" aria-labelledby="listening-title">
   <div class="stage">
     <div class="exit-dim exit-dim--photo" aria-hidden="true"></div>
     <Picture
@@ -20,7 +20,7 @@ import EdgeFade from '../EdgeFade.astro';
     />
     <div class="room__dim" aria-hidden="true" data-room-dim></div>
     <div class="room__scrim" aria-hidden="true"></div>
-    <EdgeFade color="#120A05" light="#F5F1E9" />
+    <EdgeFade color="#120A05" light="#6B4A36" />
 
     <div class="frame">
       <div class="copy">
@@ -112,16 +112,18 @@ import EdgeFade from '../EdgeFade.astro';
     line-height: 1.25;
   }
 
-  /* Light theme: the room stays clear; soft warm-brown bands at the sides, where the words sit (ivory on them); the middle stays clear. */
+  /* Light theme: the same filter as in dark, in the warm, lighter brown (#6B4A36) instead
+     of near-black; the words stay ivory. */
   :global([data-theme='light']) .stage {
-    background: var(--color-ivory);
+    background: #6b4a36;
   }
   :global([data-theme='light']) .room__dim {
-    background: var(--color-ivory);
+    background: #6b4a36;
   }
   :global([data-theme='light']) .room__scrim {
     background:
-      linear-gradient(90deg, rgb(58 34 18 / 0.78) 0%, rgb(58 34 18 / 0.42) 30%, rgb(58 34 18 / 0) 45%, rgb(58 34 18 / 0) 55%, rgb(58 34 18 / 0.42) 70%, rgb(58 34 18 / 0.78) 100%);
+      linear-gradient(90deg, rgb(107 74 54 / 0.78) 0%, rgb(107 74 54 / 0.25) 38%, rgb(107 74 54 / 0.25) 62%, rgb(107 74 54 / 0.78) 100%),
+      linear-gradient(180deg, rgb(107 74 54 / 0.55) 0%, rgb(107 74 54 / 0) 30%, rgb(107 74 54 / 0) 60%, rgb(107 74 54 / 0.7) 100%);
   }
 
   /* Stacked (phone + tablet portrait): title on top, the rest grouped at the bottom. */
@@ -130,9 +132,7 @@ import EdgeFade from '../EdgeFade.astro';
       background: linear-gradient(180deg, rgb(10 7 5 / 0.75) 0%, rgb(10 7 5 / 0.35) 30%, rgb(10 7 5 / 0.55) 55%, rgb(10 7 5 / 0.9) 100%);
     }
     :global([data-theme='light']) .room__scrim {
-      background:
-        radial-gradient(ellipse 80% 16% at 30% 14%, rgb(58 34 18 / 0.8), rgb(58 34 18 / 0) 75%),
-        linear-gradient(180deg, rgb(58 34 18 / 0) 42%, rgb(58 34 18 / 0.72) 62%, rgb(58 34 18 / 0.8) 100%);
+      background: linear-gradient(180deg, rgb(107 74 54 / 0.75) 0%, rgb(107 74 54 / 0.35) 30%, rgb(107 74 54 / 0.55) 55%, rgb(107 74 54 / 0.9) 100%);
     }
     .copy {
       display: flex;

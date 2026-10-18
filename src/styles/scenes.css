@@ -67,6 +67,6 @@
     background: radial-gradient(ellipse 90% 80% at 50% 40%, #2a1e16, #120d0a);
   }
   [data-theme='light'] .exit-dim--photo {
-    background: var(--dim);
+    background: #6b4a36;
   }
 }
