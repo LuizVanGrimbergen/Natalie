@@ -176,7 +176,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
   - *Stilte is hier geen leegte. Het is structuur.* (italic, `copper-300`)
 
 ### 03 · The wooden room — listening
-- Image: `interior.avif` = photo looking up inside the real dome (light birch plywood rhombi meeting in a star, 1200×1600 portrait; zoom origin on the star's centre).
+- Image: `interior.avif` = the inside of the dome looking up (light wooden rhombi meeting in a star, clean seams, 1086×1448 portrait; zoom origin on the star's centre).
 - No visible lamp / no "sun".
 - Scrim: dark wash along the edges and behind text for readability.
 - Copy (desktop: spread out; phone/tablet portrait: title on top, the rest grouped at the bottom):
@@ -287,4 +287,4 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - A project name (she tried *A Space for Sound*, *SŌNAR*, *SYNC∞ × OFFL*); for now the wordmark stays *Natalie*
 - Natalie's confirmation that the dome may be shown and that the dark copper/wood palette is right
 - Domain name
-- Higher-resolution `door.avif` (currently 330×490, soft on retina screens) and `interior.avif` (photo is 1200×1600, upscaled on wide desktop screens)
+- Higher-resolution `door.avif` (currently 330×490, soft on retina screens) and `interior.avif` (1086×1448, upscaled on wide desktop screens)
