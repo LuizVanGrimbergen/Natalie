@@ -4,7 +4,7 @@ import door from '../../assets/door.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
-<section id="invitation" class="scene invitation" style="z-index: 5" data-tint="#F5F1E9" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
+<section id="invitation" class="scene invitation" style="z-index: 7" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="invitation" aria-labelledby="invitation-title">
   <div class="stage">
     <div class="glow" aria-hidden="true"></div>
     <div class="frame">
@@ -28,13 +28,13 @@ import CtaLink from '../CtaLink.astro';
 </section>
 
 <style>
-  /* Warm in the middle, plain ivory at the top and bottom edges, where Safari's bars meet the page. */
+  /* Flat wood at the top and bottom edges, where Safari's bars meet the page; the glow sits in the middle. */
   .stage {
-    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 35%, var(--color-ivory-warm-2) 60%, var(--color-ivory) 100%);
-    color: var(--color-bronze-900);
+    background: var(--page);
+    color: var(--fg);
   }
   /* When the footer comes up, the content may move up to stay clear of it; it then
-     fades out softly at the top, so the top edge (and Safari's bar) stays ivory. */
+     fades out softly at the top, so the top edge (and Safari's bar) stays flat wood. */
   :global(html.motion) .frame {
     -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40px);
     mask-image: linear-gradient(to bottom, transparent, #000 40px);
@@ -45,7 +45,7 @@ import CtaLink from '../CtaLink.astro';
     top: -6%;
     width: 60vw;
     height: 112%;
-    background: radial-gradient(ellipse 40% 50% at 50% 55%, rgb(200 143 128 / 0.32), rgb(245 241 233 / 0) 70%);
+    background: radial-gradient(ellipse 40% 50% at 50% 55%, rgb(200 143 128 / 0.16), rgb(200 143 128 / 0) 70%);
     pointer-events: none;
   }
   .grid {
@@ -67,13 +67,12 @@ import CtaLink from '../CtaLink.astro';
     line-height: 0.98;
   }
   .text__h em {
-    color: var(--color-copper-700);
+    color: var(--accent);
   }
   .text__p {
     max-width: 440px;
     font-size: 17px;
     line-height: 1.7;
-    color: var(--color-body-on-ivory);
   }
   .door {
     height: min(68%, 560px);
@@ -87,7 +86,7 @@ import CtaLink from '../CtaLink.astro';
     width: 100%;
     object-fit: cover;
     border-radius: 999px 999px 2px 2px;
-    box-shadow: 0 40px 120px 10px rgb(200 143 128 / 0.35);
+    box-shadow: 0 40px 120px 10px rgb(212 154 114 / 0.22);
   }
 
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {

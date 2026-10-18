@@ -1,50 +1,51 @@
 ---
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import BookingDetails from '../components/booking/BookingDetails.astro';
+import BookingVisual from '../components/booking/BookingVisual.astro';
+import Sessions from '../components/booking/Sessions.astro';
+import People from '../components/booking/People.astro';
 import BookingCalendar from '../components/booking/BookingCalendar.astro';
+import GoodToKnow from '../components/booking/GoodToKnow.astro';
 ---
 
 <Base
   title="Afspraak maken — Natalie"
   description="Plan een moment in de koepel: immersieve muziek en persoonlijke begeleiding bij Natalie Vandervoort."
-  tint="#F5F1E9"
+  tint="#0E0B09"
+  tintLight="#F5F1E9"
 >
   <div class="page">
-    <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
-    <main class="layout">
-      <BookingDetails />
+    <SiteHeader base="/" />
+    <BookingVisual />
+    <main class="flow">
+      <Sessions />
+      <People />
       <BookingCalendar />
+      <GoodToKnow />
     </main>
   </div>
 </Base>
 
 <style>
+  /* Mobile first: one calm column. Wider screens keep the same column, centered;
+     only the calendar gets more room (BookingCalendar). */
   .page {
-    position: relative;
     min-height: 100svh;
-    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 50%, var(--color-ivory) 100%);
-    color: var(--color-bronze-900);
+    background: var(--page-booking);
+    color: var(--fg);
   }
-  .layout {
-    display: grid;
-    grid-template-columns: 5fr 6fr;
-    gap: 6vw;
-    align-items: start;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: clamp(120px, 16vh, 180px) 6vw 80px;
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding: 28px 24px 56px;
   }
-  @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 1fr;
-      gap: 48px;
-      padding: 104px 24px 56px;
-    }
-  }
-  @media (min-width: 600px) and (max-width: 900px) {
-    .layout {
-      padding: 120px 48px 72px;
+  @media (min-width: 700px) {
+    .flow {
+      width: min(560px, 100%);
+      margin: 0 auto;
+      gap: 44px;
+      padding: 40px 0 80px;
     }
   }
 </style>

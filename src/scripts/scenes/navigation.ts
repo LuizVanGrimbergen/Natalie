@@ -7,7 +7,7 @@ import { trackScene } from './track';
 import { prime, type Timeline } from './tweens';
 
 /** Seconds a scene takes to build itself once it is on screen. */
-const BUILD: Record<string, number> = { hero: 1.8, listening: 2.2, perspectives: 2.6, welcomes: 1.8, invitation: 1.8 };
+const BUILD: Record<string, number> = { hero: 1.8, shape: 3.2, listening: 2.2, elements: 2.6, coaching: 2.6, welcomes: 1.8, invitation: 1.8 };
 /** Seconds of the crossfade between scenes (both ways), and of the footer sliding back down. */
 const FADE = 0.9;
 const BACK = 0.6;
@@ -29,7 +29,6 @@ const ease = 'power1.inOut';
 export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades: Timeline[]) {
   builds.forEach(prime);
   fades.forEach(prime);
-  const header = one(document, '[data-header]');
   const footer = one(document, '[data-footer]');
   const last = scenes.length - 1;
 
@@ -55,11 +54,10 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       onstage(Math.min(current, last));
       const next = queued.shift();
       if (next) step(next);
-      else if (current < last) cue.show(scenes[current]);
+      else if (current < last) cue.show();
     });
   }
 
-  const opacity = (element: Element) => Number(gsap.getProperty(element, 'opacity'));
   const seconds = (i: number) => BUILD[scenes[i].dataset.scene!] ?? 2;
   const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: seconds(i), ease });
 
@@ -81,9 +79,8 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       trackScene(scenes[to]);
       builds[to].progress(0);
       tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
-        .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => opacity(scenes[to])), 0)
+        .add(tintTo(scenes[to], FADE), 0)
         .add(play(to), FADE * 0.5);
-      if (current === 0) tl.to(header, { autoAlpha: 0, duration: 0.4 }, 0);
     }
     current = to;
     run(tl);
@@ -101,22 +98,16 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       onstage(to, from);
       builds[to].progress(0);
       tl.add(fades[to].tweenTo(0, { duration: FADE, ease }), 0)
-        .add(
-          tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => {
-            // Revealed as the later scene fades out and this one's own dim lifts.
-            const dim = scenes[to].querySelector('.exit-dim');
-            return (1 - opacity(scenes[from])) * (1 - (dim ? opacity(dim) : 0));
-          }),
-          0,
-        )
+        .add(tintTo(scenes[to], FADE), 0)
         .add(play(to), FADE * 0.5);
-      if (to === 0) tl.to(header, { autoAlpha: 1, duration: 0.4 }, FADE / 2);
     }
     current = from - 1;
     run(tl);
   }
 
   function step(dir: Step) {
+    // The hamburger menu lies over the story; nothing steps underneath it (site-menu.ts).
+    if (document.documentElement.classList.contains('menu-open')) return;
     if (active) {
       if (queued.length < QUEUE) queued.push(dir);
       active.timeScale(HURRY);
@@ -126,18 +117,18 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     else back();
   }
 
-  /** Skip ahead to a later scene: it dissolves in over the current one, the scenes in between are settled underneath. */
+  /** Go straight to a scene (a menu link, a hash): forward it dissolves in over the current one, back it is uncovered. */
   function jump(to: number, instant = false) {
-    if (to <= current || current > last) return;
     // Whatever is still playing (e.g. the hero's own build) finishes at once.
     queued.length = 0;
     active?.progress(1);
+    if (to < current) return jumpBack(to);
+    if (to === current || current > last) return;
     if (to === current + 1 && !instant) return forward();
     const settle = () => {
       for (let i = 0; i < to; i++) builds[i].progress(1);
       for (let i = 0; i < to; i++) fades[i].progress(1);
     };
-    gsap.set(header, { autoAlpha: 0 });
     current = to;
     trackScene(scenes[to]);
     if (instant) {
@@ -145,7 +136,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       settle();
       builds[to].progress(1);
       onstage(to);
-      if (to < last) cue.show(scenes[to]);
+      if (to < last) cue.show();
       else cue.hide();
       return;
     }
@@ -158,12 +149,36 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     run(tl);
   }
 
+  /**
+   * Back to an earlier scene: the scenes in between vanish underneath, then the one on
+   * screen dissolves away over it, and it builds itself again (like a step back).
+   */
+  function jumpBack(to: number) {
+    if (current > last) {
+      gsap.set(footer, { yPercent: 0 });
+      gsap.set(one(scenes[last], '[data-footer-shift]'), { y: 0 });
+      current = last;
+      if (to === last) return;
+    }
+    const from = current;
+    if (to === from - 1) return back();
+    for (let i = to; i < from - 1; i++) fades[i].progress(0);
+    onstage(to, from);
+    builds[to].progress(0);
+    const tl = gsap.timeline();
+    tl.add(fades[from - 1].tweenTo(0, { duration: FADE, ease }), 0)
+      .add(tintTo(scenes[to], FADE), 0)
+      .add(play(to), FADE * 0.5);
+    current = to;
+    run(tl);
+  }
+
   onstage(0);
   run(
     gsap
       .timeline({ delay: HERO_DELAY })
       .add(play(0), 0)
-      .add(tintTo(scenes[0], 0, { seconds: seconds(0), length: builds[0].duration(), ease }), 0),
+      .add(tintTo(scenes[0], 0), 0),
   );
   onStep(step);
 
@@ -180,6 +195,9 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     const target = scenes.findIndex((scene) => scene.contains(event.target as Node));
     if (target > current) jump(target, true);
   });
+
+  // The navbar's light/dark switch: the bars take the scene on show's color in the new theme.
+  addEventListener('themechange', () => tintNow(scenes[Math.min(current, last)]));
 
   const initial = scenes.indexOf(document.getElementById(location.hash.slice(1))!);
   if (initial > 0) jump(initial, true);

@@ -18,16 +18,18 @@ interface Props {
   story?: boolean;
   /** Color of the browser bars and overscroll area (Safari tints from the page background). */
   tint?: string;
+  /** The same in the light theme, for pages whose top is light then (the story's hero is a photo, so it has none). */
+  tintLight?: string;
 }
 
-const { title, description, story = false, tint = '#12100D' } = Astro.props;
+const { title, description, story = false, tint = '#12100D', tintLight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = await getImage({ src: hero, width: 1200, height: 630, format: 'jpg', quality: 80 });
 const ogUrl = new URL(og.src, Astro.site);
 ---
 
 <!doctype html>
-<html lang="nl" style={`--tint: ${tint}`}>
+<html lang="nl" style={`--tint: ${tint}`} data-tint-dark={tint} data-tint-light={tintLight}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -36,6 +38,8 @@ const ogUrl = new URL(og.src, Astro.site);
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- The chosen theme (light or dark), before first paint; a file, so the CSP can forbid inline scripts. -->
+    <script is:inline src="/theme.js"></script>
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_BE" />

@@ -2,9 +2,9 @@
 // TODO(Natalie): personal text below is sample copy awaiting her approval; swap the placeholder for her portrait.
 ---
 
-<section class="scene welcomes" style="z-index: 4" data-tint="#F5F1E9" data-scene="welcomes" data-enter="light" aria-labelledby="welcomes-title">
+<section id="natalie" class="scene welcomes" style="z-index: 6" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="welcomes" aria-labelledby="welcomes-title">
   <div class="stage">
-    <div class="exit-dim exit-dim--light" aria-hidden="true"></div>
+    <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="window-light" aria-hidden="true"></div>
     <div class="frame">
       <div class="grid">
@@ -14,8 +14,9 @@
             Ik ben er niet om je de weg te wijzen. <em>Wel om de deur open te houden.</em>
           </h2>
           <p class="text__body" data-reveal="3">
-            Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag
-            zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
+            Ik geloof dat niemand los staat van de relaties, ruimtes en ritmes waarin hij leeft. Je groeit niet door jezelf te
+            fixen, maar door te zien hoe dat alles samenhangt — en het opnieuw te ordenen. Daarom maakte ik deze ruimte en ontvang
+            ik je er graag.
           </p>
           <p class="display text__sign" data-reveal="4"><em>Natalie Vandervoort</em></p>
         </div>
@@ -32,17 +33,17 @@
 
 <style>
   .stage {
-    background: var(--color-ivory);
-    color: var(--color-bronze-900);
+    background: var(--page);
+    color: var(--fg);
   }
-  /* Soft window light falling diagonally across the wall. */
+  /* Soft warm light falling diagonally across the wall, well clear of the screen edges. */
   .window-light {
     position: absolute;
     right: -14%;
     top: -18%;
     width: 80vw;
     height: 110%;
-    background: radial-gradient(ellipse 50% 32% at 50% 50%, rgb(255 252 246 / 0.9), rgb(255 252 246 / 0.35) 45%, rgb(255 252 246 / 0) 70%);
+    background: radial-gradient(ellipse 50% 32% at 50% 50%, rgb(156 85 48 / 0.2), rgb(156 85 48 / 0.08) 45%, rgb(156 85 48 / 0) 70%);
     transform: rotate(-28deg);
     pointer-events: none;
   }
@@ -63,20 +64,19 @@
     gap: 24px;
   }
   .text__label {
-    color: var(--color-copper-700);
+    color: var(--label);
   }
   .text__h {
     font-size: clamp(34px, 4.2vw, 72px);
     line-height: 1.04;
   }
   .text__h em {
-    color: var(--color-copper-700);
+    color: var(--accent);
   }
   .text__body {
     max-width: 460px;
     font-size: 18px;
     line-height: 1.75;
-    color: var(--color-body-on-ivory);
   }
   .text__sign {
     font-size: 32px;
@@ -95,12 +95,12 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background: linear-gradient(165deg, #e6ded2, #cfc3b4);
+    background: linear-gradient(165deg, var(--portrait-from), var(--portrait-to));
   }
   .portrait__light {
     position: absolute;
     inset: -10%;
-    background: linear-gradient(115deg, rgb(255 252 246 / 0) 30%, rgb(255 252 246 / 0.35) 45%, rgb(255 252 246 / 0) 62%);
+    background: linear-gradient(115deg, transparent 30%, var(--portrait-light) 45%, transparent 62%);
   }
   .portrait__note {
     position: absolute;
@@ -108,7 +108,7 @@
     bottom: 24px;
     right: 24px;
     letter-spacing: 0.14em;
-    color: var(--color-muted);
+    color: var(--label);
   }
 
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {

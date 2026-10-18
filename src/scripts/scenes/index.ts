@@ -1,9 +1,11 @@
+import { coaching } from './coaching';
 import { all } from './dom';
+import { elements } from './elements';
 import { hero } from './hero';
 import { invitation } from './invitation';
 import { listening } from './listening';
 import { initNavigation } from './navigation';
-import { perspectives } from './perspectives';
+import { shape } from './shape';
 import { crossfade } from './transition';
 import type { Timeline } from './tweens';
 import { welcomes } from './welcomes';
@@ -17,8 +19,10 @@ declare global {
 /** Keyed by each section's data-scene attribute. */
 const builders: Record<string, (scene: HTMLElement) => Timeline> = {
   hero,
+  shape,
   listening,
-  perspectives,
+  elements,
+  coaching,
   welcomes,
   invitation,
 };

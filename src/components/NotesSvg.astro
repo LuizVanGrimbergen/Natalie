@@ -15,19 +15,19 @@ const { class: className } = Astro.props;
     data-draw="self"
     d="M20 430 C 110 400, 150 300, 235 320 S 330 470, 295 440 S 250 330, 335 300 C 420 272, 520 400, 626 388"
     fill="none"
-    stroke="#9C5530"
+    style="stroke: var(--note-self)"
     stroke-width="1.6"
     stroke-linecap="round"></path>
   <path
     data-draw="with"
     d="M360 350 C 440 338, 520 430, 610 418 S 700 372, 724 372"
     fill="none"
-    stroke="#C88F80"
+    style="stroke: var(--note-with)"
     stroke-width="1.6"
     stroke-linecap="round"></path>
-  <ellipse data-head="self" cx="640" cy="384" rx="17" ry="11.5" transform="rotate(-22 640 384)" fill="#9C5530"></ellipse>
-  <ellipse data-head="with" cx="740" cy="368" rx="17" ry="11.5" transform="rotate(-22 740 368)" fill="#C88F80"></ellipse>
-  <path data-stem="self" d="M655 379 L655 248" fill="none" stroke="#9C5530" stroke-width="2.4" stroke-linecap="round"></path>
-  <path data-stem="with" d="M755 363 L755 232" fill="none" stroke="#C88F80" stroke-width="2.4" stroke-linecap="round"></path>
-  <path data-beam d="M654 246 L756 230 L756 244 L654 260 Z" fill="#9C5530"></path>
+  <ellipse data-head="self" cx="640" cy="384" rx="17" ry="11.5" transform="rotate(-22 640 384)" style="fill: var(--note-self)"></ellipse>
+  <ellipse data-head="with" cx="740" cy="368" rx="17" ry="11.5" transform="rotate(-22 740 368)" style="fill: var(--note-with)"></ellipse>
+  <path data-stem="self" d="M655 379 L655 248" fill="none" style="stroke: var(--note-self)" stroke-width="2.4" stroke-linecap="round"></path>
+  <path data-stem="with" d="M755 363 L755 232" fill="none" style="stroke: var(--note-with)" stroke-width="2.4" stroke-linecap="round"></path>
+  <path data-beam d="M654 246 L756 230 L756 244 L654 260 Z" style="fill: var(--note-self)"></path>
 </svg>

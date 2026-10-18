@@ -5,8 +5,10 @@ import SiteHeader from '../components/SiteHeader.astro';
 import NextCue from '../components/NextCue.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Hero from '../components/scenes/Hero.astro';
+import Shape from '../components/scenes/Shape.astro';
 import Listening from '../components/scenes/Listening.astro';
-import Perspectives from '../components/scenes/Perspectives.astro';
+import Elements from '../components/scenes/Elements.astro';
+import Coaching from '../components/scenes/Coaching.astro';
 import WhoWelcomes from '../components/scenes/WhoWelcomes.astro';
 import Invitation from '../components/scenes/Invitation.astro';
 import hero from '../assets/hero.avif';
@@ -17,8 +19,9 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1600], sizes
 
 <Base
   story
+  tintLight="#F5F1E9"
   title="Natalie — Niet alles wat je raakt, kun je meteen begrijpen."
-  description="Immersieve muziek in een houten, geometrische koepel in het bos, gevolgd door persoonlijke begeleiding. Een plek om je eigen perspectief te ontdekken."
+  description="Tot rust komen in immersieve muziek, in een geometrische koepel in het bos, en persoonlijke coaching bij Natalie Vandervoort. Een plek om je eigen perspectief te ontdekken."
 >
   <link
     slot="head"
@@ -31,12 +34,14 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1600], sizes
     fetchpriority="high"
   />
 
-  <SiteHeader href="#invitation">Kom het zelf ontdekken&nbsp;→</SiteHeader>
+  <SiteHeader />
 
   <main>
     <Hero />
+    <Shape />
     <Listening />
-    <Perspectives />
+    <Elements />
+    <Coaching />
     <WhoWelcomes />
     <Invitation />
   </main>

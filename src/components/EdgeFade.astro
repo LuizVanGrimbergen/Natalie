@@ -3,16 +3,19 @@
  * Lets a full-screen photo fade into one flat color at its top and bottom
  * edge. Safari paints its bars (around the camera and the toolbar) in a single
  * color, so a photo scene only meets them seamlessly when its edges are that
- * color too. `color` must equal the scene's data-tint.
+ * color too. `color` must equal the scene's data-tint, `light` its data-tint-light
+ * (the light theme, html[data-theme='light']).
  */
 interface Props {
   color: string;
+  light?: string;
 }
-const { color } = Astro.props;
+const { color, light = color } = Astro.props;
+const vars = `--edge-dark: ${color}; --edge-light: ${light}`;
 ---
 
-<div class="edge edge--top" style={`--edge: ${color}`} aria-hidden="true"></div>
-<div class="edge edge--bottom" style={`--edge: ${color}`} aria-hidden="true"></div>
+<div class="edge edge--top" style={vars} aria-hidden="true"></div>
+<div class="edge edge--bottom" style={vars} aria-hidden="true"></div>
 
 <style>
   .edge {
@@ -20,9 +23,13 @@ const { color } = Astro.props;
     left: 0;
     right: 0;
     pointer-events: none;
+    --edge: var(--edge-dark);
     /* Eased stops, so the photo dissolves instead of ending in a visible band. */
     --edge-fade: var(--edge) 0%, color-mix(in srgb, var(--edge) 82%, transparent) 22%,
       color-mix(in srgb, var(--edge) 50%, transparent) 50%, color-mix(in srgb, var(--edge) 18%, transparent) 78%, transparent 100%;
+  }
+  :global([data-theme='light']) .edge {
+    --edge: var(--edge-light);
   }
   .edge--top {
     top: 0;

@@ -1,7 +1,7 @@
 import { one, reveal } from './dom';
 import { build, rise, unveil, type Timeline } from './tweens';
 
-/* 05 · The portrait opens from the bottom, then the words follow. */
+/* 06 · The portrait opens from the bottom, then the words follow. */
 export function welcomes(scene: HTMLElement): Timeline {
   const tl = build();
   unveil(tl, one(scene, '[data-unveil]'), 0.02, 0.2);

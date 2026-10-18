@@ -1,5 +1,5 @@
 ---
-/** Outline pill with a soft copper pulse; on hover bronze fills it from the left and an arrow slides in. */
+/** Outline pill with a soft copper pulse; on hover the text color fills it from the left and an arrow slides in. Follows the theme. */
 interface Props {
   href: string;
 }
@@ -17,13 +17,13 @@ const { href } = Astro.props;
     align-items: center;
     min-height: 44px;
     padding: 0 22px;
-    border: 1px solid rgb(30 23 18 / 0.55);
+    border: 1px solid var(--outline);
     border-radius: 999px;
     font: inherit;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.02em;
-    color: var(--color-bronze-900);
+    color: var(--fg);
     text-decoration: none;
     transition:
       color 0.45s,
@@ -36,7 +36,7 @@ const { href } = Astro.props;
     inset: 0;
     z-index: -1;
     border-radius: inherit;
-    background: var(--color-bronze-900);
+    background: var(--fg);
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.55s cubic-bezier(0.6, 0, 0.2, 1);
@@ -54,8 +54,8 @@ const { href } = Astro.props;
   }
   .cta:hover,
   .cta:focus-visible {
-    color: var(--color-ivory);
-    border-color: var(--color-bronze-900);
+    color: var(--page);
+    border-color: var(--fg);
   }
   .cta:hover::before,
   .cta:focus-visible::before {
@@ -70,11 +70,11 @@ const { href } = Astro.props;
   }
   @keyframes cta-pulse {
     0% {
-      box-shadow: 0 0 0 0 rgb(156 85 48 / 0.35);
+      box-shadow: 0 0 0 0 rgb(var(--pulse) / 0.4);
     }
     70%,
     100% {
-      box-shadow: 0 0 0 14px rgb(156 85 48 / 0);
+      box-shadow: 0 0 0 14px rgb(var(--pulse) / 0);
     }
   }
 </style>

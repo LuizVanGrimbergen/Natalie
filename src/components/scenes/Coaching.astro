@@ -1,19 +1,22 @@
 ---
+// TODO(Natalie): sample copy (coaching, from her documents and email), awaiting her approval.
 import NotesSvg from '../NotesSvg.astro';
 ---
 
-<section class="scene perspectives" style="z-index: 3" data-tint="#F5F1E9" data-tint-enter="#6B4A36" data-tint-lift="0.17" data-scene="perspectives" data-enter="dark" aria-labelledby="perspectives-title">
+<section id="coaching" class="scene coaching" style="z-index: 5" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="coaching" aria-labelledby="coaching-title">
   <div class="stage">
-    <div class="exit-dim exit-dim--light" aria-hidden="true"></div>
-    <div class="warmth" aria-hidden="true" data-warmth></div>
+    <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="frame">
       <NotesSvg class="notes" />
       <div class="text">
-        <p class="label text__label" data-reveal="1">Nieuwe perspectieven</p>
-        <h2 id="perspectives-title" class="display text__h" data-reveal="1">Er is meer dan één manier <em>om te voelen.</em></h2>
-        <p class="text__p" data-reveal="2">Een veilige plek waar je met jezelf kunt connecteren, experimenteren en luisteren.</p>
+        <p class="label text__label" data-reveal="1">Coaching</p>
+        <h2 id="coaching-title" class="display text__h" data-reveal="1">Soms helpt het om <em>samen te kijken.</em></h2>
+        <p class="text__p" data-reveal="2">
+          In een coachingsessie ga je met Natalie in gesprek over wat er speelt: in je hoofd, je lichaam, je relaties.
+        </p>
         <p class="text__p" data-reveal="3">
-          Als je een bijkomende behoefte hebt, kun je die ook delen met Natalie, zodat je samen een begeleidend project kunt aangaan.
+          Niet om je te repareren, wel om te zien hoe alles samenhangt en wat je anders wilt. Apart te boeken, of samen met een
+          soundroom-sessie.
         </p>
       </div>
     </div>
@@ -22,15 +25,7 @@ import NotesSvg from '../NotesSvg.astro';
 
 <style>
   .stage {
-    background: var(--color-ivory);
-  }
-  /* Copper-brown veil that lifts to ivory at the start of the scene. */
-  .warmth {
-    position: absolute;
-    inset: 0;
-    background: var(--color-copper-brown);
-    opacity: 0;
-    pointer-events: none;
+    background: var(--page);
   }
   .stage :global(.notes) {
     position: absolute;
@@ -47,22 +42,21 @@ import NotesSvg from '../NotesSvg.astro';
     display: flex;
     flex-direction: column;
     gap: 28px;
-    color: var(--color-bronze-900);
+    color: var(--fg);
   }
   .text__label {
-    color: var(--color-copper-brown);
+    color: var(--label);
   }
   .text__h {
     font-size: clamp(44px, 4.6vw, 80px);
     line-height: 1;
   }
   .text__h em {
-    color: var(--color-copper-700);
+    color: var(--accent);
   }
   .text__p {
     font-size: 17px;
     line-height: 1.75;
-    color: var(--color-body-on-ivory);
   }
 
   /* Phone: the drawing is wide, so it is scaled to its right part (loop, notes, beam)

@@ -3,7 +3,7 @@
  * "There is more": a round button with an arrow that draws itself downwards
  * (like the lines of the notes scene) and a copper pulse ring (like the
  * CTA). navigation.ts shows it once a screen is complete and hides it on the
- * next step; clicking it is a step too. Ivory on dark scenes, bronze on light ones.
+ * next step; clicking it is a step too.
  */
 ---
 
@@ -31,8 +31,9 @@
     border: 0;
     background: none;
     font: inherit;
-    color: var(--color-ivory);
-    --pulse: 212 154 114;
+    /* Follows the screen on show: ivory on dark screens, bronze on light ones (html[data-surface]). */
+    color: var(--on-screen);
+    --pulse: var(--on-screen-pulse);
     cursor: pointer;
     translate: -50% 0;
     opacity: 0;
@@ -51,10 +52,6 @@
       opacity 0.6s ease,
       translate 0.6s ease,
       visibility 0s;
-  }
-  .next.is-light {
-    color: var(--color-bronze-900);
-    --pulse: 156 85 48;
   }
   /* Without motion the page scrolls normally, so there is nothing to cue. */
   :global(html:not(.motion)) .next {
@@ -160,7 +157,7 @@
     outline: none;
   }
   .next:focus-visible .next__ring {
-    outline: 2px solid var(--color-copper-700);
+    outline: 2px solid var(--accent);
     outline-offset: 4px;
   }
 </style>

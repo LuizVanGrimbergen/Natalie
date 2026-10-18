@@ -1,0 +1,62 @@
+/* Light and dark: the colors every flat screen, the footer, the navbar and the
+   booking page take. Dark is the default; html[data-theme='light'] (public/theme.js,
+   the navbar's switch) swaps them. Photo scenes (hero, wooden room) keep their own
+   fixed colors in both. html[data-surface] says whether the screen on show is light
+   or dark (tint.ts), so the navbar and the next cue can follow it. */
+:root {
+  --page: var(--color-wood-950);
+  --page-booking: var(--color-night-950);
+  --surface: var(--color-night-900);
+  --surface-strong: var(--color-night-800);
+  --fg: var(--color-ivory);
+  --fg-soft: rgb(245 241 233 / 0.82);
+  --fg-muted: rgb(245 241 233 / 0.6);
+  --fg-faint: rgb(245 241 233 / 0.45);
+  --label: var(--color-aluminium);
+  --accent: var(--color-copper-300);
+  --accent-hover: #e2b08f;
+  --on-accent: var(--color-night-950);
+  --line: rgb(212 154 114 / 0.35);
+  --hairline: rgb(245 241 233 / 0.1);
+  --outline: rgb(245 241 233 / 0.55);
+  --pulse: 212 154 114;
+  --dim: radial-gradient(ellipse 90% 80% at 50% 40%, #2a1e16, #120d0a);
+  --note-self: #d49a72;
+  --note-with: #c88f80;
+  --portrait-from: #2a1e16;
+  --portrait-to: #1a120c;
+  --portrait-light: rgb(212 154 114 / 0.1);
+}
+[data-theme='light'] {
+  --page: var(--color-ivory);
+  --page-booking: var(--color-ivory);
+  --surface: #fffdf9;
+  --surface-strong: #ece3d7;
+  --fg: var(--color-bronze-900);
+  --fg-soft: rgb(30 23 18 / 0.8);
+  --fg-muted: rgb(30 23 18 / 0.64);
+  --fg-faint: rgb(30 23 18 / 0.45);
+  --label: #6e655c;
+  --accent: #9c5530;
+  --accent-hover: #86472a;
+  --on-accent: var(--color-ivory);
+  --line: rgb(156 85 48 / 0.35);
+  --hairline: rgb(30 23 18 / 0.1);
+  --outline: rgb(30 23 18 / 0.5);
+  --pulse: 156 85 48;
+  --dim: var(--color-ivory);
+  --note-self: #9c5530;
+  --note-with: #c88f80;
+  --portrait-from: #e6ded2;
+  --portrait-to: #cfc3b4;
+  --portrait-light: rgb(255 252 246 / 0.35);
+}
+/* Text on whatever screen is showing: the navbar and the next cue. */
+:root {
+  --on-screen: var(--color-ivory);
+  --on-screen-pulse: 212 154 114;
+}
+[data-surface='light'] {
+  --on-screen: var(--color-bronze-900);
+  --on-screen-pulse: 156 85 48;
+}

@@ -1,6 +1,6 @@
 # Natalie — website
 
-A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
+A story of seven full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
 Natalie invites young people (20–30) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
@@ -26,7 +26,7 @@ The original HTML prototype has been fully rebuilt in this codebase; **the code 
 | Images | **astro:assets** `<Picture>` | AVIF + WebP, JPG fallback, responsive `srcset`; hero preloaded, the rest lazy |
 | Fonts | `@fontsource` (self-hosted) | Cormorant Garamond (300, 400, italic) + Figtree (300, 400, 500), latin subset |
 | Visitor stats | **Vercel Web Analytics** (`@vercel/analytics`, `<Analytics />` in `Base`) | Cookieless (no consent banner), same-origin script, visitors / referrers / countries / devices / UTM. Each scene reached counts once per visit as a page `/scene/<name>` (`track.ts`), so the Pages list shows how far people get; `/booking` shows who clicked through. Time per scene would need custom events (Pro plan). |
-| Booking | Google Calendar appointment schedule | Embedded on `/booking` via `PUBLIC_BOOKING_URL` |
+| Booking | **Cal.com** (free plan) | One event type per session, set in `PUBLIC_CAL_SOUNDROOM` / `PUBLIC_CAL_COACHING` as `<username>/<slug>`. Inline embed on `/booking` (`scripts/booking/cal.ts`), dark, in the site's copper; the chosen number of people prefills the booking question `personen`. Payments (Stripe, or Mollie via another route) come later |
 | Hosting | Vercel (preview links for the client) or own VPS via Ploi | Static output (`astro build`) |
 
 No UI framework. If interactivity is ever needed: an Astro island.
@@ -39,24 +39,35 @@ No UI framework. If interactivity is ever needed: an Astro island.
 src/
   layouts/Base.astro                # <html>, fonts, meta/OG, sets html.motion (or not) before paint
   pages/
-    index.astro                     # the story: header + the five scenes, starts the scene script
+    index.astro                     # the story: header + the seven scenes, starts the scene script
     booking.astro                   # booking page
   components/
-    SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
+    SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
     CtaLink.astro                   # outline pill button with pulse + hover fill
     NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring, Scroll/Swipe
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
-    NotesSvg.astro                  # the two lines + eighth notes (scene 04)
+    NotesSvg.astro                  # the two lines + eighth notes (scene 05, coaching)
     scenes/
       Hero.astro                    # 01
-      Listening.astro               # 03 wooden room (02 was removed)
-      Perspectives.astro            # 04 lines + music notes
-      WhoWelcomes.astro             # 05 Natalie
-      Invitation.astro              # 06 invitation + footer
+      Shape.astro                   # 02 the net folds into the dome (canvas; static SVG without JS)
+      Listening.astro               # 03 wooden room
+      Elements.astro                # 04 three elements of a session
+      Coaching.astro                # 05 coaching: lines + music notes
+      WhoWelcomes.astro             # 06 Natalie
+      Invitation.astro              # 07 invitation + footer
     booking/
-      BookingDetails.astro          # title, intro, location/duration/price/contact
-      BookingCalendar.astro         # Google Calendar embed or placeholder card
+      BookingVisual.astro           # photo band on top: title + one line of facts
+      SectionLabel.astro            # small label above each part
+      BookingCalendar.astro         # the chosen session's Cal.com booker, or a placeholder
+      Sessions.astro                # pick a session (two plain rows)
+      People.astro                  # number of people (segmented 1–3), total, the copper button
+      sessions.ts                   # the two sessions: name, text, duration, price, Cal.com link; friends discount, max people
+      GoodToKnow.astro              # "Goed om te weten": practical and safety notes, folded
+  scripts/site-menu.ts              # closes the hamburger menu (link, Escape); html.menu-open pauses the story's steps
+  scripts/theme.ts                  # the light/dark switch: stores it, re-tints, fires themechange
+  scripts/booking/
+    cal.ts                          # loads Cal.com's embed once a session is chosen; one booker per session × people, in the booking page's colors
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
     navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
@@ -67,13 +78,17 @@ src/
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes
     tint.ts                         # Safari bar color, tweened together with the crossfades
-    hero.ts, listening.ts, perspectives.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
+    hero.ts, shape.ts, listening.ts, elements.ts, coaching.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
+    fold/geometry.ts                # rhombic triacontahedron + its flat net, folding and projection (pure math, also used at build time)
+    fold/shade.ts                   # face, seam and hinge colors (copper panels, aluminium seams, like hero.avif)
+    fold/draw.ts                    # draws one frame of the fold on a canvas
   styles/
     global.css                      # imports only
     tokens.css                      # design tokens (@theme)
+    theme.css                       # light/dark theme variables (html[data-theme]) + --on-screen (html[data-surface])
     base.css                        # base elements, .display / .label, reduced motion
     scenes.css                      # scene/stage pinning mechanics, exit dims
-  assets/                           # hero.avif, interior.avif, door.avif
+  assets/                           # hero.avif, interior.avif, door.avif, booking.avif
 ```
 
 Conventions: one component per file; styles live scoped in the component that owns them; global CSS only for tokens, base and shared scene mechanics. Animated elements are found via `data-*` attributes (`data-scene`, `data-reveal="n"`, `data-unveil`, …), never via styling classes.
@@ -82,26 +97,26 @@ Conventions: one component per file; styles live scoped in the component that ow
 
 ## Design tokens
 
+**One mood per theme.** Dark (the default): every screen of the story without a photo, and the footer, is flat `wood-950` with ivory text and copper accents, so it flows into the two photo scenes; the booking page is dark too, in its own calmer near-black (`night-*`, see Booking page). Within a theme, never mix light and dark backgrounds on flat screens. Warmth comes from soft copper glows in the middle of a screen, never at its edges.
+
+**Light theme** (the navbar's switch; the visitor's choice is stored in `localStorage`): every flat screen, the footer, the navbar menu and the booking page turn ivory with bronze text and `copper-700` accents. The photo scenes keep their photo but are washed light: the dusk becomes an ivory mist, they fade into ivory at their edges (`<EdgeFade color light>`, `data-tint-light`), and their words turn dark with a soft ivory glow. So the light story is light from start to end, the dark story dark — never mixed. All colors of flat screens and shared components come from the theme variables in `styles/theme.css` (`--page`, `--page-booking`, `--surface`, `--fg`, `--fg-soft`, `--fg-muted`, `--accent`, `--line`, `--outline`, `--dim`, notes, portrait …), swapped by `html[data-theme='light']` — never hard-code ivory or wood in them. `public/theme.js` (blocking in `<head>` on every page) sets the theme before first paint; `scripts/theme.ts` runs the switch and fires `themechange` (the story re-tints, the Cal.com booker redraws in its light theme). `html[data-surface]` (light / dark, from the bar color in `tint.ts`) tells the navbar and the next cue which screen is on show, so they are ivory over dark screens and photos, bronze over light ones (`--on-screen`).
+
 Colors (tuned to the dome: bronze, copper, wood, ivory):
 
 | Token | Hex | Use |
 |---|---|---|
-| `bronze-950` | `#12100D` | dark base, hero night |
-| `bronze-900` | `#1E1712` | dark text on ivory, button |
-| `wood-950` | `#120A05` | wooden scene background |
-| `copper-700` | `#9C5530` | accents on ivory (italic accent words, labels, line 1) |
-| `copper-300` | `#D49A72` | accent on dark (next cue pulse) |
+| `bronze-950` | `#12100D` | hero night (its edge color) |
+| `bronze-900` | `#1E1712` | button text on its ivory hover fill |
+| `wood-950` | `#120A05` | background of every flat screen of the story |
+| `night-950` / `night-900` / `night-800` | `#0E0B09` / `#1A1511` / `#2A221C` | booking page: page, cards, the chosen number |
+| `copper-300` | `#D49A72` | the accent: italic accent words, copper labels, line 1, pulses, focus outline |
 | `clay` | `#C88F80` | second line / note (the guide) |
-| `copper-brown` | `#6B4A36` | transition color into ivory in scene 04 |
-| `ivory` | `#F5F1E9` | light base, text on dark |
-| `ivory-warm` / `ivory-warm-2` | `#F2E5DA` → `#EEDACC` | gradient in scene 06 |
-| `body-on-ivory` | `#3E342C` | body text on ivory |
-| `muted` / `muted-2` | `#5E5650` / `#6E655C` | footer, small text |
-| `aluminium` | `#A7ADB0` | small labels on dark |
+| `ivory` | `#F5F1E9` | text |
+| `aluminium` | `#A7ADB0` | small labels, footer, placeholder notes |
 
 Typography:
 - Display: **Cormorant Garamond 300**, `letter-spacing: -0.02em`, large titles with `clamp(...)`.
-- **Every scene title has one italic accent in `copper-700`** (e.g. *om te voelen.*, *Wel om de deur open te houden.*, *voor jou.*). Keep this consistent.
+- **Every scene title has one italic accent in `copper-300`** (e.g. *om te voelen.*, *Wel om de deur open te houden.*, *voor jou.*). Keep this consistent.
 - Body: **Figtree 300/400**, 17–18px desktop, 15–16px phone, `line-height` 1.6–1.75.
 - Labels: 12px, `letter-spacing: .34em`, uppercase.
 - Contrast: all text at least 4.5:1 (3:1 from 24px). Text on images gets a soft dark scrim + text-shadow.
@@ -110,12 +125,11 @@ Typography:
 
 ## Scenes (in order; Dutch copy used VERBATIM)
 
-Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, wooden room 2.2s, perspectives 2.6s, Natalie 1.8s, invitation 1.8s.
+Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, shape 3.2s, wooden room 2.2s, elements 2.6s, coaching 2.6s, Natalie 1.8s, invitation 1.8s.
 
 ### Transitions between scenes
 - **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. 0.9s both ways (`FADE`); the footer slides back down in 0.6s (`BACK`).
-- Dark transitions (hero → wood → perspectives): true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
-- Light transitions (perspectives → Natalie → invitation): the previous first fades to ivory (0–55% of the transition), then the new one appears (40–100%), so texts never overlap.
+- Every transition is the same true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
 - All content of a scene is fully built **before** the next scene starts dissolving in.
 
 ### One step per screen (desktop and touch alike)
@@ -123,15 +137,20 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`); up to 3 quick steps are remembered (`QUEUE`).
 - The hero completes its sentence by itself after the load intro.
-- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
-- A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays ivory. The header fades out after the hero.
-- Links to `#invitation` (header link, or opening the page with the hash) dissolve straight to the finished scene; keyboard focus on a later scene (Tab to the button) brings it on screen.
+- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory. Every scene but the last keeps 72px free at the bottom of its frame for it.
+- A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays flat wood.
+- Links to a scene (`#start`, `#ruimte`, `#luisteren`, `#coaching`, `#natalie`, `#invitation` — the navbar and menu, or opening the page with the hash) go straight to it: a later scene dissolves in over the current one, an earlier one is uncovered (the scenes in between vanish underneath) and builds itself again. Keyboard focus on a later scene (Tab to the button) brings it on screen. While the hamburger menu is open the story doesn't step.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
 - The scene timelines are relative (positions 0–1); `navigation.ts` gives them their duration.
 
-### Header (not sticky; fades out after the hero)
-- Left: wordmark *Natalie* (Cormorant italic).
-- Right: link **"Kom het zelf ontdekken →"** to `#invitation`; lands on the finished invitation scene.
+### Navbar (`SiteHeader.astro`, fixed on every screen and page)
+- Left: wordmark *Natalie* (Cormorant italic) → the hero (`#start`; `/` from other pages).
+- From 900px: links **De ruimte · Luisteren · Coaching · Over Natalie** (14px, 78% ivory) and an outline pill **Afspraak maken** → `/booking`.
+- Below 900px: a hamburger (two lines that turn into a cross) opens a full-screen menu in the page's own color, **everything centered**: the four links large in Cormorant, under them **Afspraak maken** as an outline pill (max 320px). It is a `<details>`, so it works without JS; `scripts/site-menu.ts` closes it on a link or Escape.
+- Always (beside the hamburger on phones, after the links on desktop): the **light/dark switch**, a circle half filled that turns over; shown only when scripts run (`html.js`, set by `public/theme.js`).
+- Colors follow the screen on show (`--on-screen`), not the theme: ivory over dark screens and photos, bronze over light screens.
+- Its backdrop fades from the page color (`--tint`) at the very top to nothing, so the top edge stays the page's color for Safari's bar and the links stay readable over photos.
+- On other pages (`base="/"`) the links lead back into the story (`/#coaching` …), which opens on that finished scene.
 
 ### 01 · Hero — wonder
 - Image: `hero.avif` (the copper dome in the forest), full screen, `object-fit: cover`.
@@ -144,11 +163,20 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - Then (time-based, ~1.2s after load): the dusk lifts, the photo zooms out from `scale(1.22)` → 1, a warm glow comes up, then line 2 and the subtext rise (fade + 48px rise).
 - The next cue (see above) appears once the sentence is complete.
 
-### 02 · (removed)
-Deliberately removed. Do not bring back.
+### 02 · The shape — the dome folds itself
+(The original scene 02 stays removed; this is a new scene in its place.)
+- Flat `wood-950`, a soft copper glow behind the dome (fading to flat wood well before the edges).
+- Visual: the flat net of **30 rhombi** (Natalie's prototype, data from Paul Bourke) appears from the centre rhombus outward, then **folds itself** into the rhombic triacontahedron — the shape of the dome in the hero. The folds start at the centre and run out to the ends of the arms; a hinge glows `copper-300` only while it moves. Panels copper, lit from one side; seams aluminium; inner sides dark. Ends closed and still.
+- Drawn on a `<canvas>` (`fold/draw.ts`), driven by a proxy tween in `shape.ts`. Without JS / reduced motion: a static SVG of the closed dome, rendered at build time from the same `fold/geometry.ts`.
+- Desktop: text left, dome right. Phone/tablet portrait: dome on top, text grouped at the bottom.
+- Copy (sample, from Natalie's notes and the article — awaiting her approval):
+  - label: DE RUIMTE
+  - h2: **Een ruimte die** *mee luistert.*
+  - Dertig ruiten vouwen samen tot één koepel. Elke hoek en elk vlak bepaalt hoe het geluid beweegt, weerkaatst en uitdooft.
+  - *Stilte is hier geen leegte. Het is structuur.* (italic, `copper-300`)
 
 ### 03 · The wooden room — listening
-- Image: `interior.avif` = rendered inside of the dome (rhombic triacontahedron seen from inside, wooden panels with grain, thin semi-transparent white seams, warm light from below).
+- Image: `interior.avif` = photo looking up inside the real dome (light birch plywood rhombi meeting in a star, 1200×1600 portrait; zoom origin on the star's centre).
 - No visible lamp / no "sun".
 - Scrim: dark wash along the edges and behind text for readability.
 - Copy (desktop: spread out; phone/tablet portrait: title on top, the rest grouped at the bottom):
@@ -158,48 +186,66 @@ Deliberately removed. Do not bring back.
   - *Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.* (bottom right, italic, larger)
 - Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Texts appear one by one.
 
-### 04 · New perspectives — guiding, not fixing
-- Background goes from copper-brown `#6B4A36` → ivory in the first ~17% of the build; only then text.
+### 04 · Three elements — what happens between you and the sound
+- Flat `wood-950`. Title + one line, then the three elements rise one by one. **Text only — no icons or glyphs**: a fine copper line above each element, its name in Cormorant, one sentence.
+- Desktop: three columns. Phone/tablet portrait: under each other.
+- Copy (sample, from Natalie's email — awaiting her approval):
+  - h2: **Wat er gebeurt** *tussen jou en het geluid.*
+  - Je hoeft niets te doen. Je lichaam mag loslaten, tot rust komen en weer opladen. Drie dingen spelen daarin samen. (Natalie's documents speak of *loslaten → opladen* and avoid the word *ontspanning*.)
+  - **De persoon** — Jij, zoals je binnenkomt: je lichaam, je adem, de ruis in je hoofd, je vermoeidheid of alertheid.
+  - **Het geluidsveld** — De muziek zelf: klank, ritme, frequenties, stilte, en hoe de ruimte ze draagt.
+  - **De koppeling** — Wat er tussen jou en het geluid ontstaat: een adem die vertraagt, schouders die zakken, beelden, rust.
+
+### 05 · Coaching — guiding, not fixing
+The second half of what Natalie offers (beside the soundroom): a personal conversation. Its title mirrors scene 03 (*Soms hoef je alleen maar te luisteren.*).
+- Flat `wood-950`; the lines start drawing right away, the text rises alongside.
 - Visual: SVG with **two lines that end in a pair of eighth notes**. The lines **draw themselves** (stroke-dashoffset over each path's real length — never `pathLength="1"`, GSAP rounds that to a jump):
-  1. Copper line (`#9C5530`) draws, hesitates, makes a loop → note head → stem.
+  1. Copper line (`#D49A72`) draws, hesitates, makes a loop → note head → stem.
   2. Then a clay line (`#C88F80`) walks alongside without touching the first → second note head → stem.
   3. Finally a **beam** joins both notes.
   Meaning: two separate voices sounding together = guiding without fixing. Each stroke draws at an even pace (no glide, no swelling, no floating).
 - Copy (to the right of the notes on desktop; below the notes on phone/tablet portrait):
-  - label: NIEUWE PERSPECTIEVEN
-  - h2: **Er is meer dan één manier** *om te voelen.* (accent italic in copper)
-  - Een veilige plek waar je met jezelf kunt connecteren, experimenteren en luisteren.
-  - Als je een bijkomende behoefte hebt, kun je die ook delen met Natalie, zodat je samen een begeleidend project kunt aangaan. (appears together with the second line)
+  - label: COACHING
+  - h2: **Soms helpt het om** *samen te kijken.* (accent italic in copper)
+  - In een coachingsessie ga je met Natalie in gesprek over wat er speelt: in je hoofd, je lichaam, je relaties.
+  - Niet om je te repareren, wel om te zien hoe alles samenhangt en wat je anders wilt. Apart te boeken, of samen met een soundroom-sessie. (appears together with the second line)
+  - Sample copy from her documents and email, awaiting her approval (it replaces the original NIEUWE PERSPECTIEVEN copy).
 
-### 05 · Who welcomes you
-- Ivory, soft window light on the wall (blurred diagonal patch of light).
+### 06 · Who welcomes you
+- Flat `wood-950`, a soft warm copper light falling diagonally across the wall. Portrait placeholder in dark wood tones.
 - Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
 - Portrait: **placeholder** `[Foto van Natalie]` until there is a real photo.
 - Copy:
   - label: WIE JE ONTVANGT
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
+  - Ik geloof dat niemand los staat van de relaties, ruimtes en ritmes waarin hij leeft. Je groeit niet door jezelf te fixen, maar door te zien hoe dat alles samenhangt — en het opnieuw te ordenen. Daarom maakte ik deze ruimte en ontvang ik je er graag. (Natalie's belief from her email, shortened.)
   - *Natalie Vandervoort* (signature, Cormorant italic)
   - ⚠️ This personal text is sample copy; Natalie still has to approve it.
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
-### 06 · The invitation (`id="invitation"`)
-- Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
+### 07 · The invitation (`id="invitation"`)
+- Flat `wood-950` with a soft clay glow in the middle (flat wood at the top and bottom edges, for Safari's bars).
 - Image: `door.avif` = the glowing opening of the dome with the orange lamp, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
 - Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
   - Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor openstaat.
   - Button: **Afspraak maken** → `/booking`
-- Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Footer (`SiteFooter`) **below** the invitation scene, in normal flow: *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`.
+- Button style (`CtaLink`): clean outline (1px ivory), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus ivory fills from left to right, text turns bronze, arrow `→` slides in.
+- Footer (`SiteFooter`) **below** the invitation scene, in normal flow (flat wood, aluminium text): *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`. With motion it is fixed above every scene (`z-index` 10; the scenes' own `z-index` is their order, 1–7).
 - Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
-- Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, `[KORTE INTRO OVER DE AFSPRAAK]`, definition list Locatie (Schoten — town only, no street address) / Duur / Prijs / Contact with placeholders.
-- Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card).
-- Phone: stacked.
+Calm and mobile first: one column on every screen (centered, 560px from 700px wide). Its own quiet palette within the dark mood: near-black `night-950` page, plain `night-900` cards, `night-800` for the chosen number, ivory text, secondary text at 60% ivory. **Copper only for what you choose (the card's border) and the one button** — no badges, pills, icons, step numbers or tinted fills.
+- Navbar as on the story (links lead back into it).
+- **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it fades into the page color at top and bottom. On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
+- Each part has a small label (`SectionLabel.astro`: 12px, uppercase, 60% ivory).
+- **Sessie** (`Sessions.astro`): two plain rows (radio buttons, `name="session"`; no form, nothing is sent): name in Cormorant, one line in 60% ivory, the price on the right. Chosen: copper border. Data in `sessions.ts` (names, durations, prices and discount are Natalie's, descriptions are sample):
+  - **Soundroom** — €75 — Je ligt in de koepel, omringd door muziek, en komt tot rust.
+  - **Coaching** — €65 — Een persoonlijk gesprek met Natalie over wat er speelt en wat jij nodig hebt.
+- **Aantal personen** (`People.astro`): segmented 1 · 2 · 3 (`MAX_PEOPLE`, 1 preselected), *Met vrienden betaalt ieder 10% minder.* (`FRIENDS_DISCOUNT`). Then **Totaal**: *Kies een sessie* until one is chosen, then the amount (Cormorant, 32px) with the regular price struck through beside it for groups (~~€225~~ €202,50). Then the one copper button **Kies een moment** (`#moment`), shown once a session is chosen. Generated `:has()` rules, no JS.
+- **Moment** (`BookingCalendar.astro` + `scripts/booking/cal.ts`): shown once a session is chosen; the **Cal.com booker** of that session, inline, dark, with Cal.com's CSS variables set to the same night palette and copper (`month_view`); from 700px it breaks out of the column (max 960px) so month and times sit side by side. embed.js loads only once a session is chosen and is awaited, then only the latest choice is drawn; every session × people combination gets its own Cal.com namespace (Cal.com keeps one inline booker per namespace), with `personen` prefilled. Without Cal.com links: a short placeholder; without JS: plain links to cal.com.
+- **Goed om te weten** (`GoodToKnow.astro`): a folded `<details>` card at the end, sample from Natalie's documents: Maximaal drie mensen tegelijk, geen schermen. · Er is altijd iemand in de buurt. Je kunt op elk moment stoppen, zonder uitleg. · Dit is geen therapie en vervangt die ook niet. Heb je meer nodig, dan zoeken we samen waar je terecht kunt. · We meten je hartslagvariabiliteit voor en na, om te leren wat de ruimte doet. Is er geen verschil, dan zeggen we dat ook. Under it: *Vragen vooraf?* `[CONTACTGEGEVENS]`.
 
 ---
 
@@ -223,12 +269,11 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
-  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#12100D`, wooden room `#120A05`, ivory scenes `#F5F1E9`).
-  - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. Light scenes are flat ivory at the edges already.
-  - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the footer and the booking page are ivory too). Nothing may cast a shadow into the screen edges.
-  - A scene that arrives in another color and then lifts (perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
-  - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge).
-- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
+  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#12100D`, every other scene `#120A05`); flat scenes also have `data-tint-light="#F5F1E9"` for the light theme (`tintOf()` in `tint.ts`).
+  - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. The other scenes are flat wood at the edges already.
+  - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Every scene keeps **flat wood at the top and bottom edge** (glows sit in the middle; the footer and the booking page are flat wood too). Nothing may cast a shadow into the screen edges.
+  - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge), and `tintLight` when their top turns light in the light theme (the booking page); `public/theme.js` applies it before first paint.
+- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. Cal.com is allowed via `script-src https://app.cal.com` (embed.js), `frame-src https://app.cal.com` (the booker) and `font-src https://cal.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
 ---
@@ -236,9 +281,10 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 ## Open items (keep the placeholders)
 
 - Real portrait photo of Natalie
-- Approval of the personal text (scene 05)
-- Booking page: intro, location, duration, price, contact
-- Google Calendar appointment schedule URL
-- Natalie's confirmation that the dome may be shown and that the copper palette is right
+- Approval of the personal text (scene 06) and of the new sample copy (scenes 02, 04 and 05, the booking texts and "Goed om te weten")
+- Booking page: contact; the session descriptions; Natalie's Cal.com account with the two event types (`soundroom`, `coaching`: 50 min, location Schoten, required booking question identifier `personen` + an 18+ check), connected to her Google Agenda; payments later; confirm that the safety notes and HRV measuring apply
+- The article places the room "behind an unassuming façade on a quiet street in Schoten"; the site says a dome in the forest — check with Natalie
+- A project name (she tried *A Space for Sound*, *SŌNAR*, *SYNC∞ × OFFL*); for now the wordmark stays *Natalie*
+- Natalie's confirmation that the dome may be shown and that the dark copper/wood palette is right
 - Domain name
-- Higher-resolution `door.avif` (currently 330×490, soft on retina screens)
+- Higher-resolution `door.avif` (currently 330×490, soft on retina screens) and `interior.avif` (photo is 1200×1600, upscaled on wide desktop screens)

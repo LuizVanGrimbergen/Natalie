@@ -1,0 +1,85 @@
+---
+// TODO(Natalie): sample copy from her notes on safety and measuring, awaiting her approval; contact is a placeholder.
+const notes = [
+  'Maximaal drie mensen tegelijk, geen schermen.',
+  'Er is altijd iemand in de buurt. Je kunt op elk moment stoppen, zonder uitleg.',
+  'Dit is geen therapie en vervangt die ook niet. Heb je meer nodig, dan zoeken we samen waar je terecht kunt.',
+  'We meten je hartslagvariabiliteit voor en na, om te leren wat de ruimte doet. Is er geen verschil, dan zeggen we dat ook.',
+];
+---
+
+<section class="know" aria-label="Goed om te weten">
+  <!-- Folded by default, so the page stays calm; one tap opens it. -->
+  <details class="know__details">
+    <summary class="know__summary">Goed om te weten<span class="know__mark" aria-hidden="true"></span></summary>
+    <ul class="know__list">
+      {notes.map((note) => <li>{note}</li>)}
+    </ul>
+  </details>
+  <p class="know__contact">Vragen vooraf? [CONTACTGEGEVENS]</p>
+</section>
+
+<style>
+  .know {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .know__details {
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .know__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 56px;
+    padding: 0 20px;
+    font-size: 15px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .know__summary::-webkit-details-marker {
+    display: none;
+  }
+  /* A plus that turns into a minus when open. */
+  .know__mark {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    color: var(--fg-muted);
+  }
+  .know__mark::before,
+  .know__mark::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.3s ease;
+  }
+  .know__mark::after {
+    transform: rotate(90deg);
+  }
+  .know__details[open] .know__mark::after {
+    transform: rotate(0deg);
+  }
+  .know__list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0 20px 20px;
+    list-style: none;
+  }
+  .know__list li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-muted);
+  }
+  .know__contact {
+    font-size: 14px;
+    color: var(--fg-muted);
+  }
+</style>

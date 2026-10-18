@@ -1,0 +1,22 @@
+---
+/** The small label above a part of the booking page. `legend` inside a fieldset, `h2` otherwise. */
+interface Props {
+  as?: 'legend' | 'h2';
+  id?: string;
+}
+const { as: Tag = 'h2', id } = Astro.props;
+---
+
+<Tag class="section-label" id={id}><slot /></Tag>
+
+<style>
+  .section-label {
+    padding: 0;
+    margin: 0 0 14px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+</style>

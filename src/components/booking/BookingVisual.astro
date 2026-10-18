@@ -1,0 +1,94 @@
+---
+/** The top of the booking page: Natalie in the opening of the dome, the title and one line of facts. */
+import { Picture } from 'astro:assets';
+import photo from '../../assets/booking.avif';
+---
+
+<div class="visual">
+  <Picture
+    class="visual__img"
+    src={photo}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    alt=""
+    aria-hidden="true"
+    widths={[600, 900, 1200, 1600]}
+    sizes="100vw"
+    loading="eager"
+  />
+  <div class="visual__shade" aria-hidden="true"></div>
+  <div class="visual__text">
+    <h1 class="display visual__h">Afspraak <em>maken</em></h1>
+    <p class="visual__facts">50 minuten · Schoten · vanaf 18 jaar</p>
+  </div>
+</div>
+
+<style>
+  .visual {
+    position: relative;
+    height: min(48svh, 420px);
+    overflow: hidden;
+    background: var(--page-booking);
+  }
+  .visual :global(.visual__img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keeps Natalie's face in view in the band, on every width. */
+    object-position: 38% 28%;
+  }
+  /* The page's own color at the top (Safari's bar, the header) and at the bottom, where the text sits. */
+  .visual__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      var(--page-booking) 0%,
+      color-mix(in srgb, var(--page-booking) 20%, transparent) 24%,
+      color-mix(in srgb, var(--page-booking) 15%, transparent) 50%,
+      color-mix(in srgb, var(--page-booking) 85%, transparent) 82%,
+      var(--page-booking) 100%
+    );
+  }
+  .visual__text {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .visual__h {
+    font-size: 44px;
+    line-height: 1;
+  }
+  .visual__h em {
+    color: var(--accent);
+  }
+  .visual__facts {
+    font-size: 14px;
+    color: var(--fg-soft);
+  }
+
+  @media (min-width: 700px) {
+    .visual {
+      height: min(56svh, 560px);
+    }
+    .visual__text {
+      left: 50%;
+      right: auto;
+      width: min(560px, calc(100% - 48px));
+      transform: translateX(-50%);
+      bottom: 32px;
+    }
+    .visual__h {
+      font-size: 64px;
+    }
+    .visual__facts {
+      font-size: 15px;
+    }
+  }
+</style>
