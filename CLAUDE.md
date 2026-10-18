@@ -97,7 +97,7 @@ Conventions: one component per file; styles live scoped in the component that ow
 
 ## Design tokens
 
-**One mood per theme.** Dark (the default): every screen of the story without a photo, and the footer, is flat `wood-950` with ivory text and copper accents, so it flows into the two photo scenes; the booking page is dark too, in its own calmer near-black (`night-*`, see Booking page). Within a theme, never mix light and dark backgrounds on flat screens. Warmth comes from soft copper glows in the middle of a screen, never at its edges.
+**One mood per theme.** Dark (the default): every screen of the story without a photo, and the footer, is flat `wood-950` with ivory text and copper accents, so it flows into the two photo scenes; the booking page is the same wood brown (`night-*` tokens, see Booking page). Within a theme, never mix light and dark backgrounds on flat screens. Warmth comes from soft copper glows in the middle of a screen, never at its edges.
 
 **Light theme** (the navbar's switch; the visitor's choice is stored in `localStorage`): every flat screen, the footer, the navbar menu and the booking page turn ivory with bronze text and `copper-700` accents. The photo scenes keep their photo but are washed light: the dusk becomes an ivory mist, they fade into ivory at their edges (`<EdgeFade color light>`, `data-tint-light`), and their words turn dark with a soft ivory glow. So the light story is light from start to end, the dark story dark — never mixed. All colors of flat screens and shared components come from the theme variables in `styles/theme.css` (`--page`, `--page-booking`, `--surface`, `--fg`, `--fg-soft`, `--fg-muted`, `--accent`, `--line`, `--outline`, `--dim`, notes, portrait …), swapped by `html[data-theme='light']` — never hard-code ivory or wood in them. `public/theme.js` (blocking in `<head>` on every page) sets the theme before first paint; `scripts/theme.ts` runs the switch and fires `themechange` (the story re-tints, the Cal.com booker redraws in its light theme). `html[data-surface]` (light / dark, from the bar color in `tint.ts`) tells the navbar and the next cue which screen is on show, so they are ivory over dark screens and photos, bronze over light ones (`--on-screen`).
 
@@ -108,7 +108,7 @@ Colors (tuned to the dome: bronze, copper, wood, ivory):
 | `bronze-950` | `#12100D` | hero night (its edge color) |
 | `bronze-900` | `#1E1712` | button text on its ivory hover fill |
 | `wood-950` | `#120A05` | background of every flat screen of the story |
-| `night-950` / `night-900` / `night-800` | `#0E0B09` / `#1A1511` / `#2A221C` | booking page: page, cards, the chosen number |
+| `night-950` / `night-900` / `night-800` | `#120A05` / `#1F150D` / `#2E2016` | booking page: page (the wood brown), cards, the chosen number |
 | `copper-300` | `#D49A72` | the accent: italic accent words, copper labels, line 1, pulses, focus outline |
 | `clay` | `#C88F80` | second line / note (the guide) |
 | `ivory` | `#F5F1E9` | text |
@@ -236,7 +236,7 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
 - Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
-Calm and mobile first: one column on every screen (centered, 560px from 700px wide). Its own quiet palette within the dark mood: near-black `night-950` page, plain `night-900` cards, `night-800` for the chosen number, ivory text, secondary text at 60% ivory. **Copper only for what you choose (the card's border) and the one button** — no badges, pills, icons, step numbers or tinted fills.
+Calm and mobile first: one column on every screen (centered, 560px from 700px wide). Its own quiet palette within the dark mood: wood-brown `night-950` page, plain `night-900` cards, `night-800` for the chosen number, ivory text, secondary text at 60% ivory. **Copper only for what you choose (the card's border) and the one button** — no badges, pills, icons, step numbers or tinted fills.
 - Navbar as on the story (links lead back into it).
 - **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it fades into the page color at top and bottom. On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
 - Each part has a small label (`SectionLabel.astro`: 12px, uppercase, 60% ivory).
@@ -269,10 +269,10 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Decorative images/SVG `aria-hidden`; portrait with a label.
 - Performance: hero image preloaded, the rest lazy; only animate `transform`/`opacity` (no live filters, blur or blend modes during animation — they made the prototype stutter); Lighthouse ≥ 95 on all four.
 - Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
-  - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#12100D`, every other scene `#120A05`); flat scenes also have `data-tint-light="#F5F1E9"` for the light theme (`tintOf()` in `tint.ts`).
+  - `data-tint` on each scene = the measured color of its **top edge** when finished (every scene `#120A05`, the wood brown); flat scenes also have `data-tint-light="#F5F1E9"` for the light theme (`tintOf()` in `tint.ts`).
   - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. The other scenes are flat wood at the edges already.
   - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Every scene keeps **flat wood at the top and bottom edge** (glows sit in the middle; the footer and the booking page are flat wood too). Nothing may cast a shadow into the screen edges.
-  - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge), and `tintLight` when their top turns light in the light theme (the booking page); `public/theme.js` applies it before first paint.
+  - Pages pass `tint` to `Base` for the first paint (default `#120A05`), and `tintLight` when their top turns light in the light theme (the booking page); `public/theme.js` applies it before first paint.
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. Cal.com is allowed via `script-src https://app.cal.com` (embed.js), `frame-src https://app.cal.com` (the booker) and `font-src https://cal.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 

@@ -4,7 +4,7 @@ const root = document.documentElement;
 const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
 
 /** The color Safari's bars currently show; tweened so they change together with the screen. */
-const bar = { color: meta?.content ?? '#12100D' };
+const bar = { color: meta?.content ?? '#120A05' };
 
 /** Rough perceived lightness (0–1) of a color GSAP has written (#rrggbb or rgb()). */
 function lightness(color: string) {
