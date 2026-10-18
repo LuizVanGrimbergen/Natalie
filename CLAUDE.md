@@ -153,7 +153,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - On other pages (`base="/"`) the links lead back into the story (`/#coaching` …), which opens on that finished scene.
 
 ### 01 · Hero — wonder
-- Image: `hero.avif` (the copper dome in the forest), full screen, `object-fit: cover`.
+- Image: `hero.avif` (the copper dome in the forest, daylight, 1448×1086), full screen, `object-fit: cover`.
 - Copy:
   - (top left, large) **Niet alles wat je raakt,**
   - (bottom right, large, italic) **kun je meteen begrijpen.**
