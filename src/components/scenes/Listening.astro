@@ -112,7 +112,7 @@ import EdgeFade from '../EdgeFade.astro';
     line-height: 1.25;
   }
 
-  /* Light theme: the same room, washed light along the edges and behind the words, which turn dark. */
+  /* Light theme: the room stays clear; a soft ivory glow only behind each block of words, which turn dark. */
   :global([data-theme='light']) .stage {
     background: var(--color-ivory);
   }
@@ -121,8 +121,10 @@ import EdgeFade from '../EdgeFade.astro';
   }
   :global([data-theme='light']) .room__scrim {
     background:
-      linear-gradient(90deg, rgb(245 241 233 / 0.85) 0%, rgb(245 241 233 / 0.25) 38%, rgb(245 241 233 / 0.25) 62%, rgb(245 241 233 / 0.85) 100%),
-      linear-gradient(180deg, rgb(245 241 233 / 0.6) 0%, rgb(245 241 233 / 0) 30%, rgb(245 241 233 / 0) 60%, rgb(245 241 233 / 0.75) 100%);
+      radial-gradient(ellipse 34% 30% at 18% 22%, rgb(245 241 233 / 0.8), rgb(245 241 233 / 0) 72%),
+      radial-gradient(ellipse 30% 22% at 16% 70%, rgb(245 241 233 / 0.75), rgb(245 241 233 / 0) 72%),
+      radial-gradient(ellipse 28% 20% at 84% 42%, rgb(245 241 233 / 0.72), rgb(245 241 233 / 0) 72%),
+      radial-gradient(ellipse 38% 20% at 80% 84%, rgb(245 241 233 / 0.78), rgb(245 241 233 / 0) 72%);
   }
   :global([data-theme='light']) .copy {
     color: var(--fg);
@@ -139,7 +141,9 @@ import EdgeFade from '../EdgeFade.astro';
       background: linear-gradient(180deg, rgb(10 7 5 / 0.75) 0%, rgb(10 7 5 / 0.35) 30%, rgb(10 7 5 / 0.55) 55%, rgb(10 7 5 / 0.9) 100%);
     }
     :global([data-theme='light']) .room__scrim {
-      background: linear-gradient(180deg, rgb(245 241 233 / 0.85) 0%, rgb(245 241 233 / 0.35) 30%, rgb(245 241 233 / 0.6) 55%, rgb(245 241 233 / 0.92) 100%);
+      background:
+        radial-gradient(ellipse 80% 16% at 30% 14%, rgb(245 241 233 / 0.8), rgb(245 241 233 / 0) 75%),
+        linear-gradient(180deg, rgb(245 241 233 / 0) 42%, rgb(245 241 233 / 0.72) 62%, rgb(245 241 233 / 0.8) 100%);
     }
     .copy {
       display: flex;
