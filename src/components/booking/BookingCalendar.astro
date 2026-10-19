@@ -19,6 +19,15 @@ const ready = Object.keys(links).length > 0;
         <div class="calendar__box" data-cal-box>
           <p class="calendar__text">De agenda wordt geladen…</p>
         </div>
+        <!-- Shown by cal.ts when embed.js can't load (network, an ad blocker). -->
+        <div class="calendar__empty" data-cal-failed hidden>
+          <p class="calendar__text">De agenda kon hier niet geladen worden.</p>
+          {SESSIONS.filter((s) => s.calLink).map((s) => (
+            <a class="calendar__link" href={`https://cal.com/${s.calLink}`}>
+              Plan een sessie: {s.name} →
+            </a>
+          ))}
+        </div>
         <noscript>
           <div class="calendar__empty">
             {SESSIONS.filter((s) => s.calLink).map((s) => (

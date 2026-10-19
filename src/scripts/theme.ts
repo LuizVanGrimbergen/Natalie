@@ -9,11 +9,9 @@ const root = document.documentElement;
 
 const isLight = () => root.dataset.theme === 'light';
 
+/** A toggle with a fixed label ("Lichte weergave"): pressed means the light theme is on. */
 function show(buttons: NodeListOf<HTMLButtonElement>) {
-  for (const button of buttons) {
-    button.setAttribute('aria-pressed', String(isLight()));
-    button.setAttribute('aria-label', isLight() ? 'Donkere weergave' : 'Lichte weergave');
-  }
+  for (const button of buttons) button.setAttribute('aria-pressed', String(isLight()));
 }
 
 export function initThemeToggle() {

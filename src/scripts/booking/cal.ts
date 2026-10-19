@@ -88,6 +88,7 @@ const theme = () => (document.documentElement.dataset.theme === 'light' ? 'light
 export function initCalEmbed(root: HTMLElement) {
   const links = JSON.parse(root.dataset.links ?? '{}') as Record<string, string>;
   const box = root.querySelector<HTMLElement>('[data-cal-box]')!;
+  const failed = root.querySelector<HTMLElement>('[data-cal-failed]')!;
   const started = new Set<string>();
   let shown = '';
 
@@ -105,8 +106,20 @@ export function initCalEmbed(root: HTMLElement) {
     if (namespace === shown) return;
     shown = namespace;
 
-    const cal = await loadCal();
+    let cal: CalApi;
+    try {
+      cal = await loadCal();
+    } catch {
+      // embed.js didn't load: plain links to Cal.com instead; a later choice tries again.
+      ready = null;
+      shown = '';
+      box.hidden = true;
+      failed.hidden = false;
+      return;
+    }
     if (namespace !== shown) return; // chosen again while embed.js was loading
+    box.hidden = false;
+    failed.hidden = true;
     if (!started.has(namespace)) {
       started.add(namespace);
       cal('init', namespace, { origin: ORIGIN });

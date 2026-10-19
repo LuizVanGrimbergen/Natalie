@@ -28,6 +28,9 @@ export function onStep(step: (dir: Step) => void) {
   addEventListener(
     'wheel',
     (event) => {
+      // Ctrl + wheel is the browser's zoom (also a trackpad pinch on macOS): leave it alone.
+      // So is the open hamburger menu, which may need to scroll on short screens.
+      if (event.ctrlKey || document.documentElement.classList.contains('menu-open')) return;
       event.preventDefault();
       const now = performance.now();
       const delta = event.deltaY;
@@ -59,6 +62,8 @@ export function onStep(step: (dir: Step) => void) {
     'touchmove',
     (event) => {
       if (startY === null) return;
+      // The open hamburger menu may need to scroll on short screens.
+      if (document.documentElement.classList.contains('menu-open')) return;
       event.preventDefault();
       const dy = startY - event.touches[0].clientY;
       if (Math.abs(dy) < SWIPE_MIN) return;
@@ -69,7 +74,11 @@ export function onStep(step: (dir: Step) => void) {
   );
 
   addEventListener('keydown', (event) => {
-    if (event.target !== document.body) return;
+    // Keys keep stepping after a click on a button or link; only typing and a Space that presses a control are left alone.
+    const target = event.target as HTMLElement;
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (target.closest('input, textarea, select, [contenteditable]')) return;
+    if (event.key === ' ' && target.closest('a, button, summary')) return;
     if (['ArrowDown', 'PageDown', ' '].includes(event.key)) step(1);
     else if (['ArrowUp', 'PageUp'].includes(event.key)) step(-1);
     else return;

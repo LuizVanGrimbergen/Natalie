@@ -30,7 +30,7 @@ const links = [
       <a class="header__cta" href="/booking">Afspraak maken</a>
     </nav>
 
-    <!-- Light / dark: a circle, half filled. scripts/theme.ts sets its label and state. -->
+    <!-- Light / dark: a circle, half filled. scripts/theme.ts sets its state (pressed = light). -->
     <button class="theme" type="button" data-theme-toggle aria-pressed="false" aria-label="Lichte weergave">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.3"></circle>
@@ -164,7 +164,8 @@ const links = [
     height: 20px;
     transition: transform 0.4s ease;
   }
-  .theme[aria-pressed='true'] svg {
+  /* From the theme itself (set before first paint), so the icon doesn't turn on every page load. */
+  :global(html[data-theme='light']) .theme svg {
     transform: rotate(180deg);
   }
 
@@ -219,6 +220,9 @@ const links = [
     padding: 96px 24px max(32px, calc(env(safe-area-inset-bottom) + 20px));
     background: var(--tint, var(--page));
     text-align: center;
+    /* A last resort if it still doesn't fit (very short screens, large text). */
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   /* A soft copper glow in the middle, like the story's screens. */
   .menu__panel::before {
@@ -291,6 +295,25 @@ const links = [
     font-size: 16px;
     color: inherit;
     text-decoration: none;
+  }
+
+  /* Phone landscape: smaller links, so "Afspraak maken" stays on screen too. */
+  @media (max-height: 520px) {
+    .menu__panel {
+      gap: 16px;
+      padding-top: 68px;
+      padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px));
+    }
+    .menu__nav {
+      gap: 0;
+    }
+    .menu__link {
+      padding: 4px 0;
+      font-size: 28px;
+    }
+    .menu__cta {
+      min-height: 48px;
+    }
   }
 
   @media (min-width: 900px) {

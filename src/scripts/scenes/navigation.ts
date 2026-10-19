@@ -212,9 +212,10 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       jump(target);
     });
   }
+  // Both ways, so focus never sits on a scene hidden under the one on show (Shift+Tab).
   addEventListener('focusin', (event) => {
     const target = scenes.findIndex((scene) => scene.contains(event.target as Node));
-    if (target > current) jump(target, true);
+    if (target >= 0 && target !== Math.min(current, last)) jump(target, true);
   });
 
   // The navbar's light/dark switch: the bars take the scene on show's color in the new theme.
