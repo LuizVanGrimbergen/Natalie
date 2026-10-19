@@ -1,39 +1,34 @@
 ---
 /**
- * "There is more": a round button with an arrow that draws itself downwards
- * (like the lines of the notes scene) and a copper pulse ring (like the
- * CTA). navigation.ts shows it once a screen is complete and hides it on the
- * next step; clicking it is a step too.
+ * "There is more": a small label over a thin line, on one centred axis. A light
+ * segment glides along the line, down for a mouse (scroll) and up on touch
+ * (the way the finger swipes). navigation.ts shows it once a screen is complete
+ * and hides it on the next step; clicking it is a step too.
  */
 ---
 
 <button class="next" type="button" data-next aria-label="Naar het volgende scherm">
-  <span class="next__ring" aria-hidden="true">
-    <svg viewBox="0 0 24 24" focusable="false">
-      <path class="next__stem" d="M12 5 V18" pathLength="20"></path>
-      <path class="next__head" d="M7.5 13.5 L12 18 L16.5 13.5" pathLength="20"></path>
-    </svg>
-  </span>
   <span class="label next__label" aria-hidden="true"><span class="next__mouse">Scroll</span><span class="next__touch">Swipe</span></span>
+  <span class="next__line" aria-hidden="true"><span class="next__glide"></span></span>
 </button>
 
 <style>
   .next {
     position: fixed;
     left: 50%;
-    bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
+    bottom: max(12px, calc(env(safe-area-inset-bottom) + 4px));
     z-index: 20;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 14px;
-    min-height: 44px;
-    padding: 0 6px;
+    gap: 8px;
+    min-width: 88px;
+    padding: 0;
     border: 0;
     background: none;
     font: inherit;
     /* Follows the screen on show: ivory on dark screens, bronze on light ones (html[data-surface]). */
     color: var(--on-screen);
-    --pulse: var(--on-screen-pulse);
     cursor: pointer;
     translate: -50% 0;
     opacity: 0;
@@ -49,8 +44,8 @@
     translate: -50% -6px;
     visibility: visible;
     transition:
-      opacity 0.6s ease,
-      translate 0.6s ease,
+      opacity 0.8s ease,
+      translate 0.8s ease,
       visibility 0s;
   }
   /* Without motion the page scrolls normally, so there is nothing to cue. */
@@ -58,84 +53,51 @@
     display: none;
   }
 
-  .next__ring {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-    animation: next-pulse 3.2s ease-out infinite;
-  }
-  .next__ring svg {
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.3;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    overflow: visible;
-  }
-  /* The stem draws down, the head lands, both fade, and again: a slow beat. */
-  .next__stem,
-  .next__head {
-    stroke-dasharray: 20;
-    stroke-dashoffset: 20;
-    animation: next-draw 2.4s cubic-bezier(0.45, 0, 0.25, 1) infinite;
-  }
-  .next__head {
-    animation-name: next-land;
-  }
-  @keyframes next-draw {
-    0% {
-      stroke-dashoffset: 20;
-      opacity: 1;
-    }
-    40%,
-    78% {
-      stroke-dashoffset: 0;
-      opacity: 1;
-    }
-    100% {
-      stroke-dashoffset: 0;
-      opacity: 0;
-    }
-  }
-  @keyframes next-land {
-    0%,
-    30% {
-      stroke-dashoffset: 20;
-      opacity: 1;
-    }
-    55%,
-    78% {
-      stroke-dashoffset: 0;
-      opacity: 1;
-    }
-    100% {
-      stroke-dashoffset: 0;
-      opacity: 0;
-    }
-  }
-  @keyframes next-pulse {
-    0% {
-      box-shadow: 0 0 0 0 rgb(var(--pulse) / 0.4);
-    }
-    70%,
-    100% {
-      box-shadow: 0 0 0 14px rgb(var(--pulse) / 0);
-    }
-  }
-
   .next__label {
-    letter-spacing: 0.34em;
-    margin-right: -0.34em;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    /* Letter-spacing trails after the last letter; this keeps the word on the axis. */
+    margin-right: -0.4em;
+    opacity: 0.72;
+    transition: opacity 0.4s;
   }
   .next__touch {
     display: none;
   }
+
+  /* The track: a faint hairline; the glide is a brighter segment moving along it. */
+  .next__line {
+    position: relative;
+    width: 1px;
+    height: 28px;
+    overflow: hidden;
+    background: color-mix(in srgb, currentColor 28%, transparent);
+  }
+  .next__glide {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, currentColor 45%, currentColor 55%, transparent);
+    animation: next-down 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  @keyframes next-down {
+    0% {
+      transform: translateY(-100%);
+    }
+    70%,
+    100% {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes next-up {
+    0% {
+      transform: translateY(100%);
+    }
+    70%,
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+
   @media (hover: none) and (pointer: coarse) {
     .next__mouse {
       display: none;
@@ -143,21 +105,19 @@
     .next__touch {
       display: inline;
     }
+    .next__glide {
+      animation-name: next-up;
+    }
   }
 
   @media (hover: hover) {
-    .next__ring {
-      transition: background-color 0.4s;
-    }
-    .next:hover .next__ring {
-      background-color: rgb(var(--pulse) / 0.14);
+    .next:hover .next__label {
+      opacity: 1;
     }
   }
   .next:focus-visible {
-    outline: none;
-  }
-  .next:focus-visible .next__ring {
     outline: 2px solid var(--accent);
-    outline-offset: 4px;
+    outline-offset: 6px;
+    border-radius: 4px;
   }
 </style>

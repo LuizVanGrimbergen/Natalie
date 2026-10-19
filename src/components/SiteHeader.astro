@@ -44,9 +44,15 @@ const links = [
       </summary>
       <div class="menu__panel">
         <nav class="menu__nav" aria-label="Menu">
-          {links.map((link) => <a class="display menu__link" href={link.href}>{link.label}</a>)}
+          {
+            links.map((link, i) => (
+              <a class="display menu__link" href={link.href} style={`--i: ${i}`}>
+                {link.label}
+              </a>
+            ))
+          }
         </nav>
-        <a class="menu__cta" href="/booking">Afspraak maken</a>
+        <a class="menu__cta" href="/booking" style={`--i: ${links.length}`}>Afspraak maken</a>
       </div>
     </details>
   </div>
@@ -213,6 +219,47 @@ const links = [
     padding: 96px 24px max(32px, calc(env(safe-area-inset-bottom) + 20px));
     background: var(--tint, var(--page));
     text-align: center;
+  }
+  /* A soft copper glow in the middle, like the story's screens. */
+  .menu__panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 70% 40% at 50% 46%, rgb(156 85 48 / 0.16), rgb(156 85 48 / 0) 100%);
+    pointer-events: none;
+  }
+  /* Opening: the panel fades in, then the links rise one after the other, the button last.
+     Closing (site-menu.ts, .is-closing): the panel fades out before the <details> closes. */
+  .menu[open] .menu__panel {
+    animation: menu-in 0.45s ease both;
+  }
+  .menu[open] .menu__panel::before {
+    animation: menu-in 1.2s 0.1s ease both;
+  }
+  .menu[open] .menu__link,
+  .menu[open] .menu__cta {
+    animation: menu-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.12s + var(--i) * 0.07s);
+  }
+  .menu.is-closing .menu__panel {
+    animation: menu-out 0.28s ease both;
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes menu-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes menu-rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
   }
   /* The links fill the middle of the screen; "Afspraak maken" sits at the bottom, within thumb's reach. */
   .menu__nav {

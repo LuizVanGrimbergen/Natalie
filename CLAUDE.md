@@ -44,7 +44,7 @@ src/
   components/
     SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
     CtaLink.astro                   # outline pill button with pulse + hover fill
-    NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring, Scroll/Swipe
+    NextCue.astro                   # "next" cue: Scroll/Swipe over a hairline with a gliding light, one centred axis
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 05, coaching)
@@ -142,7 +142,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`); up to 3 quick steps are remembered (`QUEUE`).
 - The hero completes its sentence by itself after the load intro.
-- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory. Every scene but the last keeps 72px free at the bottom of its frame for it.
+- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): everything on one centred axis — the small label **Scroll** (mouse) / **Swipe** (touch) over a thin vertical hairline along which a light segment glides, down for a mouse, up on touch (the finger's swipe). Transform only. (Replaced: a round button with an arrow and a pulse ring — off-centre on phones and heavier.) It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory over dark screens, bronze over light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
 - A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays flat wood.
 - Links to a scene (`#start`, `#ruimte`, `#luisteren`, `#coaching`, `#natalie`, `#invitation` — the navbar and menu, or opening the page with the hash) go straight to it: a later scene dissolves in over the current one, an earlier one is uncovered (the scenes in between vanish underneath) and builds itself again. Keyboard focus on a later scene (Tab to the button) brings it on screen. While the hamburger menu is open the story doesn't step.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
@@ -151,7 +151,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 ### Navbar (`SiteHeader.astro`, fixed on every screen and page)
 - Left: wordmark *Natalie* (Cormorant italic) → the hero (`#start`; `/` from other pages).
 - From 900px: links **De ruimte · Luisteren · Coaching · Over Natalie** (14px, 78% ivory) and an outline pill **Afspraak maken** → `/booking`.
-- Below 900px: a hamburger (two lines that turn into a cross) opens a full-screen menu in the page's own color, **everything centered**: the four links large in Cormorant in the middle of the screen, **Afspraak maken** as an outline pill (max 320px) at the bottom, within thumb's reach. It is a `<details>`, so it works without JS; `scripts/site-menu.ts` closes it on a link or Escape.
+- Below 900px: a hamburger (two lines that turn into a cross) opens a full-screen menu in the page's own color, **everything centered**: the four links large in Cormorant in the middle of the screen, **Afspraak maken** as an outline pill (max 320px) at the bottom, within thumb's reach. It opens with a fade, a soft copper glow in the middle and the links rising one after the other (the button last); closing fades it out (`.is-closing`). It is a `<details>`, so it works without JS; `scripts/site-menu.ts` closes it on a link, the cross or Escape.
 - Always (beside the hamburger on phones, after the links on desktop): the **light/dark switch**, a circle half filled that turns over; shown only when scripts run (`html.js`, set by `public/theme.js`).
 - Colors follow the screen on show (`--on-screen`), not the theme: ivory over dark screens and photos, bronze over light screens.
 - Its backdrop fades from the page color (`--tint`) at the very top to nothing, so the top edge stays the page's color for Safari's bar and the links stay readable over photos.
