@@ -116,7 +116,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     // Whatever is still playing (e.g. the hero's own build) finishes at once.
     queued.length = 0;
     active?.progress(1);
-    if (to < current) return jumpBack(to);
+    if (to < current) return jumpBack(to, instant);
     if (to === current) return;
     if (to === current + 1 && !instant) return forward();
     const settle = () => {
@@ -149,15 +149,27 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
    * Back to an earlier scene: the scenes in between vanish underneath, then the one on
    * screen dissolves away over it, and it builds itself again (like a step back).
    */
-  function jumpBack(to: number) {
+  function jumpBack(to: number, instant = false) {
     const from = current;
-    if (to === from - 1) return back();
+    if (to === from - 1 && !instant) return back();
+    if (instant) {
+      for (let i = to; i < from; i++) fades[i].progress(0);
+      builds[to].progress(1);
+      tintNow(scenes[to]);
+      onstage(to);
+      rail.set(to);
+      cue.show(scenes[to]);
+      if (to === 0) gsap.set(header, { autoAlpha: 1 });
+      current = to;
+      return;
+    }
     for (let i = to; i < from - 1; i++) fades[i].progress(0);
     onstage(to, from);
     builds[to].progress(0);
     const tl = gsap.timeline();
     tl.add(fades[from - 1].tweenTo(0, { duration: FADE, ease }), 0)
-      .add(tintTo(scenes[to], FADE), 0)
+      // The scenes in between are gone, so this one shows as the later one fades out.
+      .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => 1 - opacity(scenes[from])), 0)
       .add(play(to), FADE * 0.5);
     if (to === 0) tl.to(header, { autoAlpha: 1, duration: 0.4 }, FADE / 2);
     current = to;
