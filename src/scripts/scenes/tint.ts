@@ -42,7 +42,24 @@ export function tintTo(
 ) {
   const ease = 'power1.inOut';
   const { tint, tintEnter, tintLift } = scene.dataset;
-  if (!tintEnter || !build) return gsap.to(bar, { color: tint, duration: fade, ease, onUpdate: apply });
+  if (!tintEnter || !build) {
+    if (!shown) return gsap.to(bar, { color: tint, duration: fade, ease, onUpdate: apply });
+    let from = bar.color;
+    return gsap.to({}, {
+      duration: fade,
+      onStart: () => {
+        from = bar.color;
+      },
+      onUpdate: () => {
+        bar.color = gsap.utils.interpolate(from, tint!, shown());
+        apply();
+      },
+      onComplete: () => {
+        bar.color = tint!;
+        apply();
+      },
+    });
+  }
 
   const fadeCurve = gsap.parseEase(ease);
   const buildCurve = gsap.parseEase(build.ease);
