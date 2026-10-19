@@ -63,6 +63,21 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
   const seconds = (i: number) => BUILD[scenes[i].dataset.scene!] ?? 2;
   const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: seconds(i), ease });
 
+  /** The build's timing, so the bars can follow a scene that lifts (perspectives). */
+  const timing = (i: number) => ({ seconds: seconds(i), length: builds[i].duration(), ease });
+
+  /** Show a scene finished at once (opening on #invitation, keyboard focus). */
+  function land(to: number) {
+    builds[to].progress(1);
+    tintNow(scenes[to]);
+    onstage(to);
+    rail.set(to);
+    gsap.set(header, { autoAlpha: to === 0 ? 1 : 0 });
+    if (to < last) cue.show(scenes[to]);
+    else cue.hide();
+    current = to;
+  }
+
   function forward() {
     if (current >= last) return;
     const to = current + 1;
@@ -71,24 +86,31 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     trackScene(scenes[to]);
     builds[to].progress(0);
     tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
-      .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => opacity(scenes[to])), 0)
+      .add(tintTo(scenes[to], FADE, timing(to), () => opacity(scenes[to])), 0)
       .add(play(to), FADE * 0.5);
     if (current === 0) tl.to(header, { autoAlpha: 0, duration: 0.4 }, 0);
     current = to;
     run(tl);
   }
 
-  function back() {
-    if (current === 0) return;
+  /**
+   * Back to an earlier scene, a mirror of a step forward: the scenes in between vanish
+   * underneath, the one on screen dissolves away, and the earlier one builds itself again.
+   */
+  function back(to = current - 1, instant = false) {
+    if (to < 0) return;
     const from = current;
-    const tl = gsap.timeline();
-    // A mirror of a step forward: the earlier scene dissolves back in and builds itself again.
-    const to = from - 1;
+    for (let i = to; i < from - 1; i++) fades[i].progress(0);
+    if (instant) {
+      fades[from - 1].progress(0);
+      return land(to);
+    }
     onstage(to, from);
     builds[to].progress(0);
-    tl.add(fades[to].tweenTo(0, { duration: FADE, ease }), 0)
+    const tl = gsap.timeline();
+    tl.add(fades[from - 1].tweenTo(0, { duration: FADE, ease }), 0)
       .add(
-        tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => {
+        tintTo(scenes[to], FADE, timing(to), () => {
           // Revealed as the later scene fades out and this one's own dim lifts.
           const dim = scenes[to].querySelector('.exit-dim');
           return (1 - opacity(scenes[from])) * (1 - (dim ? opacity(dim) : 0));
@@ -97,7 +119,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       )
       .add(play(to), FADE * 0.5);
     if (to === 0) tl.to(header, { autoAlpha: 1, duration: 0.4 }, FADE / 2);
-    current = from - 1;
+    current = to;
     run(tl);
   }
 
@@ -111,68 +133,31 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     else back();
   }
 
-  /** Skip ahead to a later scene: it dissolves in over the current one, the scenes in between are settled underneath. */
+  /** Go straight to any scene: a later one dissolves in over the current one, the scenes in between are settled underneath. */
   function jump(to: number, instant = false) {
     // Whatever is still playing (e.g. the hero's own build) finishes at once.
     queued.length = 0;
     active?.progress(1);
-    if (to < current) return jumpBack(to, instant);
+    if (to < current) return back(to, instant);
     if (to === current) return;
     if (to === current + 1 && !instant) return forward();
     const settle = () => {
       for (let i = 0; i < to; i++) builds[i].progress(1);
       for (let i = 0; i < to; i++) fades[i].progress(1);
     };
-    gsap.set(header, { autoAlpha: 0 });
-    current = to;
     trackScene(scenes[to]);
     if (instant) {
-      tintNow(scenes[to]);
       settle();
-      builds[to].progress(1);
-      onstage(to);
-      rail.set(to);
-      if (to < last) cue.show(scenes[to]);
-      else cue.hide();
-      return;
+      return land(to);
     }
+    gsap.set(header, { autoAlpha: 0 });
     onstage(0, current, to);
     builds[to].progress(0);
+    current = to;
     const tl = gsap.timeline();
     tl.to(scenes[to], { opacity: 1, duration: FADE, ease, onComplete: settle }, 0)
-      .add(tintTo(scenes[to], FADE), 0)
+      .add(tintTo(scenes[to], FADE, timing(to), () => opacity(scenes[to])), 0)
       .add(play(to), FADE * 0.5);
-    run(tl);
-  }
-
-  /**
-   * Back to an earlier scene: the scenes in between vanish underneath, then the one on
-   * screen dissolves away over it, and it builds itself again (like a step back).
-   */
-  function jumpBack(to: number, instant = false) {
-    const from = current;
-    if (to === from - 1 && !instant) return back();
-    if (instant) {
-      for (let i = to; i < from; i++) fades[i].progress(0);
-      builds[to].progress(1);
-      tintNow(scenes[to]);
-      onstage(to);
-      rail.set(to);
-      cue.show(scenes[to]);
-      if (to === 0) gsap.set(header, { autoAlpha: 1 });
-      current = to;
-      return;
-    }
-    for (let i = to; i < from - 1; i++) fades[i].progress(0);
-    onstage(to, from);
-    builds[to].progress(0);
-    const tl = gsap.timeline();
-    tl.add(fades[from - 1].tweenTo(0, { duration: FADE, ease }), 0)
-      // The scenes in between are gone, so this one shows as the later one fades out.
-      .add(tintTo(scenes[to], FADE, { seconds: seconds(to), length: builds[to].duration(), ease }, () => 1 - opacity(scenes[from])), 0)
-      .add(play(to), FADE * 0.5);
-    if (to === 0) tl.to(header, { autoAlpha: 1, duration: 0.4 }, FADE / 2);
-    current = to;
     run(tl);
   }
 
