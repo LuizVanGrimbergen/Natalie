@@ -3,11 +3,16 @@
     background: var(--tint, var(--color-bronze-950));
     -webkit-text-size-adjust: 100%;
   }
+  /* One side margin for every scene: 6vw, and on big screens a centred column of
+     1240px, so the eye never has to travel far from left to right. */
+  :root {
+    --gutter: max(6vw, calc((100vw - 1240px) / 2));
+  }
   body {
     margin: 0;
     font-family: var(--font-body);
     font-weight: 300;
-    color: var(--color-ivory);
+    color: var(--color-sand);
     background: var(--tint, var(--color-bronze-950));
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
