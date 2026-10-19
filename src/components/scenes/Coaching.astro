@@ -8,7 +8,9 @@ import NotesSvg from '../NotesSvg.astro';
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="frame">
       <div class="layout">
-        <NotesSvg class="notes" />
+        <div class="notes-box">
+          <NotesSvg class="notes" />
+        </div>
         <div class="text">
         <p class="label text__label" data-reveal="1">Coaching</p>
         <h2 id="coaching-title" class="display text__h" data-reveal="1">Soms helpt het om <em>samen te kijken.</em></h2>
@@ -39,6 +41,10 @@ import NotesSvg from '../NotesSvg.astro';
     gap: 4vw;
     padding: 0 var(--gutter);
   }
+  /* Only a box on phones (the room between the navbar and the text); elsewhere a plain grid cell. */
+  .notes-box {
+    display: contents;
+  }
   .stage :global(.notes) {
     width: 100%;
     height: auto;
@@ -68,11 +74,20 @@ import NotesSvg from '../NotesSvg.astro';
   }
 
   /* Phone: the drawing is wide, so it is scaled to its right part (loop, notes, beam)
-     and the start of the copper line runs in from beyond the left edge. */
+     and the start of the copper line runs in from beyond the left edge. It is centred
+     in the room between the navbar and the text. */
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
     .layout {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 68px 0 6%;
+    }
+    .notes-box {
       display: block;
-      padding: 0;
+      position: relative;
+      flex: 1;
+      min-height: 0;
     }
     .stage :global(.notes) {
       position: absolute;
@@ -82,16 +97,13 @@ import NotesSvg from '../NotesSvg.astro';
       left: -42vw;
       width: var(--w);
       height: calc(var(--w) * 7 / 8);
-      top: calc(34% - var(--w) * 7 / 16);
+      top: calc(50% - var(--w) * 7 / 16);
     }
     .stage :global(.notes [data-draw]) {
       stroke-width: 2.6;
     }
     .text {
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      bottom: 6%;
+      margin: 0 24px;
       max-width: none;
       gap: 20px;
     }
@@ -105,16 +117,19 @@ import NotesSvg from '../NotesSvg.astro';
   }
   @media (min-width: 600px) and (max-width: 820px) and (min-height: 521px) {
     .text {
-      left: 48px;
-      right: 48px;
+      margin: 0 48px;
     }
     .text__h {
       font-size: 52px;
     }
   }
   @media (max-width: 559px) and (max-height: 700px), (max-width: 820px) and (min-height: 521px) and (max-height: 700px) {
+    .layout {
+      padding-top: 60px;
+    }
     .stage :global(.notes) {
-      top: calc(25% - var(--w) * 7 / 16);
+      --w: 124vw;
+      left: -35vw;
     }
     .text {
       gap: 14px;
@@ -143,16 +158,25 @@ import NotesSvg from '../NotesSvg.astro';
      fills the middle band of its box, so the empty top and bottom are cropped away. */
   @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
     .layout {
+      display: grid;
       grid-template-columns: minmax(0, 1fr);
       align-content: center;
       gap: 3vh;
       padding: 0 var(--gutter);
     }
+    .notes-box {
+      display: contents;
+    }
     .stage :global(.notes) {
+      position: static;
       max-height: none;
+      aspect-ratio: 8 / 7;
+      width: 100%;
+      height: auto;
       margin: -27% 0 -24%;
     }
     .text {
+      margin: 0;
       max-width: none;
       gap: 22px;
     }
