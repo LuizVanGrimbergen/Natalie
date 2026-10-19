@@ -203,15 +203,15 @@ Two screens, so it reads calmly without many steps: the title, then the three el
 - `Elements.astro`: the title screen (`data-scene="elements"`, label + h2 + the one line, `elements.ts`), followed by `ElementsList.astro` (`data-scene="list"`, z-index 5, `list.ts`).
 - **The two screens are one thought** (`gather.ts`, `wayIn(1.2)`): instead of a crossfade, the label above and the line under the title give way (every `data-gather-line`) and the title rises and shrinks into the head of the list screen (the same words, small, `data-gather-target`), landing as that screen dissolves in (the head is sized to wrap on the same words as the title, so the handover is invisible); then the three elements rise under it. Measured from the real positions (again on resize and once fonts load). Stepping back is the mirror.
 - Flat `wood-950`, a soft copper glow in the middle of the list screen. **Text only, no icons, cards or numbers.**
-- The list: each element's name large in Cormorant (h3, the noun as the italic copper accent: De *persoon.*, Het *geluidsveld.*, De *wisselwerking.*) with its one sentence; quiet hairlines between them; they rise slowly one after the other.
+- The list: each element's name large in Cormorant (h3, the noun as the italic copper accent: De *persoon.*, Het *geluidsveld.*, De *koppeling.*) with its one sentence; quiet hairlines between them; they rise slowly one after the other.
 - Desktop: name left, sentence right, three rows. Phone/tablet portrait: name above sentence, the three under each other.
 - Copy (sample, from Natalie's email — awaiting her approval):
   - label: HOE VERLOOPT EEN SESSIE?
   - h2: **Wat muziek** *met je kan doen.*
   - Je ligt in de soundroom en luistert, vijftig minuten lang. Je hoeft niets te doen of te bereiken: wat je hoort en wat het met je doet, is voor iedereen anders. Drie dingen spelen daarin samen. (The one concrete description of a session on the story: lying in the dome, 50 minutes, as in `sessions.ts`. Natalie's documents avoid the word *ontspanning*.)
-  - **De persoon** — Jij, zoals je binnenkomt: je lichaam, je adem, de ruis in je hoofd, je vermoeidheid of alertheid.
-  - **Het geluidsveld** — De muziek zelf: klank, ritme, frequenties, stilte, en hoe de ruimte ze draagt.
-  - **De wisselwerking** — Wat er tussen jou en het geluid ontstaat: een adem die vertraagt, schouders die zakken, beelden, rust.
+  - **De persoon** — Met haar pre-sessie toestand: lichaam, zenuwstelsel, mentale ruis, intentie, vermoeidheid of alertheid.
+  - **Het geluidsveld** — De feitelijke akoestische uitvoering: instrumenten, frequentiebanden, ritme, structuur, duur, ruimte-akoestiek.
+  - **De koppeling** — Wat zich tussen lichaam en geluid afspeelt: entrainment, resonantie, ademhalingsreactie, autonome verschuiving, aandacht, beelden, lichaamssensaties.
 
 ### 05 · Coaching — guiding, not fixing
 The second half of what Natalie offers (beside the soundroom): a personal conversation. Its title mirrors scene 03 (*Soms hoef je alleen maar te luisteren.*).
