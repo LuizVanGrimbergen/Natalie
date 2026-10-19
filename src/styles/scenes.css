@@ -59,14 +59,11 @@
     pointer-events: none;
   }
   /* Flat scenes dim to the theme's own dim (warm dark brown, or ivory in the light theme);
-     photo scenes always dim to dark. */
+     photo scenes always dim to dark (they look the same in both themes). */
   .exit-dim--dark {
     background: var(--dim);
   }
   .exit-dim--photo {
     background: radial-gradient(ellipse 90% 80% at 50% 40%, #2a1e16, #120d0a);
-  }
-  [data-theme='light'] .exit-dim--photo {
-    background: #6b4a36;
   }
 }

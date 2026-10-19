@@ -7,7 +7,7 @@ import EdgeFade from '../EdgeFade.astro';
 const firstLine = 'Niet alles wat je raakt,'.split(' ');
 ---
 
-<section id="start" class="scene hero" style="z-index: 1" data-tint="#120A05" data-tint-light="#6B4A36" data-scene="hero" aria-labelledby="hero-title">
+<section id="start" class="scene hero" style="z-index: 1" data-tint="#120A05" data-scene="hero" aria-labelledby="hero-title">
   <div class="stage">
     <div class="exit-dim exit-dim--photo" aria-hidden="true"></div>
     <div class="hero__drift" aria-hidden="true">
@@ -30,7 +30,7 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     <div class="hero__dark" aria-hidden="true" data-hero-dark></div>
     <div class="hero__vignette" aria-hidden="true"></div>
     <div class="hero__pulse" aria-hidden="true"></div>
-    <EdgeFade color="#120A05" light="#6B4A36" />
+    <EdgeFade color="#120A05" />
 
     <div class="frame">
       <h1 id="hero-title" class="sr-only">Niet alles wat je raakt, kun je meteen begrijpen.</h1>
@@ -176,22 +176,6 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     font-size: 18px;
     line-height: 1.6;
     font-weight: 400;
-  }
-
-  /* Light theme: the same dusk filter as in dark, but in a warm, lighter brown
-     (#6B4A36) instead of near-black: the photo, its edges and Safari's bars turn brown,
-     the words stay ivory. */
-  :global([data-theme='light']) .stage {
-    background: #6b4a36;
-  }
-  :global([data-theme='light']) .hero__night {
-    background: linear-gradient(180deg, rgb(107 74 54 / 0.88), rgb(107 74 54 / 0.55) 45%, rgb(107 74 54 / 0.94));
-  }
-  :global([data-theme='light']) .hero__dark {
-    background: #6b4a36;
-  }
-  :global([data-theme='light']) .hero__vignette {
-    background: radial-gradient(ellipse 75% 70% at 50% 50%, rgb(107 74 54 / 0) 35%, rgb(107 74 54 / 0.97) 100%);
   }
 
   /* phone */

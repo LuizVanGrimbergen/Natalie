@@ -4,7 +4,7 @@ import interior from '../../assets/interior.avif';
 import EdgeFade from '../EdgeFade.astro';
 ---
 
-<section id="luisteren" class="scene listening" style="z-index: 3" data-tint="#120A05" data-tint-light="#6B4A36" data-scene="listening" aria-labelledby="listening-title">
+<section id="luisteren" class="scene listening" style="z-index: 3" data-tint="#120A05" data-scene="listening" aria-labelledby="listening-title">
   <div class="stage">
     <div class="exit-dim exit-dim--photo" aria-hidden="true"></div>
     <Picture
@@ -20,7 +20,7 @@ import EdgeFade from '../EdgeFade.astro';
     />
     <div class="room__dim" aria-hidden="true" data-room-dim></div>
     <div class="room__scrim" aria-hidden="true"></div>
-    <EdgeFade color="#120A05" light="#6B4A36" />
+    <EdgeFade color="#120A05" />
 
     <div class="frame">
       <div class="copy">
@@ -112,27 +112,10 @@ import EdgeFade from '../EdgeFade.astro';
     line-height: 1.25;
   }
 
-  /* Light theme: the same filter as in dark, in the warm, lighter brown (#6B4A36) instead
-     of near-black; the words stay ivory. */
-  :global([data-theme='light']) .stage {
-    background: #6b4a36;
-  }
-  :global([data-theme='light']) .room__dim {
-    background: #6b4a36;
-  }
-  :global([data-theme='light']) .room__scrim {
-    background:
-      linear-gradient(90deg, rgb(107 74 54 / 0.95) 0%, rgb(107 74 54 / 0.4) 38%, rgb(107 74 54 / 0.4) 62%, rgb(107 74 54 / 0.95) 100%),
-      linear-gradient(180deg, rgb(107 74 54 / 0.75) 0%, rgb(107 74 54 / 0) 30%, rgb(107 74 54 / 0) 60%, rgb(107 74 54 / 0.88) 100%);
-  }
-
   /* Stacked (phone + tablet portrait): title on top, the rest grouped at the bottom. */
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px), (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
     .room__scrim {
       background: linear-gradient(180deg, rgb(10 7 5 / 0.75) 0%, rgb(10 7 5 / 0.35) 30%, rgb(10 7 5 / 0.55) 55%, rgb(10 7 5 / 0.9) 100%);
-    }
-    :global([data-theme='light']) .room__scrim {
-      background: linear-gradient(180deg, rgb(107 74 54 / 0.92) 0%, rgb(107 74 54 / 0.5) 30%, rgb(107 74 54 / 0.72) 55%, rgb(107 74 54 / 0.97) 100%);
     }
     .copy {
       display: flex;
