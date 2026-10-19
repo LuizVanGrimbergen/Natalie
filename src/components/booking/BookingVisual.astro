@@ -41,6 +41,26 @@ import photo from '../../assets/booking.avif';
     object-fit: cover;
     /* Keeps Natalie's face in view in the band, on every width. */
     object-position: 38% 28%;
+    /* On arrival the photo settles, like the story's camera; then the words rise. */
+    animation: visual-settle 2.4s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  @keyframes visual-settle {
+    from {
+      opacity: 0.4;
+      transform: scale(1.08);
+    }
+  }
+  @keyframes visual-rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  .visual__h {
+    animation: visual-rise 1s 0.3s cubic-bezier(0.2, 0.6, 0.2, 1) backwards;
+  }
+  .visual__facts {
+    animation: visual-rise 1s 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) backwards;
   }
   /* Flat wood at the top (Safari's bar, the header) and at the bottom, where the text sits;
      in the dark theme that is the page itself, in the light one the ivory page starts below. */

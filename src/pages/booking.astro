@@ -39,6 +39,21 @@ import GoodToKnow from '../components/booking/GoodToKnow.astro';
     gap: 36px;
     padding: 28px 24px 56px;
   }
+  /* The parts rise one after the other, under the photo's title. */
+  .flow > :global(*) {
+    animation: flow-rise 0.9s cubic-bezier(0.2, 0.6, 0.2, 1) backwards;
+    animation-delay: calc(0.6s + var(--i, 0) * 0.12s);
+  }
+  .flow > :global(:nth-child(2)) { --i: 1; }
+  .flow > :global(:nth-child(3)) { --i: 2; }
+  .flow > :global(:nth-child(4)) { --i: 3; }
+  .flow > :global(:nth-child(5)) { --i: 4; }
+  @keyframes flow-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
   @media (min-width: 700px) {
     .flow {
       width: min(560px, 100%);

@@ -24,6 +24,16 @@ const { title, description, story = false, tint = '#120A05' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = await getImage({ src: hero, width: 1200, height: 630, format: 'jpg', quality: 80 });
 const ogUrl = new URL(og.src, Astro.site);
+// Search engines: who and where (a data block, not a script, so the CSP doesn't block it).
+const business = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Natalie Vandervoort',
+  description,
+  url: new URL('/', Astro.site),
+  image: ogUrl,
+  address: { '@type': 'PostalAddress', addressLocality: 'Schoten', addressCountry: 'BE' },
+});
 ---
 
 <!doctype html>
@@ -36,6 +46,9 @@ const ogUrl = new URL(og.src, Astro.site);
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <!-- The chosen theme (light or dark), before first paint; a file, so the CSP can forbid inline scripts. -->
     <script is:inline src="/theme.js"></script>
 
@@ -48,6 +61,7 @@ const ogUrl = new URL(og.src, Astro.site);
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" is:inline set:html={business} />
 
     {
       // A file, not inline, so the Content-Security-Policy can forbid inline scripts.

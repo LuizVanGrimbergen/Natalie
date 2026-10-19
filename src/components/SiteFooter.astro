@@ -1,11 +1,11 @@
 ---
-// TODO(Natalie): fill in contact details.
+import { contactHref, contactLabel } from '../contact';
 ---
 
 <footer class="footer" data-footer>
   <span class="display footer__name"><em>Natalie Vandervoort</em></span>
   <span>Schoten</span>
-  <span>[CONTACTGEGEVENS]</span>
+  {contactHref ? <a class="footer__link" href={contactHref}>{contactLabel}</a> : <span>{contactLabel}</span>}
 </footer>
 
 <style>
@@ -32,6 +32,9 @@
     top: 100%;
     /* Above every scene (their z-index is their order, 1–8). */
     z-index: 15;
+  }
+  .footer__link {
+    color: inherit;
   }
   .footer__name {
     font-size: 20px;

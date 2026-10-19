@@ -59,6 +59,7 @@ const ready = Object.keys(links).length > 0;
   }
   :global(body:has([name='session']:checked)) .calendar {
     display: block;
+    animation: calendar-in 0.8s ease-out;
   }
   .calendar__box {
     min-height: 480px;
@@ -87,5 +88,11 @@ const ready = Object.keys(links).length > 0;
   .calendar__link {
     color: var(--accent);
     font-size: 16px;
+  }
+  @keyframes calendar-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
   }
 </style>

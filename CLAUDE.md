@@ -41,6 +41,8 @@ src/
   pages/
     index.astro                     # the story: header + the seven scenes (eight screens), starts the scene script
     booking.astro                   # booking page
+    404.astro                       # page not found: the hero photo, darkened, and a way back
+    robots.txt.ts                   # robots.txt with the absolute sitemap URL
   components/
     SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
     CtaLink.astro                   # outline pill button with pulse + hover fill
@@ -66,6 +68,7 @@ src/
       People.astro                  # number of people (segmented 1–3), total, the copper button
       sessions.ts                   # the two sessions: name, text, duration, price, Cal.com link; friends discount, max people
       GoodToKnow.astro              # "Goed om te weten": practical and safety notes, folded
+  contact.ts                        # Natalie's contact (footer, booking); the placeholder until it is filled in
   scripts/site-menu.ts              # closes the hamburger menu (link, Escape); html.menu-open pauses the story's steps
   scripts/theme.ts                  # the light/dark switch: stores it, re-tints, fires themechange
   scripts/booking/
@@ -293,7 +296,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
   - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Every scene keeps **flat wood at the top and bottom edge** (glows sit in the middle; the footer and the booking page are flat wood too). Nothing may cast a shadow into the screen edges.
   - Pages pass `tint` to `Base` for the first paint (default `#120A05`); every page starts with a photo (dark in both themes), so `public/theme.js` only sets the theme, the story re-tints per scene.
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. Cal.com is allowed via `script-src https://app.cal.com` (embed.js), `frame-src https://app.cal.com` (the booker) and `font-src https://cal.com`.
-- SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
+- SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero), JSON-LD `LocalBusiness` (Base), sitemap (`@astrojs/sitemap`), `robots.txt`, apple-touch-icon + `site.webmanifest`. Set `SITE_URL` once the domain is known.
 
 ---
 

@@ -1,5 +1,6 @@
 ---
-// TODO(Natalie): sample copy from her notes on safety and measuring, awaiting her approval; contact is a placeholder.
+// TODO(Natalie): sample copy from her notes on safety and measuring, awaiting her approval; contact comes from contact.ts.
+import { contactHref, contactLabel } from '../../contact';
 const notes = [
   'Maximaal drie mensen tegelijk, geen schermen.',
   'Er is altijd iemand in de buurt. Je kunt op elk moment stoppen, zonder uitleg.',
@@ -16,7 +17,7 @@ const notes = [
       {notes.map((note) => <li>{note}</li>)}
     </ul>
   </details>
-  <p class="know__contact">Vragen vooraf? [CONTACTGEGEVENS]</p>
+  <p class="know__contact">Vragen vooraf? {contactHref ? <a href={contactHref}>{contactLabel}</a> : contactLabel}</p>
 </section>
 
 <style>

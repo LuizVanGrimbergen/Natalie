@@ -1,0 +1,88 @@
+---
+/**
+ * A page that doesn't exist: the dome in the forest, darkened like the booking
+ * page's photo band, and one way back. Looks the same in both themes.
+ * TODO(Natalie): sample copy, awaiting her approval.
+ */
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import CtaLink from '../components/CtaLink.astro';
+import hero from '../assets/hero.avif';
+---
+
+<Base title="Pagina niet gevonden — Natalie Vandervoort" description="Deze pagina bestaat niet." tint="#120A05">
+  <SiteHeader base="/" />
+  <main class="lost">
+    <Picture
+      class="lost__img"
+      src={hero}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      alt=""
+      aria-hidden="true"
+      widths={[600, 1000, 1448]}
+      sizes="100vw"
+      loading="eager"
+    />
+    <div class="lost__shade" aria-hidden="true"></div>
+    <div class="lost__text">
+      <h1 class="display lost__h">Deze pagina <em>bestaat niet.</em></h1>
+      <CtaLink href="/">Terug naar het begin</CtaLink>
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* A photo, so ivory words and dark wood edges in both themes (like the story's photo scenes). */
+  .lost {
+    --fg: var(--color-ivory);
+    --page: var(--color-wood-950);
+    --outline: rgb(245 241 233 / 0.55);
+    --pulse: 212 154 114;
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100lvh;
+    overflow: hidden;
+    background: var(--color-wood-950);
+    color: var(--fg);
+  }
+  .lost :global(.lost__img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Flat wood at the top and bottom (Safari's bars), darker behind the words. */
+  .lost__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      var(--color-wood-950) 0%,
+      color-mix(in srgb, var(--color-wood-950) 55%, transparent) 22%,
+      color-mix(in srgb, var(--color-wood-950) 70%, transparent) 50%,
+      color-mix(in srgb, var(--color-wood-950) 55%, transparent) 78%,
+      var(--color-wood-950) 100%
+    );
+  }
+  .lost__text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  .lost__h {
+    font-size: clamp(40px, 7vw, 88px);
+    line-height: 1.05;
+    text-shadow: 0 2px 24px rgb(18 10 5 / 0.6);
+  }
+  .lost__h em {
+    color: var(--color-copper-300);
+  }
+</style>
