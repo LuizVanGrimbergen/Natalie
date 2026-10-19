@@ -41,10 +41,13 @@ src/
   pages/
     index.astro                     # the story: header + the seven scenes (eight screens), starts the scene script
     booking.astro                   # booking page
+    onderzoek/index.astro           # research: the list of pieces
+    onderzoek/[slug].astro          # research: one piece, one reading column
     404.astro                       # page not found: the hero photo, darkened, and a way back
     robots.txt.ts                   # robots.txt with the absolute sitemap URL
   components/
     SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
+    PhotoBand.astro                 # photo band on top of booking and research: h1 + one line of facts
     CtaLink.astro                   # outline pill button with pulse + hover fill
     NextCue.astro                   # "next" cue: a mouse with a rolling wheel (pointer) or two chevrons (touch)
     ProgressRail.astro              # one dot per screen on the right edge, a pill on the one on show
@@ -60,14 +63,16 @@ src/
       Coaching.astro                # 05 coaching: lines + music notes
       WhoWelcomes.astro             # 06 Natalie
       Invitation.astro              # 07 invitation + footer
+    research/date.ts                # a piece's date in Dutch
     booking/
-      BookingVisual.astro           # photo band on top: title + one line of facts
       SectionLabel.astro            # small label above each part
       BookingCalendar.astro         # the chosen session's Cal.com booker, or a placeholder
       Sessions.astro                # pick a session (two plain rows)
       People.astro                  # number of people (segmented 1–3), total, the copper button
       sessions.ts                   # the two sessions: name, text, duration, price, Cal.com link; friends discount, max people
       GoodToKnow.astro              # "Goed om te weten": practical and safety notes, folded
+  content.config.ts                 # the research collection (title, accent, date, summary, draft)
+  content/research/*.md             # one research piece per file → /onderzoek/<slug>
   contact.ts                        # Natalie's contact (footer, booking); the placeholder until it is filled in
   scripts/site-menu.ts              # closes the hamburger menu (link, Escape); html.menu-open pauses the story's steps
   scripts/theme.ts                  # the light/dark switch: stores it, re-tints, fires themechange
@@ -258,7 +263,7 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
 ### Booking page (`/booking`)
 Calm and mobile first: one column on every screen (centered, 560px from 700px wide). Its own quiet palette within the dark mood: wood-brown `night-950` page, plain `night-900` cards, `night-800` for the chosen number, ivory text, secondary text at 60% ivory. **Copper only for what you choose (the card's border) and the one button** — no badges, pills, icons, step numbers or tinted fills.
 - Navbar as on the story (links lead back into it).
-- **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it looks the same in both themes, like the story's photos: flat wood (`wood-950`) at its top and bottom, ivory words, copper accent; in the dark theme it flows into the page, in the light theme the ivory page starts under it with a straight edge. (Tried and rejected: blooming the wood into ivory with a gradient — muddy.) On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
+- **Photo band** (`PhotoBand.astro`, shared with research): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it looks the same in both themes, like the story's photos: flat wood (`wood-950`) at its top and bottom, ivory words, copper accent; in the dark theme it flows into the page, in the light theme the ivory page starts under it with a straight edge. (Tried and rejected: blooming the wood into ivory with a gradient — muddy.) On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
 - Each part has a small label (`SectionLabel.astro`: 12px, uppercase, 60% ivory).
 - **Kies je sessie** (`Sessions.astro`): two plain rows (radio buttons, `name="session"`; no form, nothing is sent), each with a visible radio ring on the left (filled copper when chosen), the name in Cormorant, one line in 82% ivory, the price on the right. Until one is chosen the rows are outlined and one line above says *Tik op Soundroom of Coaching om verder te gaan.* Chosen: copper border and ring. Data in `sessions.ts` (names, durations, prices and discount are Natalie's, descriptions are sample):
   - **Soundroom** — €75 — Je ligt in de soundroom, omringd door muziek, en beleeft het op je eigen manier, zonder begeleiding.
@@ -267,6 +272,11 @@ Calm and mobile first: one column on every screen (centered, 560px from 700px wi
 - **Aantal personen** (`People.astro`): segmented 1 · 2 · 3 (`MAX_PEOPLE`, 1 preselected), greyed out and disabled with *Kies eerst een sessie.* until a session is chosen (a small script sets `disabled`; without JS only the CSS greys it). The buttons 2 and 3 carry the friends discount, *−10%* (`FRIENDS_DISCOUNT`), as a small line under the number; no prices on the buttons. Plain muted text, no badges. Then **Totaal**: *Kies een sessie* until one is chosen, then the amount (Cormorant, 32px) with the regular price struck through beside it for groups (~~€225~~ €202,50). Then the one copper button **Kies een moment** (`#moment`), shown once a session is chosen; while no session has a Cal.com link it reads **Neem contact op om af te spreken** instead. Generated `:has()` rules, no JS.
 - **Moment** (`BookingCalendar.astro` + `scripts/booking/cal.ts`): shown once a session is chosen; the **Cal.com booker** of that session, inline, dark, with Cal.com's CSS variables set to the same night palette and copper (`month_view`); from 700px it breaks out of the column (max 960px) so month and times sit side by side. embed.js loads only once a session is chosen and is awaited, then only the latest choice is drawn; every session × people combination gets its own Cal.com namespace (Cal.com keeps one inline booker per namespace), with `personen` prefilled. Without Cal.com links: a short placeholder (*De online agenda volgt binnenkort. Neem tot dan contact op met Natalie om af te spreken.*); without JS: plain links to cal.com.
 - **Goed om te weten** (`GoodToKnow.astro`): a folded `<details>` card at the end (17px title; the notes 16px in 82% ivory with hairlines between them, so they read easily), sample from Natalie's documents: Maximaal drie mensen tegelijk, geen schermen. · Er is altijd iemand in de buurt. Je kunt op elk moment stoppen, zonder uitleg. · Dit is geen therapie en vervangt die ook niet. Heb je meer nodig, dan zoeken we samen waar je terecht kunt. · We meten je hartslagvariabiliteit voor en na, om te leren wat de ruimte doet. Is er geen verschil, dan zeggen we dat ook. Under it: *Vragen vooraf?* `[CONTACTGEGEVENS]`.
+
+---
+
+### Research (`/onderzoek`)
+Natalie's research, so the soundroom's claim stays honest: what is measured (HRV before/after, against an ordinary room) and what is found, also when there is no difference. One Markdown file per piece in `src/content/research/` (title + italic `accent`, date, one-sentence summary, `draft: true` hides it). Pages: the photo band (`interior.avif`, h1 **Wat de ruimte** *doet.*), then one 680px column in the page's own color (follows the theme): the list as quiet rows with hairlines (date label, title in Cormorant with its copper accent, the summary), a piece as calm prose with Cormorant h2s, ending with **Ervaar de ruimte zelf** → `/booking` and a way back. Navbar link **Onderzoek**. The first piece is a Dutch version of the article *Can a Geometric Space Change How We Feel?* (Feb 2026), sample until Natalie approves; Jonathan and the street/façade are left out. Natalie's brand concepts (*SŌNAR*, *SYNC∞ × OFFL*: teens, other names, blue palette, other durations) are source material, not for publishing.
 
 ---
 
@@ -309,4 +319,5 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - A project name (she tried *A Space for Sound*, *SŌNAR*, *SYNC∞ × OFFL*); for now the wordmark stays *Natalie*
 - Natalie's confirmation that the dome may be shown and that the dark copper/wood palette is right
 - Domain name
+- Research: approval of the Dutch article; may Frans Van Hauwaert, Mereon and Jonathan be named; pilot results once there are any
 - Higher-resolution `door.avif` (currently 330×490, soft on retina screens) and `interior.avif` (1086×1448, upscaled on wide desktop screens)

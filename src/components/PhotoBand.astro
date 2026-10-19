@@ -1,10 +1,21 @@
 ---
 /**
- * The top of the booking page: Natalie in the opening of the dome, the title and one line of facts.
- * Like the story's photo scenes it looks the same in both themes: dark wood edges, ivory words.
+ * The photo band on top of a page (booking, research): a photo, the h1 (its accent
+ * in the `accent` slot) and one line of facts. Like the story's photo scenes it looks
+ * the same in both themes: dark wood edges, ivory words.
  */
 import { Picture } from 'astro:assets';
-import photo from '../../assets/booking.avif';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  photo: ImageMetadata;
+  /** The h1's plain words; the italic accent goes in the `accent` slot. */
+  title: string;
+  facts: string;
+  /** object-position that keeps the subject in view on every width. */
+  focus?: string;
+}
+const { photo, title, facts, focus = '50% 50%' } = Astro.props;
 ---
 
 <div class="visual">
@@ -15,14 +26,15 @@ import photo from '../../assets/booking.avif';
     fallbackFormat="jpg"
     alt=""
     aria-hidden="true"
+    style={`object-position: ${focus}`}
     widths={[600, 900, 1200, 1600]}
     sizes="100vw"
     loading="eager"
   />
   <div class="visual__shade" aria-hidden="true"></div>
   <div class="visual__text">
-    <h1 class="display visual__h">Afspraak <em>maken</em></h1>
-    <p class="visual__facts">50 minuten · Schoten · vanaf 18 jaar</p>
+    <h1 class="display visual__h">{title} <em><slot name="accent" /></em></h1>
+    <p class="visual__facts">{facts}</p>
   </div>
 </div>
 
@@ -39,8 +51,6 @@ import photo from '../../assets/booking.avif';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Keeps Natalie's face in view in the band, on every width. */
-    object-position: 38% 28%;
     /* On arrival the photo settles, like the story's camera; then the words rise. */
     animation: visual-settle 2.4s cubic-bezier(0.2, 0.6, 0.2, 1);
   }

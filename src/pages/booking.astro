@@ -1,11 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import BookingVisual from '../components/booking/BookingVisual.astro';
+import PhotoBand from '../components/PhotoBand.astro';
 import Sessions from '../components/booking/Sessions.astro';
 import People from '../components/booking/People.astro';
 import BookingCalendar from '../components/booking/BookingCalendar.astro';
 import GoodToKnow from '../components/booking/GoodToKnow.astro';
+import photo from '../assets/booking.avif';
 ---
 
 <Base
@@ -15,7 +16,9 @@ import GoodToKnow from '../components/booking/GoodToKnow.astro';
 >
   <div class="page">
     <SiteHeader base="/" />
-    <BookingVisual />
+    <PhotoBand photo={photo} title="Afspraak" facts="50 minuten · Schoten · vanaf 18 jaar" focus="38% 28%">
+      <Fragment slot="accent">maken</Fragment>
+    </PhotoBand>
     <main class="flow">
       <Sessions />
       <People />

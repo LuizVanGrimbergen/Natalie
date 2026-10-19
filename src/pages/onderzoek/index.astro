@@ -1,0 +1,128 @@
+---
+/**
+ * The research list: the photo band (inside the dome), then every piece as a quiet
+ * row like the elements of scene 04 — the title with its accent, the date, one sentence.
+ * TODO(Natalie): sample copy, awaiting her approval.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import PhotoBand from '../../components/PhotoBand.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import photo from '../../assets/interior.avif';
+import { formatDate } from '../../components/research/date';
+
+const pieces = (await getCollection('research', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<Base
+  title="Onderzoek — Natalie Vandervoort"
+  description="Wat doet een geometrische ruimte met geluid, en met jou? Natalies onderzoek naar de soundroom in Schoten: wat we meten en wat we leren."
+  tint="#120A05"
+>
+  <div class="page">
+    <SiteHeader base="/" />
+    <PhotoBand photo={photo} title="Wat de ruimte" facts="Wat we meten, en wat we leren" focus="50% 40%">
+      <Fragment slot="accent">doet.</Fragment>
+    </PhotoBand>
+    <main class="list">
+      <p class="list__intro">
+        De soundroom is ook een vraag: doet de vorm van een ruimte iets met hoe muziek je raakt? Hier
+        delen we wat we onderzoeken, hoe we meten en wat we vinden. Ook als er geen verschil is.
+      </p>
+      <ul class="list__items">
+        {
+          pieces.map((piece) => (
+            <li class="item">
+              <a class="item__link" href={`/onderzoek/${piece.id}`}>
+                <time class="label item__date" datetime={piece.data.date.toISOString()}>
+                  {formatDate(piece.data.date)}
+                </time>
+                <h2 class="display item__h">
+                  {piece.data.title} <em>{piece.data.accent}</em>
+                </h2>
+                <p class="item__text">{piece.data.summary}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+    <SiteFooter />
+  </div>
+</Base>
+
+<style>
+  .page {
+    min-height: 100svh;
+    background: var(--page);
+    color: var(--fg);
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: min(680px, 100%);
+    margin: 0 auto;
+    padding: 32px 24px 72px;
+    animation: list-rise 0.9s 0.6s cubic-bezier(0.2, 0.6, 0.2, 1) backwards;
+  }
+  @keyframes list-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  .list__intro {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--fg-soft);
+  }
+  .list__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  /* Quiet hairlines between the pieces, like the elements of scene 04. */
+  .item {
+    border-top: 1px solid var(--line);
+  }
+  .item:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .item__link {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .item__date {
+    color: var(--fg-muted);
+  }
+  .item__h {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.12;
+  }
+  .item__h em {
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+  .item__link:hover .item__h em,
+  .item__link:focus-visible .item__h em {
+    color: var(--accent-hover);
+  }
+  .item__text {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .list {
+      animation: none;
+    }
+  }
+</style>
