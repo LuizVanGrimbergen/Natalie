@@ -26,12 +26,11 @@ import EdgeFade from '../EdgeFade.astro';
       <div class="copy">
         <h2 id="listening-title" class="display copy__h" data-reveal="1">Soms hoef je alleen maar te luisteren.</h2>
         <p class="copy__a" data-reveal="2">
-          In een bijzondere geometrische ruimte, met speciaal op maat gemaakte luidsprekers, word je van alle kanten omringd door
-          muziek.
+          Een geometrische ruimte met unieke luidsprekers, en muziek die je van alle kanten omringt.
         </p>
-        <p class="copy__b" data-reveal="3">Een geluidservaring die je nauwelijks kunt bevatten, maar des te meer kunt voelen.</p>
+        <p class="copy__b" data-reveal="3">Een ervaring om te voelen</p>
         <p class="display copy__c" data-reveal="4">
-          <em>Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.</em>
+          <em>Geen afleiding, geen verwachtingen. Alleen de klanken en wat ze in je oproepen.</em>
         </p>
       </div>
     </div>
@@ -48,7 +47,7 @@ import EdgeFade from '../EdgeFade.astro';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform-origin: 52% 74%;
+    transform-origin: 50% 54%;
     will-change: transform;
   }
   .room__dim,
@@ -71,7 +70,7 @@ import EdgeFade from '../EdgeFade.astro';
     position: absolute;
     inset: 0;
     z-index: 3;
-    color: var(--color-ivory);
+    color: var(--color-sand);
   }
   .copy > * {
     position: absolute;
@@ -80,7 +79,7 @@ import EdgeFade from '../EdgeFade.astro';
       0 0 2px rgb(10 6 3 / 0.6);
   }
   .copy__h {
-    left: 6vw;
+    left: var(--gutter);
     top: 12%;
     max-width: 30vw;
     font-size: clamp(44px, 5.2vw, 92px);
@@ -93,18 +92,18 @@ import EdgeFade from '../EdgeFade.astro';
     font-weight: 400;
   }
   .copy__a {
-    left: 6vw;
+    left: var(--gutter);
     top: 62%;
     max-width: 330px;
   }
   .copy__b {
-    right: 6vw;
+    right: var(--gutter);
     top: 34%;
     max-width: 300px;
     text-align: right;
   }
   .copy__c {
-    right: 6vw;
+    right: var(--gutter);
     bottom: 9%;
     max-width: 520px;
     text-align: right;
