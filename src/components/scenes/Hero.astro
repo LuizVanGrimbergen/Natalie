@@ -7,7 +7,7 @@ import EdgeFade from '../EdgeFade.astro';
 const firstLine = 'Niet alles wat je raakt,'.split(' ');
 ---
 
-<section id="start" class="scene hero" data-tint="#120A05" data-scene="hero" aria-labelledby="hero-title">
+<section id="start" class="scene hero" data-tint="#120A05" data-tint-light="#F5F1E9" data-photo data-scene="hero" aria-labelledby="hero-title">
   <div class="stage">
     <div class="exit-dim exit-dim--photo" aria-hidden="true"></div>
     <div class="hero__drift" aria-hidden="true">
@@ -30,7 +30,7 @@ const firstLine = 'Niet alles wat je raakt,'.split(' ');
     <div class="hero__dark" aria-hidden="true" data-hero-dark></div>
     <div class="hero__vignette" aria-hidden="true"></div>
     <div class="hero__pulse" aria-hidden="true"></div>
-    <EdgeFade color="#120A05" />
+    <EdgeFade color="#120A05" light="#F5F1E9" />
 
     <div class="frame">
       <h1 id="hero-title" class="sr-only">Niet alles wat je raakt, kun je meteen begrijpen.</h1>

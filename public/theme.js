@@ -8,7 +8,15 @@
   try {
     theme = localStorage.getItem('theme') || 'light';
   } catch (e) {}
-  // Every page starts with a photo (dark in both themes), so the bar color doesn't change here;
-  // the story re-tints per scene (scripts/scenes/tint.ts).
-  if (theme === 'light') root.setAttribute('data-theme', 'light');
+  // Safari's bars follow the theme from the first paint (every page starts with a photo whose
+  // edges are flat wood, or ivory in the light theme); the story then re-tints per scene
+  // (scripts/scenes/tint.ts), scripts/theme.ts does the same on the switch.
+  if (theme === 'light') {
+    root.setAttribute('data-theme', 'light');
+    var tint = root.getAttribute('data-tint-light');
+    root.style.setProperty('--tint', tint);
+    root.setAttribute('data-surface', 'light');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', tint);
+  }
 })();
