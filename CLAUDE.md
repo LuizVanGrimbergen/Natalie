@@ -74,7 +74,7 @@ src/
     tokens.css                      # design tokens (@theme)
     base.css                        # base elements, .display / .label, reduced motion
     scenes.css                      # scene/stage pinning mechanics, exit dims
-  assets/                           # hero.avif, interior.avif, door.avif
+  assets/                           # hero.avif, interior.avif, forest.avif, chair.avif
 ```
 
 Conventions: one component per file; styles live scoped in the component that owns them; global CSS only for tokens, base and shared scene mechanics. Animated elements are found via `data-*` attributes (`data-scene`, `data-reveal="n"`, `data-unveil`, …), never via styling classes.
@@ -177,7 +177,7 @@ Deliberately removed. Do not bring back.
 ### 05 · Who welcomes you
 - Ivory, soft window light on the wall (blurred diagonal patch of light).
 - Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
-- Portrait: **placeholder** `[Foto van Natalie]` until there is a real photo.
+- Portrait: the dome in the forest (`forest.avif`) stands in until there is a real photo of Natalie.
 - Copy:
   - label: WIE NAAST JE, LUISTERT.
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
@@ -188,13 +188,13 @@ Deliberately removed. Do not bring back.
 
 ### 06 · The invitation (`id="invitation"`)
 - Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
-- Image: `door.avif` = the glowing opening of the dome with the orange lamp, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
+- Image: `chair.avif` = a chair alone among the green in the forest, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
 - Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
   - Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een gesprek met Natalie. Ervaar het op jouw manier.
   - Button: **Ontdek de sessies** → `/booking`
-  - The photo/frame will change (Natalie is still looking: the chair, or something with music).
+  - The chair is Natalie's pick for now; the photo/frame may still change (perhaps something with music).
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
 - Animation: the arch reveals, then title, text, button.
 
@@ -245,4 +245,3 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Google Calendar appointment schedule URL
 - Natalie's confirmation that the dome may be shown and that the copper palette is right
 - Domain name
-- Higher-resolution `door.avif` (currently 330×490, soft on retina screens)

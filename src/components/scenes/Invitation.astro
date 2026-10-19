@@ -1,6 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
-import door from '../../assets/door.avif';
+import chair from '../../assets/chair.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
@@ -20,7 +20,7 @@ import CtaLink from '../CtaLink.astro';
           </div>
         </div>
         <figure class="door" aria-hidden="true" data-unveil>
-          <Picture class="door__img" src={door} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[330]} sizes="330px" />
+          <Picture class="door__img" src={chair} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[380, 760]} sizes="380px" />
         </figure>
       </div>
     </div>
@@ -80,6 +80,7 @@ import CtaLink from '../CtaLink.astro';
     height: 100%;
     width: 100%;
     object-fit: cover;
+    object-position: 58% 50%;
     border-radius: 999px 999px 2px 2px;
     box-shadow: 0 40px 120px 10px rgb(200 143 128 / 0.35);
   }
