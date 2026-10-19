@@ -1,23 +1,42 @@
 ---
-// TODO(Natalie): intro, duration, price and contact are placeholders.
+// Natalie's sessions and prices (her feedback of 19 October); the calendar on the right stays a placeholder for now.
+const sessions = [
+  {
+    name: 'Soundroom',
+    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding, 65 euro voor 50 minuten.',
+    extra: '15 Euro extra per bijkomende persoon, max 3 personen.',
+  },
+  {
+    name: 'Coaching',
+    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie, 75 euro voor 65 minuten.',
+  },
+];
 ---
 
 <section class="details" aria-labelledby="booking-title">
   <h1 id="booking-title" class="display details__h">Afspraak <em>maken</em></h1>
-  <p class="details__intro">[KORTE INTRO OVER DE AFSPRAAK]</p>
-  <dl class="facts">
-    <div><dt class="label">Locatie</dt><dd>Schoten</dd></div>
-    <div><dt class="label">Duur</dt><dd>[DUUR]</dd></div>
-    <div><dt class="label">Prijs</dt><dd>[PRIJS]</dd></div>
-    <div><dt class="label">Contact</dt><dd>[CONTACTGEGEVENS]</dd></div>
-  </dl>
+  <p class="details__intro">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
+  <p class="label details__facts">Schoten, vanaf 18 jaar</p>
+
+  <h2 class="label details__label">Kies je sessie</h2>
+  <ul class="sessions">
+    {
+      sessions.map((session) => (
+        <li class="session">
+          <h3 class="display session__name">{session.name}</h3>
+          <p class="session__text">{session.text}</p>
+          {session.extra && <p class="session__extra">{session.extra}</p>}
+        </li>
+      ))
+    }
+  </ul>
 </section>
 
 <style>
   .details {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 24px;
     position: sticky;
     top: 48px;
   }
@@ -30,29 +49,46 @@
   }
   .details__intro {
     max-width: 440px;
-    font-size: 17px;
-    line-height: 1.7;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.35;
     color: var(--color-body-on-ivory);
   }
-  .facts {
-    margin: 8px 0 0;
-    border-top: 1px solid rgb(156 85 48 / 0.25);
-  }
-  .facts > div {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 16px;
-    align-items: baseline;
-    padding: 16px 0;
-    border-bottom: 1px solid rgb(156 85 48 / 0.25);
-  }
-  .facts dt {
+  .details__facts {
     color: var(--color-copper-700);
   }
-  .facts dd {
+  .details__label {
+    margin: 24px 0 0;
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  .sessions {
     margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgb(156 85 48 / 0.25);
+  }
+  .session {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgb(156 85 48 / 0.25);
+  }
+  .session__name {
+    font-size: 32px;
+    line-height: 1.1;
+  }
+  .session__text,
+  .session__extra {
+    max-width: 460px;
     font-size: 16px;
+    line-height: 1.65;
     color: var(--color-body-on-ivory);
+  }
+  .session__extra {
+    color: var(--color-muted);
   }
 
   @media (max-width: 900px) {
@@ -60,11 +96,8 @@
       position: static;
       gap: 20px;
     }
-    .details__intro {
-      font-size: 16px;
-    }
-    .facts > div {
-      grid-template-columns: 100px 1fr;
+    .session__name {
+      font-size: 28px;
     }
   }
 </style>
