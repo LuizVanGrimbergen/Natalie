@@ -10,12 +10,16 @@ import ElementsList from './ElementsList.astro';
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="frame">
       <div class="intro">
+        <div data-gather-line>
+          <p class="label intro__label" data-reveal="1">Hoe verloopt een sessie?</p>
+        </div>
         <div data-gather-title>
-          <h2 id="elements-title" class="display intro__h" data-reveal="1">Wat er gebeurt <em>tussen jou en het geluid.</em></h2>
+          <h2 id="elements-title" class="display intro__h" data-reveal="1">Wat muziek <em>met je kan doen.</em></h2>
         </div>
         <div data-gather-line>
           <p class="intro__p" data-reveal="2">
-            Je hoeft niets te doen. Je lichaam mag loslaten, tot rust komen en weer opladen. Drie dingen spelen daarin samen.
+            Je ligt in de soundroom en luistert, vijftig minuten lang. Je hoeft niets te doen of te bereiken: wat je hoort en wat het met
+            je doet, is voor iedereen anders. Drie dingen spelen daarin samen.
           </p>
         </div>
       </div>
@@ -44,6 +48,9 @@ import ElementsList from './ElementsList.astro';
   .intro__h {
     font-size: clamp(48px, 5.6vw, 96px);
     line-height: 1;
+  }
+  .intro__label {
+    color: var(--label);
   }
   .intro__h em {
     color: var(--accent);

@@ -19,7 +19,7 @@ export const SESSIONS: Session[] = [
   {
     id: 'soundroom',
     name: 'Soundroom',
-    text: 'Je ligt in de koepel, omringd door muziek, en komt tot rust.',
+    text: 'Je ligt in de soundroom, omringd door muziek, en komt tot rust.',
     minutes: 50,
     price: 75,
     calLink: import.meta.env.PUBLIC_CAL_SOUNDROOM?.trim() || undefined,

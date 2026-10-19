@@ -1,0 +1,70 @@
+---
+/**
+ * How far along the story you are: one dot per screen on the right edge, and a
+ * small pill that glides to the screen on show. Screens already seen stay full,
+ * the ones still to come are faint. scripts/scenes/progress.ts builds the dots
+ * (one per scene) and moves the pill with each step. Only an indicator, so
+ * hidden from screen readers; the navbar is the way to jump.
+ */
+---
+
+<div class="rail" data-rail aria-hidden="true">
+  <span class="rail__pill" data-rail-pill></span>
+</div>
+
+<style>
+  .rail {
+    --dot: 4px;
+    --gap: 14px;
+    position: fixed;
+    right: 28px;
+    top: 50%;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    color: var(--on-screen);
+    translate: 0 -50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  :global(html:not(.motion)) .rail {
+    display: none;
+  }
+  .rail.is-ready {
+    opacity: 1;
+  }
+  .rail :global(.rail__dot) {
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.28;
+    transition: opacity 0.9s ease;
+  }
+  .rail :global(.rail__dot.is-seen) {
+    opacity: 0.85;
+  }
+  /* The pill sits over the dot on show; it glides with the crossfade (0.9s, like FADE). */
+  .rail__pill {
+    position: absolute;
+    left: calc(var(--dot) / -2);
+    top: calc(var(--dot) * -1.5);
+    width: calc(var(--dot) * 2);
+    height: calc(var(--dot) * 4);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    transform: translateY(calc(var(--at, 0) * (var(--dot) + var(--gap))));
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  /* Phones: smaller and closer to the edge, clear of the text (which keeps 24px). */
+  @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
+    .rail {
+      --dot: 3px;
+      --gap: 10px;
+      right: 9px;
+    }
+  }
+</style>

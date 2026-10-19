@@ -1,5 +1,6 @@
 ---
-// TODO(Natalie): sample copy (coaching, from her documents and email), awaiting her approval.
+// Coaching copy as given by the client.
+import CtaLink from '../CtaLink.astro';
 import NotesSvg from '../NotesSvg.astro';
 ---
 
@@ -13,14 +14,16 @@ import NotesSvg from '../NotesSvg.astro';
         </div>
         <div class="text">
         <p class="label text__label" data-reveal="1">Coaching</p>
-        <h2 id="coaching-title" class="display text__h" data-reveal="1">Soms helpt het om <em>samen te kijken.</em></h2>
+        <h2 id="coaching-title" class="display text__h" data-reveal="1">Ruimte voor <em>jouw verhaal.</em></h2>
         <p class="text__p" data-reveal="2">
-          In een coachingsessie ga je met Natalie in gesprek over wat er speelt: in je hoofd, je lichaam, je relaties.
+          Soms is het fijn om even stil te staan bij wat je bezighoudt. Om je gedachten uit te spreken, nieuwe inzichten te ontdekken
+          of gewoon met iemand te praten die écht luistert.
         </p>
-        <p class="text__p" data-reveal="3">
-          Niet om je te repareren, wel om te zien hoe alles samenhangt en wat je anders wilt. Apart te boeken, of samen met een
-          soundroom-sessie.
+        <p class="text__p" data-reveal="2">
+          Tijdens een persoonlijk gesprek met Natalie krijg je de ruimte om op jouw tempo te verkennen wat er speelt.
         </p>
+        <p class="text__p" data-reveal="3">Zonder oordeel, zonder verwachtingen. Met oprechte aandacht voor jou en jouw verhaal.</p>
+        <div class="text__cta" data-reveal="4"><CtaLink href="/booking">Plan een gesprek</CtaLink></div>
         </div>
       </div>
     </div>
@@ -55,7 +58,7 @@ import NotesSvg from '../NotesSvg.astro';
     max-width: 520px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 22px;
     color: var(--fg);
   }
   .text__label {
@@ -142,16 +145,40 @@ import NotesSvg from '../NotesSvg.astro';
       line-height: 1.5;
     }
   }
-  @media (min-width: 560px) and (max-height: 520px) {
+  /* The smallest phones (iPhone SE): the whole text needs the screen, so the notes stay out. */
+  @media (max-width: 559px) and (max-height: 600px) {
+    .notes-box {
+      display: none;
+    }
+    .layout {
+      justify-content: flex-end;
+    }
     .text {
       gap: 12px;
     }
     .text__h {
-      font-size: clamp(24px, 8vh, 40px);
+      font-size: 28px;
+    }
+    .text__p {
+      line-height: 1.45;
+    }
+  }
+  /* Phone landscape: a wider text column, so the copy takes fewer lines and fits under the navbar. */
+  @media (min-width: 560px) and (max-height: 520px) {
+    .layout {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      padding-top: 52px;
+    }
+    .text {
+      max-width: none;
+      gap: 8px;
+    }
+    .text__h {
+      font-size: clamp(24px, 8vh, 34px);
     }
     .text__p {
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.4;
     }
   }
   /* Tablet portrait: the notes above the text, the two centred together. The drawing only

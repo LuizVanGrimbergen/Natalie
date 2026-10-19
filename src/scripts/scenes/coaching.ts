@@ -15,5 +15,6 @@ export function coaching(scene: HTMLElement): Timeline {
   rise(tl, reveal(scene, 1), 0.06, 0.1);
   rise(tl, reveal(scene, 2), 0.16, 0.1);
   rise(tl, reveal(scene, 3), 0.31, 0.12);
+  rise(tl, reveal(scene, 4), 0.42, 0.12);
   return tl;
 }

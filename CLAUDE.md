@@ -44,7 +44,8 @@ src/
   components/
     SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
     CtaLink.astro                   # outline pill button with pulse + hover fill
-    NextCue.astro                   # "next" cue: Scroll/Swipe over a hairline with a gliding light, one centred axis
+    NextCue.astro                   # "next" cue: a mouse with a rolling wheel (pointer) or two chevrons (touch)
+    ProgressRail.astro              # one dot per screen on the right edge, a pill on the one on show
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
     SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 05, coaching)
@@ -74,6 +75,7 @@ src/
     navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
     input.ts                        # wheel / touch / keys → single steps (trackpad momentum = still one step)
     cue.ts                          # shows/hides the NextCue, light or dark per scene
+    progress.ts                     # builds the rail's dots, moves its pill with every step
     track.ts                        # counts each reached scene once per visit as /scene/<name> (Vercel Web Analytics)
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
@@ -120,7 +122,7 @@ Colors (tuned to the dome: bronze, copper, wood, ivory):
 
 Typography:
 - Display: **Cormorant Garamond 300**, `letter-spacing: -0.02em`, large titles with `clamp(...)`.
-- **Every scene title has one italic accent in `copper-300`** (e.g. *om te voelen.*, *Wel om de deur open te houden.*, *voor jou.*). Keep this consistent.
+- **Every scene title has one italic accent in `copper-300`** (e.g. *meeluistert.*, *even stil te staan.*, *jouw manier.*). Keep this consistent.
 - Body: **Figtree 300/400**, 17–18px desktop, 15–16px phone, `line-height` 1.6–1.75.
 - Labels: 12px, `letter-spacing: .34em`, uppercase.
 - Contrast: all text at least 4.5:1 (3:1 from 24px). Text on images gets a soft dark scrim + text-shadow.
@@ -142,7 +144,8 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`); up to 3 quick steps are remembered (`QUEUE`).
 - The hero completes its sentence by itself after the load intro.
-- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): everything on one centred axis — the small label **Scroll** (mouse) / **Swipe** (touch) over a thin vertical hairline along which a light segment glides, down for a mouse, up on touch (the finger's swipe). Transform only. (Replaced: a round button with an arrow and a pulse ring — off-centre on phones and heavier.) It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory over dark screens, bronze over light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
+- **Progress rail** (`ProgressRail.astro` + `progress.ts`, fixed on the right, vertically centred): one dot per screen; a small outlined pill glides to the screen on show with the crossfade (0.9s), screens already seen stay full, the ones to come are faint, so you see how far along you are. An indicator only (`aria-hidden`, no clicks). Phones: smaller, 9px from the edge, clear of the text.
+- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last), without words, as on professional story sites: a small mouse outline whose wheel rolls down (pointer), or two chevrons that light up one after the other (touch). Transform/opacity only. (Replaced: a round button with an arrow and a pulse ring, then a Scroll/Swipe label over a hairline.) It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory over dark screens, bronze over light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
 - A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays flat wood.
 - Links to a scene (`#start`, `#ruimte`, `#luisteren`, `#coaching`, `#natalie`, `#invitation` — the navbar and menu, or opening the page with the hash) go straight to it: a later scene dissolves in over the current one, an earlier one is uncovered (the scenes in between vanish underneath) and builds itself again. Keyboard focus on a later scene (Tab to the button) brings it on screen. While the hamburger menu is open the story doesn't step.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
@@ -162,7 +165,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - Copy:
   - (top left, large) **Niet alles wat je raakt,**
   - (bottom right, large, italic) **kun je meteen begrijpen.**
-  - (bottom left, small) Soms begint een nieuw perspectief met luisteren naar wat je voelt.
+  - (bottom left, small) In een soundroom in Schoten kom je tot rust in muziek en stilte, of ga je met Natalie in gesprek. (says at once what she offers and where; keep it about three lines on a phone)
   - Semantically one `<h1>`: "Niet alles wat je raakt, kun je meteen begrijpen." (visually split, `aria-hidden` on the visual parts).
 - On load (time-based, CSS): the dome is visible at dusk, the photo drifts slowly, a warm copper glow breathes on the dome, and line 1 fades in word by word. The comma leaves the sentence open; it completes itself a moment later.
 - Then (time-based, ~1.2s after load): the dusk lifts, the photo zooms out from `scale(1.22)` → 1, a warm glow comes up, then line 2 and the subtext rise (fade + 48px rise).
@@ -177,8 +180,8 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - Desktop: text left, dome right. Phone/tablet portrait: dome on top, text grouped at the bottom.
 - Copy (sample, from Natalie's notes and the article — awaiting her approval):
   - label: DE RUIMTE
-  - h2: **Een ruimte die** *mee luistert.*
-  - Dertig ruiten vouwen samen tot één koepel. Elke hoek en elk vlak bepaalt hoe het geluid beweegt, weerkaatst en uitdooft.
+  - h2: **Een ruimte die** *meeluistert.*
+  - Dertig ruiten vouwen samen tot één soundroom. Elke hoek en elk vlak bepaalt hoe het geluid beweegt, weerkaatst en uitdooft.
   - *Stilte is hier geen leegte. Het is structuur.* (italic, `copper-300`)
 
 ### 03 · The wooden room — listening
@@ -188,23 +191,24 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - Copy (desktop: spread out; phone/tablet portrait: title on top, the rest grouped at the bottom):
   - h2: **Soms hoef je alleen maar te luisteren.** (top left)
   - In een bijzondere geometrische ruimte, met speciaal op maat gemaakte luidsprekers, word je van alle kanten omringd door muziek. (bottom left)
-  - Een geluidservaring die je nauwelijks kunt bevatten, maar des te meer kunt voelen. (right middle, right aligned)
+  - Een ervaring die je niet hoeft te begrijpen, maar zelf kunt beleven. (right middle, right aligned)
   - *Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.* (bottom right, italic, larger)
 - Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Texts appear one by one.
 
-### 04 · Three elements — what happens between you and the sound
+### 04 · Three elements — how a session goes, what music can do
 Two screens, so it reads calmly without many steps: the title, then the three elements together. (Tried and rejected: three equal columns — read as a feature list; cards with icons — looked generic; one screen per element — too much scrolling.)
-- `Elements.astro`: the title screen (`data-scene="elements"`, h2 + the one line, `elements.ts`), followed by `ElementsList.astro` (`data-scene="list"`, z-index 5, `list.ts`).
-- **The two screens are one thought** (`gather.ts`, `wayIn(1.2)`): instead of a crossfade, the line under the title gives way and the title rises and shrinks into the head of the list screen (the same words, small, `data-gather-target`), landing as that screen dissolves in (the head is sized to wrap on the same words as the title, so the handover is invisible); then the three elements rise under it. Measured from the real positions (again on resize and once fonts load). Stepping back is the mirror.
+- `Elements.astro`: the title screen (`data-scene="elements"`, label + h2 + the one line, `elements.ts`), followed by `ElementsList.astro` (`data-scene="list"`, z-index 5, `list.ts`).
+- **The two screens are one thought** (`gather.ts`, `wayIn(1.2)`): instead of a crossfade, the label above and the line under the title give way (every `data-gather-line`) and the title rises and shrinks into the head of the list screen (the same words, small, `data-gather-target`), landing as that screen dissolves in (the head is sized to wrap on the same words as the title, so the handover is invisible); then the three elements rise under it. Measured from the real positions (again on resize and once fonts load). Stepping back is the mirror.
 - Flat `wood-950`, a soft copper glow in the middle of the list screen. **Text only, no icons, cards or numbers.**
-- The list: each element's name large in Cormorant (h3, the noun as the italic copper accent: De *persoon.*, Het *geluidsveld.*, De *koppeling.*) with its one sentence; quiet hairlines between them; they rise slowly one after the other.
+- The list: each element's name large in Cormorant (h3, the noun as the italic copper accent: De *persoon.*, Het *geluidsveld.*, De *wisselwerking.*) with its one sentence; quiet hairlines between them; they rise slowly one after the other.
 - Desktop: name left, sentence right, three rows. Phone/tablet portrait: name above sentence, the three under each other.
 - Copy (sample, from Natalie's email — awaiting her approval):
-  - h2: **Wat er gebeurt** *tussen jou en het geluid.*
-  - Je hoeft niets te doen. Je lichaam mag loslaten, tot rust komen en weer opladen. Drie dingen spelen daarin samen. (Natalie's documents speak of *loslaten → opladen* and avoid the word *ontspanning*.)
+  - label: HOE VERLOOPT EEN SESSIE?
+  - h2: **Wat muziek** *met je kan doen.*
+  - Je ligt in de soundroom en luistert, vijftig minuten lang. Je hoeft niets te doen of te bereiken: wat je hoort en wat het met je doet, is voor iedereen anders. Drie dingen spelen daarin samen. (The one concrete description of a session on the story: lying in the dome, 50 minutes, as in `sessions.ts`. Natalie's documents avoid the word *ontspanning*.)
   - **De persoon** — Jij, zoals je binnenkomt: je lichaam, je adem, de ruis in je hoofd, je vermoeidheid of alertheid.
   - **Het geluidsveld** — De muziek zelf: klank, ritme, frequenties, stilte, en hoe de ruimte ze draagt.
-  - **De koppeling** — Wat er tussen jou en het geluid ontstaat: een adem die vertraagt, schouders die zakken, beelden, rust.
+  - **De wisselwerking** — Wat er tussen jou en het geluid ontstaat: een adem die vertraagt, schouders die zakken, beelden, rust.
 
 ### 05 · Coaching — guiding, not fixing
 The second half of what Natalie offers (beside the soundroom): a personal conversation. Its title mirrors scene 03 (*Soms hoef je alleen maar te luisteren.*).
@@ -214,23 +218,25 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
   2. Then a clay line (`#C88F80`) walks alongside without touching the first → second note head → stem.
   3. Finally a **beam** joins both notes.
   Meaning: two separate voices sounding together = guiding without fixing. Each stroke draws at an even pace (no glide, no swelling, no floating).
-- Layout: notes and text form one group, centred in the screen (desktop: side by side, max 1440px wide; tablet portrait: notes above the text, the drawing's empty top and bottom cropped). Phone keeps the notes running in from the left edge, text at the bottom.
+- Layout: notes and text form one group, centred in the screen (desktop: side by side, max 1440px wide; tablet portrait: notes above the text, the drawing's empty top and bottom cropped). Phone keeps the notes running in from the left edge, text at the bottom; on the smallest phones (≤ 600px high) the notes stay out, the text needs the screen. Phone landscape: a wider text column.
 - Copy (to the right of the notes on desktop; below the notes on phone/tablet portrait):
   - label: COACHING
-  - h2: **Soms helpt het om** *samen te kijken.* (accent italic in copper)
-  - In een coachingsessie ga je met Natalie in gesprek over wat er speelt: in je hoofd, je lichaam, je relaties.
-  - Niet om je te repareren, wel om te zien hoe alles samenhangt en wat je anders wilt. Apart te boeken, of samen met een soundroom-sessie. (appears together with the second line)
-  - Sample copy from her documents and email, awaiting her approval (it replaces the original NIEUWE PERSPECTIEVEN copy).
+  - h2: **Ruimte voor** *jouw verhaal.* (accent italic in copper)
+  - Soms is het fijn om even stil te staan bij wat je bezighoudt. Om je gedachten uit te spreken, nieuwe inzichten te ontdekken of gewoon met iemand te praten die écht luistert.
+  - Tijdens een persoonlijk gesprek met Natalie krijg je de ruimte om op jouw tempo te verkennen wat er speelt.
+  - Zonder oordeel, zonder verwachtingen. Met oprechte aandacht voor jou en jouw verhaal. (appears together with the second line)
+  - Button (`CtaLink`): **Plan een gesprek** → `/booking`
+  - Copy as given by the client.
 
 ### 06 · Who welcomes you
-- Flat `wood-950`, a soft warm copper light falling diagonally across the wall. Portrait placeholder in dark wood tones.
+- Flat `wood-950`, a soft warm copper light falling diagonally across the wall.
 - Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
-- Portrait: **placeholder** `[Foto van Natalie]` until there is a real photo.
+- Portrait: for now `booking.avif` (Natalie smiling in the opening of the soundroom, the booking page's photo), cropped 4:5 on her face, until there is a portrait of its own.
 - Copy:
   - label: WIE JE ONTVANGT
-  - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Ik geloof dat niemand los staat van de relaties, ruimtes en ritmes waarin hij leeft. Je groeit niet door jezelf te fixen, maar door te zien hoe dat alles samenhangt — en het opnieuw te ordenen. Daarom maakte ik deze ruimte en ontvang ik je er graag. (Natalie's belief from her email, shortened.)
-  - *Natalie Vandervoort* (signature, Cormorant italic)
+  - h2: **Een plek om** *even stil te staan.*
+  - Ik geloof dat niemand los staat van de relaties, ruimtes en ritmes waarin we leven. Toch zijn we vaak zo druk met alles om ons heen, dat we vergeten naar onszelf te luisteren. Daarom maakte ik deze plek: een ruimte waar je niets moet. Ik ontvang je graag, met een open blik en aandacht voor jouw verhaal. (Natalie's belief from her email, made warmer; no invented biography.)
+  - *Natalie* (signature, Cormorant italic)
   - ⚠️ This personal text is sample copy; Natalie still has to approve it.
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
@@ -239,9 +245,9 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
 - Image: `door.avif` = the glowing opening of the dome with the orange lamp, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
 - Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
-  - h2: **Misschien is dit iets** *voor jou.*
-  - Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor openstaat.
-  - Button: **Afspraak maken** → `/booking`
+  - h2: **Ervaar het op** *jouw manier.*
+  - Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een gesprek met Natalie.
+  - Button: **Ontdek de sessies** → `/booking`
 - Button style (`CtaLink`): clean outline (1px ivory), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus ivory fills from left to right, text turns bronze, arrow `→` slides in.
 - Footer (`SiteFooter`) **below** the invitation scene, in normal flow (flat wood, aluminium text): *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`. With motion it is fixed above every scene (`z-index` 15; the scenes' own `z-index` is their DOM order, set in `initScenes`).
 - Animation: the arch reveals, then title, text, button.
@@ -252,10 +258,10 @@ Calm and mobile first: one column on every screen (centered, 560px from 700px wi
 - **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it looks the same in both themes, like the story's photos: flat wood (`wood-950`) at its top and bottom, ivory words, copper accent; in the dark theme it flows into the page, in the light theme the ivory page starts under it with a straight edge. (Tried and rejected: blooming the wood into ivory with a gradient — muddy.) On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
 - Each part has a small label (`SectionLabel.astro`: 12px, uppercase, 60% ivory).
 - **Sessie** (`Sessions.astro`): two plain rows (radio buttons, `name="session"`; no form, nothing is sent): name in Cormorant, one line in 60% ivory, the price on the right. Chosen: copper border. Data in `sessions.ts` (names, durations, prices and discount are Natalie's, descriptions are sample):
-  - **Soundroom** — €75 — Je ligt in de koepel, omringd door muziek, en komt tot rust.
+  - **Soundroom** — €75 — Je ligt in de soundroom, omringd door muziek, en komt tot rust.
   - **Coaching** — €65 — Een persoonlijk gesprek met Natalie over wat er speelt en wat jij nodig hebt.
-- **Aantal personen** (`People.astro`): segmented 1 · 2 · 3 (`MAX_PEOPLE`, 1 preselected), *Met vrienden betaalt ieder 10% minder.* (`FRIENDS_DISCOUNT`). Then **Totaal**: *Kies een sessie* until one is chosen, then the amount (Cormorant, 32px) with the regular price struck through beside it for groups (~~€225~~ €202,50). Then the one copper button **Kies een moment** (`#moment`), shown once a session is chosen. Generated `:has()` rules, no JS.
-- **Moment** (`BookingCalendar.astro` + `scripts/booking/cal.ts`): shown once a session is chosen; the **Cal.com booker** of that session, inline, dark, with Cal.com's CSS variables set to the same night palette and copper (`month_view`); from 700px it breaks out of the column (max 960px) so month and times sit side by side. embed.js loads only once a session is chosen and is awaited, then only the latest choice is drawn; every session × people combination gets its own Cal.com namespace (Cal.com keeps one inline booker per namespace), with `personen` prefilled. Without Cal.com links: a short placeholder; without JS: plain links to cal.com.
+- **Aantal personen** (`People.astro`): segmented 1 · 2 · 3 (`MAX_PEOPLE`, 1 preselected), *Met vrienden betaalt ieder 10% minder.* (`FRIENDS_DISCOUNT`). Then **Totaal**: *Kies een sessie* until one is chosen, then the amount (Cormorant, 32px) with the regular price struck through beside it for groups (~~€225~~ €202,50). Then the one copper button **Kies een moment** (`#moment`), shown once a session is chosen; while no session has a Cal.com link it reads **Neem contact op om af te spreken** instead. Generated `:has()` rules, no JS.
+- **Moment** (`BookingCalendar.astro` + `scripts/booking/cal.ts`): shown once a session is chosen; the **Cal.com booker** of that session, inline, dark, with Cal.com's CSS variables set to the same night palette and copper (`month_view`); from 700px it breaks out of the column (max 960px) so month and times sit side by side. embed.js loads only once a session is chosen and is awaited, then only the latest choice is drawn; every session × people combination gets its own Cal.com namespace (Cal.com keeps one inline booker per namespace), with `personen` prefilled. Without Cal.com links: a short placeholder (*De online agenda volgt binnenkort. Neem tot dan contact op met Natalie om af te spreken.*); without JS: plain links to cal.com.
 - **Goed om te weten** (`GoodToKnow.astro`): a folded `<details>` card at the end, sample from Natalie's documents: Maximaal drie mensen tegelijk, geen schermen. · Er is altijd iemand in de buurt. Je kunt op elk moment stoppen, zonder uitleg. · Dit is geen therapie en vervangt die ook niet. Heb je meer nodig, dan zoeken we samen waar je terecht kunt. · We meten je hartslagvariabiliteit voor en na, om te leren wat de ruimte doet. Is er geen verschil, dan zeggen we dat ook. Under it: *Vragen vooraf?* `[CONTACTGEGEVENS]`.
 
 ---
@@ -292,7 +298,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 
 ## Open items (keep the placeholders)
 
-- Real portrait photo of Natalie
+- A portrait of Natalie of its own (scene 06 uses the booking photo for now)
 - Approval of the personal text (scene 06) and of the new sample copy (scenes 02, 04 and 05, the booking texts and "Goed om te weten")
 - Booking page: contact; the session descriptions; Natalie's Cal.com account with the two event types (`soundroom`, `coaching`: 50 min, location Schoten, required booking question identifier `personen` + an 18+ check), connected to her Google Agenda; payments later; confirm that the safety notes and HRV measuring apply
 - The article places the room "behind an unassuming façade on a quiet street in Schoten"; the site says a dome in the forest — check with Natalie

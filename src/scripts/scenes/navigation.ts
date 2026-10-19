@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { initCue } from './cue';
 import { all, one } from './dom';
 import { onStep, type Step } from './input';
+import { initProgress } from './progress';
 import { tintNow, tintTo } from './tint';
 import type { WayIn } from './transition';
 import { trackScene } from './track';
@@ -44,6 +45,8 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
 
   // Shown once a screen is complete; the last scene ends on its own call to action.
   const cue = initCue(() => step(1));
+  // The rail on the right: how far along the story you are.
+  const rail = initProgress(scenes.length);
 
   /** Index of the scene on screen; last + 1 means the footer is up. */
   let current = 0;
@@ -59,6 +62,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
     active = animation;
     if (queued.length) animation.timeScale(HURRY);
     cue.hide();
+    rail.set(Math.min(current, last));
     animation.eventCallback('onComplete', () => {
       active = null;
       onstage(Math.min(current, last));
@@ -152,6 +156,7 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       settle();
       builds[to].progress(1);
       onstage(to);
+      rail.set(to);
       if (to < last) cue.show();
       else cue.hide();
       return;

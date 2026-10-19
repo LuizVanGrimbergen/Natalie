@@ -25,7 +25,6 @@
   --note-with: #c88f80;
   --portrait-from: #2a1e16;
   --portrait-to: #1a120c;
-  --portrait-light: rgb(212 154 114 / 0.1);
 }
 [data-theme='light'] {
   --page: var(--color-ivory);
@@ -49,7 +48,6 @@
   --note-with: #c88f80;
   --portrait-from: #e6ded2;
   --portrait-to: #cfc3b4;
-  --portrait-light: rgb(255 252 246 / 0.35);
 }
 /* Text on whatever screen is showing: the navbar and the next cue. */
 :root {

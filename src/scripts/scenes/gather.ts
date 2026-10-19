@@ -1,10 +1,10 @@
-import { one } from './dom';
+import { all, one } from './dom';
 import { wayIn } from './transition';
 import { fade, type Timeline } from './tweens';
 
 /**
  * Title of the three elements → the three elements: one thought, not two pages.
- * The line under the title gives way, the title rises and shrinks into the head
+ * The label above and the line under the title give way, the title rises and shrinks into the head
  * of the next screen; as it settles, that screen dissolves in, with the head on
  * exactly the same spot and wrapped on the same words, so the handover can't be
  * seen. The three elements then rise under it (list.ts). Backwards it is the mirror.
@@ -32,7 +32,7 @@ export function gather(prev: HTMLElement, next: HTMLElement): Timeline {
   measure();
 
   const tl = wayIn(1.2);
-  tl.fromTo(one(prev, '[data-gather-line]'), { opacity: 1, y: 0 }, { opacity: 0, y: 16, duration: 0.3, ease: 'sine.in' }, 0).fromTo(
+  tl.fromTo(all(prev, '[data-gather-line]'), { opacity: 1, y: 0 }, { opacity: 0, y: 16, duration: 0.3, ease: 'sine.in' }, 0).fromTo(
     title,
     { x: 0, y: 0, scale: 1, transformOrigin: 'left top', force3D: true },
     {

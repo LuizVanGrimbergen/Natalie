@@ -1,7 +1,7 @@
 ---
 /**
  * The Cal.com booker of the chosen session (env vars in sessions.ts), drawn by
- * scripts/booking/cal.ts. Shown once a session is chosen; "Kies een moment"
+ * scripts/booking/cal.ts. Shown once a session is chosen; the button in People.astro
  * scrolls here. Without Cal.com links, a tidy placeholder; without JS, links to Cal.com.
  */
 import SectionLabel from './SectionLabel.astro';
@@ -23,7 +23,7 @@ const ready = Object.keys(links).length > 0;
           <div class="calendar__empty">
             {SESSIONS.filter((s) => s.calLink).map((s) => (
               <a class="calendar__link" href={`https://cal.com/${s.calLink}`}>
-                Plan een {s.name.toLowerCase()} sessie →
+                Plan een sessie: {s.name} →
               </a>
             ))}
           </div>
@@ -31,7 +31,7 @@ const ready = Object.keys(links).length > 0;
       </div>
     ) : (
       <div class="calendar__empty">
-        <p class="calendar__text">De online agenda wordt binnenkort gekoppeld. Tot dan kun je Natalie rechtstreeks contacteren.</p>
+        <p class="calendar__text">De online agenda volgt binnenkort. Neem tot dan contact op met Natalie om af te spreken.</p>
       </div>
     )
   }

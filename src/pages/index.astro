@@ -3,6 +3,7 @@ import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import NextCue from '../components/NextCue.astro';
+import ProgressRail from '../components/ProgressRail.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Hero from '../components/scenes/Hero.astro';
 import Shape from '../components/scenes/Shape.astro';
@@ -19,8 +20,8 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1448], sizes
 
 <Base
   story
-  title="Natalie — Niet alles wat je raakt, kun je meteen begrijpen."
-  description="Tot rust komen in immersieve muziek, in een geometrische koepel in het bos, en persoonlijke coaching bij Natalie Vandervoort. Een plek om je eigen perspectief te ontdekken."
+  title="Natalie Vandervoort — Soundroom en coaching in Schoten"
+  description="Kom tot rust in muziek, in een geometrische soundroom in Schoten, of ga in gesprek met Natalie Vandervoort. Soundroom-sessies en persoonlijke coaching van 50 minuten."
 >
   <link
     slot="head"
@@ -46,6 +47,7 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1448], sizes
   </main>
 
   <NextCue />
+  <ProgressRail />
   <SiteFooter />
 </Base>
 
