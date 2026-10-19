@@ -44,24 +44,25 @@ src/
   components/
     SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     CtaLink.astro                   # outline pill button with pulse + hover fill
-    NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring, Scroll/Swipe
+    NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring (no words)
+    ProgressRail.astro              # one clickable dot per scene on the right edge, a pill on the one on show
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
-    SiteFooter.astro                # name · location · contact, below the story (not part of a scene)
     NotesSvg.astro                  # the two lines + eighth notes (scene 04)
     scenes/
       Hero.astro                    # 01
       Listening.astro               # 03 wooden room (02 was removed)
       Perspectives.astro            # 04 lines + music notes
       WhoWelcomes.astro             # 05 Natalie
-      Invitation.astro              # 06 invitation + footer
+      Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingDetails.astro          # title, intro, location/duration/price/contact
+      BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions with prices (no contact)
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
-    navigation.ts                   # one step per screen: crossfade, then the build plays in time; footer, links, focus
+    navigation.ts                   # one step per screen: crossfade, then the build plays in time; links, focus
     input.ts                        # wheel / touch / keys → single steps (trackpad momentum = still one step)
     cue.ts                          # shows/hides the NextCue, light or dark per scene
+    progress.ts                     # builds the rail's dots (buttons), moves its pill with every step
     track.ts                        # counts each reached scene once per visit as /scene/<name> (Vercel Web Analytics)
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
@@ -93,7 +94,8 @@ Colors (tuned to the dome: bronze, copper, wood, ivory):
 | `copper-300` | `#D49A72` | accent on dark (next cue pulse) |
 | `clay` | `#C88F80` | second line / note (the guide) |
 | `copper-brown` | `#6B4A36` | transition color into ivory in scene 04 |
-| `ivory` | `#F5F1E9` | light base, text on dark |
+| `ivory` | `#F5F1E9` | light base |
+| `sand` | `#EAD3C2` | all text on dark screens and photos (soft beige, Natalie's choice) |
 | `ivory-warm` / `ivory-warm-2` | `#F2E5DA` → `#EEDACC` | gradient in scene 06 |
 | `body-on-ivory` | `#3E342C` | body text on ivory |
 | `muted` / `muted-2` | `#5E5650` / `#6E655C` | footer, small text |
@@ -113,7 +115,7 @@ Typography:
 Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, wooden room 2.2s, perspectives 2.6s, Natalie 1.8s, invitation 1.8s.
 
 ### Transitions between scenes
-- **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. 0.9s both ways (`FADE`); the footer slides back down in 0.6s (`BACK`).
+- **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. 0.9s both ways (`FADE`).
 - Dark transitions (hero → wood → perspectives): true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
 - Light transitions (perspectives → Natalie → invitation): the previous first fades to ivory (0–55% of the transition), then the new one appears (40–100%), so texts never overlap.
 - All content of a scene is fully built **before** the next scene starts dissolving in.
@@ -123,8 +125,9 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - A step forward crossfades to the next scene, then its build **plays by itself**, so every screen is shown complete. A step back is the mirror image: the earlier scene dissolves back in and **builds itself again**.
 - A step asked for while one is still playing is **not ignored**: the running one speeds up ×3, finishes, and the next follows (`HURRY`); up to 3 quick steps are remembered (`QUEUE`).
 - The hero completes its sentence by itself after the load intro.
-- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), plus the label **Scroll** (mouse) / **Swipe** (touch). It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
-- A last step after the invitation slides the footer up over its bottom edge. On short screens the invitation's content moves up just enough to keep the button clear (`data-footer-clear` / `data-footer-shift`), fading out softly under the top edge so that edge stays ivory. The header fades out after the hero.
+- **Next cue** (`NextCue.astro`, bottom center, on every scene except the last): a round outline button with an arrow that draws itself downwards (like the notes' lines) and a soft copper pulse ring (like the CTA), without words. It appears with a small rise once a screen is **complete** and hides as soon as the next step starts; clicking it is a step too. Ivory on dark scenes, bronze on light ones. Every scene but the last keeps 72px free at the bottom of its frame for it.
+- **Progress rail** (`ProgressRail.astro` + `progress.ts`, fixed on the right, vertically centred): one dot per scene; a small outlined pill glides to the screen on show with the crossfade (0.9s), screens already seen stay full, the ones to come faint. Each dot is a button (44px wide) that goes straight to its scene, forwards or back. Ivory on dark scenes, bronze on light ones.
+- The invitation is the end: no footer, no name or contact (Natalie's choice). The header fades out after the hero.
 - Links to `#invitation` (header link, or opening the page with the hash) dissolve straight to the finished scene; keyboard focus on a later scene (Tab to the button) brings it on screen.
 - Scenes under the one on screen pause their CSS loops (`data-offstage`), so the browser only works on what is visible.
 - The scene timelines are relative (positions 0–1); `navigation.ts` gives them their duration.
@@ -153,9 +156,9 @@ Deliberately removed. Do not bring back.
 - Scrim: dark wash along the edges and behind text for readability.
 - Copy (desktop: spread out; phone/tablet portrait: title on top, the rest grouped at the bottom):
   - h2: **Soms hoef je alleen maar te luisteren.** (top left)
-  - In een bijzondere geometrische ruimte, met speciaal op maat gemaakte luidsprekers, word je van alle kanten omringd door muziek. (bottom left)
-  - Een geluidservaring die je nauwelijks kunt bevatten, maar des te meer kunt voelen. (right middle, right aligned)
-  - *Geen afleiding, geen verwachtingen. Alleen de muziek en wat ze bij je oproept.* (bottom right, italic, larger)
+  - Een geometrische ruimte met unieke luidsprekers, en muziek die je van alle kanten omringt. (bottom left)
+  - Een ervaring om te voelen (right middle, right aligned)
+  - *Geen afleiding, geen verwachtingen. Alleen de klanken en wat ze in je oproepen.* (bottom right, italic, larger)
 - Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Texts appear one by one.
 
 ### 04 · New perspectives — guiding, not fixing
@@ -168,18 +171,18 @@ Deliberately removed. Do not bring back.
 - Copy (to the right of the notes on desktop; below the notes on phone/tablet portrait):
   - label: NIEUWE PERSPECTIEVEN
   - h2: **Er is meer dan één manier** *om te voelen.* (accent italic in copper)
-  - Een veilige plek waar je met jezelf kunt connecteren, experimenteren en luisteren.
-  - Als je een bijkomende behoefte hebt, kun je die ook delen met Natalie, zodat je samen een begeleidend project kunt aangaan. (appears together with the second line)
+  - Een veilige plek om te verbinden met jezelf, te luisteren en te delen.
+  - Als je behoefte hebt aan begeleiding, kan je ervoor kiezen om een coaching traject met Natalie op te starten. (appears together with the second line)
 
 ### 05 · Who welcomes you
 - Ivory, soft window light on the wall (blurred diagonal patch of light).
 - Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
 - Portrait: **placeholder** `[Foto van Natalie]` until there is a real photo.
 - Copy:
-  - label: WIE JE ONTVANGT
+  - label: WIE NAAST JE, LUISTERT.
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er te weinig plekken zijn waar je gewoon even mag zijn. Daarom maakte ik deze ruimte en ontvang ik je er graag.
-  - *Natalie Vandervoort* (signature, Cormorant italic)
+  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en ik verwelkom hen er van harte.
+  - *Natalie Van der Voort* (signature, Cormorant italic)
   - ⚠️ This personal text is sample copy; Natalie still has to approve it.
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
@@ -189,10 +192,10 @@ Deliberately removed. Do not bring back.
 - Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
-  - Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor openstaat.
-  - Button: **Afspraak maken** → `/booking`
+  - Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een gesprek met Natalie. Ervaar het op jouw manier.
+  - Button: **Ontdek de sessies** → `/booking`
+  - The photo/frame will change (Natalie is still looking: the chair, or something with music).
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Footer (`SiteFooter`) **below** the invitation scene, in normal flow: *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`.
 - Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
@@ -210,6 +213,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Stages are `100lvh` so they stay full screen when Safari's toolbars collapse; their content sits in `.frame` (`100svh`) so nothing hides behind the toolbars. No max height.
 - **Phone** (`≤ 559px`, or `≤ 820px` and taller than 520px): stacked, left aligned.
 - **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type, 8–12vw margins.
+- **Desktop**: every scene uses one side margin, `--gutter` in `base.css`: `max(6vw, (100vw - 1240px) / 2)`, so on big screens the content stays in a centred 1240px column instead of hugging the edges (no long left-to-right reading). The header stays at the screen edges.
 - **Phone landscape** (`≥ 560px` wide and `≤ 520px` high): desktop layout with compact, `vh`-based type and smaller images.
 - **Short phones** (`≤ 700px` high, e.g. iPhone SE): extra compact; nothing may overlap or fall off screen.
 
@@ -225,7 +229,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Safari bars (around the camera and the toolbar) must change **together with the screen**, never ahead of it. `viewport-fit=cover`; `scripts/scenes/tint.ts` tweens `--tint` (page background) + `theme-color` with the same duration and ease as each crossfade.
   - `data-tint` on each scene = the measured color of its **top edge** when finished (hero `#12100D`, wooden room `#120A05`, ivory scenes `#F5F1E9`).
   - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. Light scenes are flat ivory at the edges already.
-  - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the footer and the booking page are ivory too). Nothing may cast a shadow into the screen edges.
+  - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the booking page is ivory too). Nothing may cast a shadow into the screen edges.
   - A scene that arrives in another color and then lifts (perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
   - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge).
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
