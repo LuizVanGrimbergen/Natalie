@@ -209,16 +209,18 @@ const links = [
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 48px;
+    gap: 32px;
     padding: 96px 24px max(32px, calc(env(safe-area-inset-bottom) + 20px));
     background: var(--tint, var(--page));
     text-align: center;
   }
+  /* The links fill the middle of the screen; "Afspraak maken" sits at the bottom, within thumb's reach. */
   .menu__nav {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 6px;
   }
   .menu__link {

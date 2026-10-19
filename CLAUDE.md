@@ -151,7 +151,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 ### Navbar (`SiteHeader.astro`, fixed on every screen and page)
 - Left: wordmark *Natalie* (Cormorant italic) → the hero (`#start`; `/` from other pages).
 - From 900px: links **De ruimte · Luisteren · Coaching · Over Natalie** (14px, 78% ivory) and an outline pill **Afspraak maken** → `/booking`.
-- Below 900px: a hamburger (two lines that turn into a cross) opens a full-screen menu in the page's own color, **everything centered**: the four links large in Cormorant, under them **Afspraak maken** as an outline pill (max 320px). It is a `<details>`, so it works without JS; `scripts/site-menu.ts` closes it on a link or Escape.
+- Below 900px: a hamburger (two lines that turn into a cross) opens a full-screen menu in the page's own color, **everything centered**: the four links large in Cormorant in the middle of the screen, **Afspraak maken** as an outline pill (max 320px) at the bottom, within thumb's reach. It is a `<details>`, so it works without JS; `scripts/site-menu.ts` closes it on a link or Escape.
 - Always (beside the hamburger on phones, after the links on desktop): the **light/dark switch**, a circle half filled that turns over; shown only when scripts run (`html.js`, set by `public/theme.js`).
 - Colors follow the screen on show (`--on-screen`), not the theme: ivory over dark screens and photos, bronze over light screens.
 - Its backdrop fades from the page color (`--tint`) at the very top to nothing, so the top edge stays the page's color for Safari's bar and the links stay readable over photos.
