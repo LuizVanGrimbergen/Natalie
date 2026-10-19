@@ -2,7 +2,7 @@
 /**
  * "There is more": a round button with an arrow that draws itself downwards
  * (like the lines of the notes scene) and a copper pulse ring (like the
- * CTA). navigation.ts shows it once a screen is complete and hides it on the
+ * CTA), without words. navigation.ts shows it once a screen is complete and hides it on the
  * next step; clicking it is a step too. Ivory on dark scenes, bronze on light ones.
  */
 ---
@@ -14,7 +14,6 @@
       <path class="next__head" d="M7.5 13.5 L12 18 L16.5 13.5" pathLength="20"></path>
     </svg>
   </span>
-  <span class="label next__label" aria-hidden="true"><span class="next__mouse">Scroll</span><span class="next__touch">Swipe</span></span>
 </button>
 
 <style>
@@ -25,13 +24,12 @@
     z-index: 20;
     display: flex;
     align-items: center;
-    gap: 14px;
     min-height: 44px;
     padding: 0 6px;
     border: 0;
     background: none;
     font: inherit;
-    color: var(--color-ivory);
+    color: var(--color-sand);
     --pulse: 212 154 114;
     cursor: pointer;
     translate: -50% 0;
@@ -129,22 +127,6 @@
     70%,
     100% {
       box-shadow: 0 0 0 14px rgb(var(--pulse) / 0);
-    }
-  }
-
-  .next__label {
-    letter-spacing: 0.34em;
-    margin-right: -0.34em;
-  }
-  .next__touch {
-    display: none;
-  }
-  @media (hover: none) and (pointer: coarse) {
-    .next__mouse {
-      display: none;
-    }
-    .next__touch {
-      display: inline;
     }
   }
 
