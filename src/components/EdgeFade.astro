@@ -24,28 +24,25 @@ const vars = `--edge-dark: ${color}; --edge-light: ${light}`;
     right: 0;
     pointer-events: none;
     --edge: var(--edge-dark);
-    --edge-h: 16svh;
     /* Eased stops, so the photo dissolves instead of ending in a visible band. */
     --edge-fade: var(--edge) 0%, color-mix(in srgb, var(--edge) 82%, transparent) 22%,
       color-mix(in srgb, var(--edge) 50%, transparent) 50%, color-mix(in srgb, var(--edge) 18%, transparent) 78%, transparent 100%;
   }
-  /* Light edges are shorter, so the photo's ivory words keep their dark ground. */
   :global([data-theme='light']) .edge {
     --edge: var(--edge-light);
-    --edge-h: 7svh;
   }
   .edge--top {
     top: 0;
-    height: var(--edge-h);
+    height: 16svh;
     background: linear-gradient(to bottom, var(--edge-fade));
   }
   /* The stage runs under Safari's bottom toolbar (100lvh); below the visible
      screen (100svh) the color is flat, above it the photo fades in. */
   .edge--bottom {
     bottom: 0;
-    height: calc(100lvh - 100svh + var(--edge-h));
+    height: calc(100lvh - 100svh + 16svh);
     background:
-      linear-gradient(to top, var(--edge-fade)) top / 100% var(--edge-h) no-repeat,
+      linear-gradient(to top, var(--edge-fade)) top / 100% 16svh no-repeat,
       linear-gradient(var(--edge), var(--edge)) bottom / 100% calc(100lvh - 100svh) no-repeat;
   }
 </style>

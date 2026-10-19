@@ -1,8 +1,7 @@
 ---
 /**
  * The top of the booking page: Natalie in the opening of the dome, the title and one line of facts.
- * Like the story's photo scenes it looks the same in both themes: dark wood, ivory words;
- * only its top edge turns ivory in the light theme, to meet Safari's bar.
+ * Like the story's photo scenes it looks the same in both themes: dark wood edges, ivory words.
  */
 import { Picture } from 'astro:assets';
 import photo from '../../assets/booking.avif';
@@ -56,24 +55,6 @@ import photo from '../../assets/booking.avif';
       color-mix(in srgb, var(--color-wood-950) 85%, transparent) 82%,
       var(--color-wood-950) 100%
     );
-  }
-  /* Light theme: the top edge fades from ivory, the color of Safari's bar (see EdgeFade). */
-  .visual::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 1;
-    height: 7svh;
-    background: linear-gradient(
-      to bottom,
-      var(--color-ivory),
-      color-mix(in srgb, var(--color-ivory) 50%, transparent) 50%,
-      transparent
-    );
-    opacity: 0;
-  }
-  :global([data-theme='light']) .visual::before {
-    opacity: 1;
   }
   .visual__text {
     position: absolute;

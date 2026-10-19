@@ -18,18 +18,16 @@ interface Props {
   story?: boolean;
   /** Color of the browser bars and overscroll area (Safari tints from the page background). */
   tint?: string;
-  /** The same in the light theme (public/theme.js and scripts/theme.ts pick one). */
-  tintLight?: string;
 }
 
-const { title, description, story = false, tint = '#120A05', tintLight = '#F5F1E9' } = Astro.props;
+const { title, description, story = false, tint = '#120A05' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = await getImage({ src: hero, width: 1200, height: 630, format: 'jpg', quality: 80 });
 const ogUrl = new URL(og.src, Astro.site);
 ---
 
 <!doctype html>
-<html lang="nl" style={`--tint: ${tint}`} data-tint={tint} data-tint-light={tintLight}>
+<html lang="nl" style={`--tint: ${tint}`}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

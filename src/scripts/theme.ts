@@ -1,18 +1,11 @@
 /**
  * The navbar's light/dark switch (SiteHeader.astro). public/theme.js already set
- * the stored theme before first paint; this flips it, stores it, re-tints
- * Safari's bars to the page's color in that theme (data-tint / data-tint-light
- * on <html>, from Base.astro), and lets the page follow: the story then re-tints
- * from the scene on show (navigation.ts listens for `themechange`).
+ * the stored theme before first paint; this flips it, stores it, and lets the
+ * page follow: the story re-tints Safari's bars from the scene on show
+ * (navigation.ts listens for `themechange`); other pages start with a photo,
+ * dark in both themes, so their bars stay as they are.
  */
 const root = document.documentElement;
-
-function tintPage() {
-  const tint = (isLight() ? root.dataset.tintLight : root.dataset.tint)!;
-  root.style.setProperty('--tint', tint);
-  root.dataset.surface = isLight() ? 'light' : 'dark';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', tint);
-}
 
 const isLight = () => root.dataset.theme === 'light';
 
@@ -37,8 +30,7 @@ export function initThemeToggle() {
         // Private mode or blocked storage: the switch still works for this visit.
       }
       show(buttons);
-      tintPage();
-      // The story re-tints from the scene on show.
+      // The story re-tints from the scene on show; other pages start with a photo, dark in both themes.
       dispatchEvent(new Event('themechange'));
     });
   }

@@ -28,21 +28,14 @@ export function tintOf(scene: HTMLElement) {
   return (root.dataset.theme === 'light' && scene.dataset.tintLight) || scene.dataset.tint!;
 }
 
-/** html[data-photo]: a photo scene is on show, dark under the next cue whatever its edges are. */
-function mark(scene: HTMLElement) {
-  root.toggleAttribute('data-photo', 'photo' in scene.dataset);
-}
-
 /** Fade the bars to a scene's color together with the crossfade (same duration and ease). */
 export function tintTo(scene: HTMLElement, fade: number) {
-  mark(scene);
   return gsap.to(bar, { color: tintOf(scene), duration: fade, ease: 'power1.inOut', onUpdate: apply });
 }
 
 /** Set the bars at once (jumping to a scene, switching the theme). */
 export function tintNow(scene: HTMLElement) {
   gsap.killTweensOf(bar);
-  mark(scene);
   bar.color = tintOf(scene);
   apply();
 }
