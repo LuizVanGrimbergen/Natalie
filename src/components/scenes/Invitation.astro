@@ -8,15 +8,15 @@ import CtaLink from '../CtaLink.astro';
   <div class="stage">
     <div class="glow" aria-hidden="true"></div>
     <div class="frame">
-      <div class="grid" data-footer-shift>
-        <div class="text" data-footer-clear>
+      <div class="grid">
+        <div class="text">
           <h2 id="invitation-title" class="display text__h" data-reveal="1">Misschien is dit iets <em>voor jou.</em></h2>
           <p class="text__p" data-reveal="2">
-            Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor
-            openstaat.
+            Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een
+            gesprek met Natalie. Ervaar het op jouw manier.
           </p>
           <div data-reveal="3">
-            <CtaLink href="/booking">Afspraak maken</CtaLink>
+            <CtaLink href="/booking">Ontdek de sessies</CtaLink>
           </div>
         </div>
         <figure class="door" aria-hidden="true" data-unveil>
@@ -32,12 +32,6 @@ import CtaLink from '../CtaLink.astro';
   .stage {
     background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 35%, var(--color-ivory-warm-2) 60%, var(--color-ivory) 100%);
     color: var(--color-bronze-900);
-  }
-  /* When the footer comes up, the content may move up to stay clear of it; it then
-     fades out softly at the top, so the top edge (and Safari's bar) stays ivory. */
-  :global(html.motion) .frame {
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40px);
-    mask-image: linear-gradient(to bottom, transparent, #000 40px);
   }
   .glow {
     position: absolute;
@@ -55,7 +49,7 @@ import CtaLink from '../CtaLink.astro';
     grid-template-columns: 1fr 1fr;
     gap: 6vw;
     align-items: center;
-    padding: 0 6vw;
+    padding: 0 var(--gutter);
   }
   .text {
     display: flex;
