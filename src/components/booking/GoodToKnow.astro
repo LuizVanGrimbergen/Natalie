@@ -35,7 +35,9 @@ const notes = [
     align-items: center;
     min-height: 56px;
     padding: 0 20px;
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--fg);
     cursor: pointer;
     list-style: none;
   }
@@ -45,9 +47,9 @@ const notes = [
   /* A plus that turns into a minus when open. */
   .know__mark {
     position: relative;
-    width: 12px;
-    height: 12px;
-    color: var(--fg-muted);
+    width: 14px;
+    height: 14px;
+    color: var(--fg);
   }
   .know__mark::before,
   .know__mark::after {
@@ -66,20 +68,21 @@ const notes = [
   .know__details[open] .know__mark::after {
     transform: rotate(0deg);
   }
+  /* Readable: body size, near full color, a quiet hairline between the notes. */
   .know__list {
-    display: grid;
-    gap: 10px;
     margin: 0;
-    padding: 0 20px 20px;
+    padding: 0 20px 8px;
     list-style: none;
   }
   .know__list li {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--fg-muted);
+    padding: 14px 0;
+    border-top: 1px solid var(--hairline);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg-soft);
   }
   .know__contact {
-    font-size: 14px;
-    color: var(--fg-muted);
+    font-size: 16px;
+    color: var(--fg-soft);
   }
 </style>

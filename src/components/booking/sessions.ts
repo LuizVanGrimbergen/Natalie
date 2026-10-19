@@ -19,7 +19,7 @@ export const SESSIONS: Session[] = [
   {
     id: 'soundroom',
     name: 'Soundroom',
-    text: 'Je ligt in de soundroom, omringd door muziek, en komt tot rust.',
+    text: 'Je ligt in de soundroom, omringd door muziek, en beleeft het op je eigen manier, zonder begeleiding.',
     minutes: 50,
     price: 75,
     calLink: import.meta.env.PUBLIC_CAL_SOUNDROOM?.trim() || undefined,
@@ -27,7 +27,7 @@ export const SESSIONS: Session[] = [
   {
     id: 'coaching',
     name: 'Coaching',
-    text: 'Een persoonlijk gesprek met Natalie over wat er speelt en wat jij nodig hebt.',
+    text: 'Ook in de soundroom, maar met Natalie erbij: na het luisteren een persoonlijk gesprek over wat er speelt.',
     minutes: 50,
     price: 65,
     calLink: import.meta.env.PUBLIC_CAL_COACHING?.trim() || undefined,

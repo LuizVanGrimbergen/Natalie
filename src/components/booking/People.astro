@@ -23,6 +23,7 @@ const totals = SESSIONS.flatMap((s) =>
 );
 // One rule per session × group size; generated so it follows sessions.ts.
 const css = `${totals.map((t) => t.rule).join(',\n')} { display: inline; }`;
+const discount = `${FRIENDS_DISCOUNT * 100}%`;
 ---
 
 <fieldset class="people">
@@ -32,14 +33,32 @@ const css = `${totals.map((t) => t.rule).join(',\n')} { display: inline; }`;
       counts.map((n) => (
         <label class="segment">
           <input class="segment__input" type="radio" name="people" value={n} id={`people-${n}`} checked={n === 1} />
-          <span>{n}</span>
+          <span class="segment__n">{n}</span>
           <span class="sr-only">{n === 1 ? 'persoon' : 'personen'}</span>
+          {n > 1 && (
+            <span class="segment__deal">
+              −{discount}
+              <span class="sr-only"> per persoon</span>
+            </span>
+          )}
         </label>
       ))
     }
   </div>
-  <p class="people__note">Met vrienden betaalt ieder {FRIENDS_DISCOUNT * 100}% minder.</p>
+  <p class="people__note">Kies eerst een sessie.</p>
 </fieldset>
+
+<script>
+  // Until a session is chosen there is no price, so the number of people can't be picked yet (the CSS greys it out too).
+  const people = document.querySelectorAll<HTMLInputElement>('input[name="people"]');
+  const sync = () => {
+    const chosen = !!document.querySelector('input[name="session"]:checked');
+    for (const input of people) input.disabled = !chosen;
+  };
+  document.addEventListener('change', sync);
+  addEventListener('pageshow', sync);
+  sync();
+</script>
 
 <div class="sum">
   <p class="sum__row" aria-live="polite">
@@ -83,9 +102,13 @@ const css = `${totals.map((t) => t.rule).join(',\n')} { display: inline; }`;
   }
   .segment {
     position: relative;
-    display: grid;
-    place-items: center;
-    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    min-height: 64px;
+    padding: 10px 4px;
     border-radius: 9px;
     font-size: 17px;
     font-weight: 400;
@@ -113,10 +136,27 @@ const css = `${totals.map((t) => t.rule).join(',\n')} { display: inline; }`;
     height: 1px;
     margin: 0;
   }
+  /* Under the number of 2 and 3: the friends discount. */
+  .segment__deal {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--fg-muted);
+  }
+  .segment:has(:checked) .segment__deal {
+    color: var(--fg-soft);
+  }
+  /* No session yet: the numbers wait, greyed out; the note says why. */
+  :global(body:not(:has([name='session']:checked))) .segments {
+    opacity: 0.45;
+    pointer-events: none;
+  }
   .people__note {
     margin-top: 10px;
     font-size: 14px;
     color: var(--fg-muted);
+  }
+  :global(body:has([name='session']:checked)) .people__note {
+    display: none;
   }
 
   .sum {
