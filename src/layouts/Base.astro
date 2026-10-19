@@ -10,6 +10,7 @@ import '@fontsource/figtree/latin-400.css';
 import '@fontsource/figtree/latin-500.css';
 import '../styles/global.css';
 import hero from '../assets/hero.avif';
+import { SESSIONS } from '../components/booking/sessions';
 
 interface Props {
   title: string;
@@ -18,21 +19,58 @@ interface Props {
   story?: boolean;
   /** Color of the browser bars and overscroll area (Safari tints from the page background). */
   tint?: string;
+  /** Open Graph type: a research piece is an `article`. */
+  ogType?: 'website' | 'article';
+  /** Extra schema.org nodes for this page (e.g. an Article), added to the site's graph. */
+  schema?: Record<string, unknown>[];
 }
 
-const { title, description, story = false, tint = '#120A05' } = Astro.props;
+const { title, description, story = false, tint = '#120A05', ogType = 'website', schema = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = await getImage({ src: hero, width: 1200, height: 630, format: 'jpg', quality: 80 });
 const ogUrl = new URL(og.src, Astro.site);
-// Search engines: who and where (a data block, not a script, so the CSP doesn't block it).
-const business = JSON.stringify({
+// Search engines and AI answers: who, where, what it costs (a data block, not a script, so the CSP doesn't block it).
+const home = new URL('/', Astro.site).href;
+const graph = JSON.stringify({
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'Natalie Vandervoort',
-  description,
-  url: new URL('/', Astro.site),
-  image: ogUrl,
-  address: { '@type': 'PostalAddress', addressLocality: 'Schoten', addressCountry: 'BE' },
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${home}#website`,
+      url: home,
+      name: 'Natalie Vandervoort',
+      inLanguage: 'nl-BE',
+      publisher: { '@id': `${home}#business` },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${home}#natalie`,
+      name: 'Natalie Vandervoort',
+      jobTitle: 'Coach',
+      worksFor: { '@id': `${home}#business` },
+    },
+    {
+      '@type': 'LocalBusiness',
+      '@id': `${home}#business`,
+      name: 'Natalie Vandervoort',
+      description:
+        'Een geometrische soundroom in Schoten: kom tot rust in muziek en stilte, of ga in een persoonlijk gesprek met Natalie. Sessies van 50 minuten, vanaf 18 jaar.',
+      url: home,
+      image: ogUrl,
+      founder: { '@id': `${home}#natalie` },
+      address: { '@type': 'PostalAddress', addressLocality: 'Schoten', addressRegion: 'Antwerpen', addressCountry: 'BE' },
+      areaServed: 'Antwerpen',
+      priceRange: `€${Math.min(...SESSIONS.map((s) => s.price))}–€${Math.max(...SESSIONS.map((s) => s.price))}`,
+      makesOffer: SESSIONS.map((session) => ({
+        '@type': 'Offer',
+        price: session.price,
+        priceCurrency: 'EUR',
+        url: new URL('/booking', Astro.site).href,
+        itemOffered: { '@type': 'Service', name: session.name, description: session.text, duration: `PT${session.minutes}M` },
+      })),
+    },
+    ...schema,
+  ],
 });
 ---
 
@@ -43,16 +81,20 @@ const business = JSON.stringify({
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- A plain-text summary of the site for AI assistants (llms.txt). -->
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt" />
     <!-- The chosen theme (light or dark), before first paint; a file, so the CSP can forbid inline scripts. -->
     <script is:inline src="/theme.js"></script>
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Natalie Vandervoort" />
     <meta property="og:locale" content="nl_BE" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -61,7 +103,7 @@ const business = JSON.stringify({
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" is:inline set:html={business} />
+    <script type="application/ld+json" is:inline set:html={graph} />
 
     {
       // A file, not inline, so the Content-Security-Policy can forbid inline scripts.

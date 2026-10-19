@@ -20,9 +20,20 @@ export async function getStaticPaths() {
 const { piece } = Astro.props;
 const { Content } = await render(piece);
 const { title, accent, date, summary } = piece.data;
+const home = new URL('/', Astro.site).href;
+const article = {
+  '@type': 'Article',
+  headline: `${title} ${accent}`,
+  description: summary,
+  datePublished: date.toISOString(),
+  inLanguage: 'nl-BE',
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  author: { '@id': `${home}#natalie` },
+  publisher: { '@id': `${home}#business` },
+};
 ---
 
-<Base title={`${title} ${accent} — Natalie Vandervoort`} description={summary} tint="#120A05">
+<Base title={`${title} ${accent} — Natalie Vandervoort`} description={summary} tint="#120A05" ogType="article" schema={[article]}>
   <div class="page">
     <SiteHeader base="/" />
     <PhotoBand photo={photo} title={title} facts={`Onderzoek · ${formatDate(date)}`} focus="50% 40%">
