@@ -3,11 +3,21 @@ import { initCue } from './cue';
 import { all, one } from './dom';
 import { onStep, type Step } from './input';
 import { tintNow, tintTo } from './tint';
+import type { WayIn } from './transition';
 import { trackScene } from './track';
 import { prime, type Timeline } from './tweens';
 
 /** Seconds a scene takes to build itself once it is on screen. */
-const BUILD: Record<string, number> = { hero: 1.8, shape: 3.2, listening: 2.2, elements: 2.6, coaching: 2.6, welcomes: 1.8, invitation: 1.8 };
+const BUILD: Record<string, number> = {
+  hero: 1.8,
+  shape: 3.2,
+  listening: 2.2,
+  elements: 1.6,
+  list: 2.6,
+  coaching: 2.6,
+  welcomes: 1.8,
+  invitation: 1.8,
+};
 /** Seconds of the crossfade between scenes (both ways), and of the footer sliding back down. */
 const FADE = 0.9;
 const BACK = 0.6;
@@ -59,6 +69,10 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
   }
 
   const seconds = (i: number) => BUILD[scenes[i].dataset.scene!] ?? 2;
+  const ownWayIn = (i: number) => fades[i].data as WayIn | undefined;
+  /** Seconds of the step between scene i and i + 1; the arriving scene starts building half a crossfade before it ends. */
+  const fadeTime = (i: number) => ownWayIn(i)?.seconds ?? FADE;
+  const buildAt = (i: number) => fadeTime(i) - FADE * 0.5;
   const play = (i: number) => builds[i].tweenFromTo(0, builds[i].duration(), { duration: seconds(i), ease });
 
   function forward() {
@@ -78,9 +92,9 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       onstage(current, to);
       trackScene(scenes[to]);
       builds[to].progress(0);
-      tl.add(fades[current].tweenTo(1, { duration: FADE, ease }), 0)
-        .add(tintTo(scenes[to], FADE), 0)
-        .add(play(to), FADE * 0.5);
+      tl.add(fades[current].tweenTo(1, { duration: fadeTime(current), ease }), 0)
+        .add(tintTo(scenes[to], fadeTime(current)), 0)
+        .add(play(to), buildAt(current));
     }
     current = to;
     run(tl);
@@ -96,10 +110,12 @@ export function initNavigation(scenes: HTMLElement[], builds: Timeline[], fades:
       // A mirror of a step forward: the earlier scene dissolves back in and builds itself again.
       const to = from - 1;
       onstage(to, from);
-      builds[to].progress(0);
-      tl.add(fades[to].tweenTo(0, { duration: FADE, ease }), 0)
-        .add(tintTo(scenes[to], FADE), 0)
-        .add(play(to), FADE * 0.5);
+      tl.add(fades[to].tweenTo(0, { duration: fadeTime(to), ease }), 0).add(tintTo(scenes[to], fadeTime(to)), 0);
+      // A scene's own way in is mirrored, so the earlier scene comes back finished.
+      if (!ownWayIn(to)) {
+        builds[to].progress(0);
+        tl.add(play(to), buildAt(to));
+      }
     }
     current = from - 1;
     run(tl);

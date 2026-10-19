@@ -1,6 +1,6 @@
 # Natalie — website
 
-A story of seven full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
+A story of seven scenes (eight full screens: scene 04 takes two), one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
 Natalie invites young people (20–30) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
@@ -39,7 +39,7 @@ No UI framework. If interactivity is ever needed: an Astro island.
 src/
   layouts/Base.astro                # <html>, fonts, meta/OG, sets html.motion (or not) before paint
   pages/
-    index.astro                     # the story: header + the seven scenes, starts the scene script
+    index.astro                     # the story: header + the seven scenes (eight screens), starts the scene script
     booking.astro                   # booking page
   components/
     SiteHeader.astro                # the navbar: wordmark, story links, Afspraak maken; hamburger menu below 900px
@@ -52,7 +52,8 @@ src/
       Hero.astro                    # 01
       Shape.astro                   # 02 the net folds into the dome (canvas; static SVG without JS)
       Listening.astro               # 03 wooden room
-      Elements.astro                # 04 three elements of a session
+      Elements.astro                # 04 three elements: the title screen, then ElementsList
+      ElementsList.astro            # 04 the three elements together on one screen
       Coaching.astro                # 05 coaching: lines + music notes
       WhoWelcomes.astro             # 06 Natalie
       Invitation.astro              # 07 invitation + footer
@@ -77,11 +78,14 @@ src/
     dom.ts                          # query helpers
     tweens.ts                       # build() + rise/fade/unveil/draw, prime
     transition.ts                   # crossfade between scenes
+    enter.ts                        # shape → wooden room: stepping into the dome instead of a crossfade
+    gather.ts                       # 04 title → list: the title shrinks into the head of the next screen
     tint.ts                         # Safari bar color, tweened together with the crossfades
-    hero.ts, shape.ts, listening.ts, elements.ts, coaching.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
+    hero.ts, shape.ts, listening.ts, elements.ts, list.ts, coaching.ts, welcomes.ts, invitation.ts   # one relative timeline per scene
     fold/geometry.ts                # rhombic triacontahedron + its flat net, folding and projection (pure math, also used at build time)
     fold/shade.ts                   # face, seam and hinge colors (copper panels, aluminium seams, like hero.avif)
     fold/draw.ts                    # draws one frame of the fold on a canvas
+    fold/follow.ts                  # the closed dome turns gently towards the mouse (fine pointers only)
   styles/
     global.css                      # imports only
     tokens.css                      # design tokens (@theme)
@@ -97,9 +101,9 @@ Conventions: one component per file; styles live scoped in the component that ow
 
 ## Design tokens
 
-**One mood per theme.** Dark (the default): every screen of the story without a photo, and the footer, is flat `wood-950` with ivory text and copper accents, so it flows into the two photo scenes; the booking page is the same wood brown (`night-*` tokens, see Booking page). Within a theme, never mix light and dark backgrounds on flat screens. Warmth comes from soft copper glows in the middle of a screen, never at its edges.
+**One mood per theme.** Dark: every screen of the story without a photo, and the footer, is flat `wood-950` with ivory text and copper accents, so it flows into the two photo scenes; the booking page is the same wood brown (`night-*` tokens, see Booking page). Within a theme, never mix light and dark backgrounds on flat screens. Warmth comes from soft copper glows in the middle of a screen, never at its edges.
 
-**Light theme** (the navbar's switch; the visitor's choice is stored in `localStorage`): every flat screen, the footer, the navbar menu and the booking page turn ivory with bronze text and `copper-700` accents. The photo scenes (hero, wooden room) look **exactly the same in both themes**: the dark wood filter, ivory words, dark edges and bars. Tried and rejected: an ivory veil (milky), ivory text glows, a brown filter (muddy, see-through). Don't tint the photos per theme. All colors of flat screens and shared components come from the theme variables in `styles/theme.css` (`--page`, `--page-booking`, `--surface`, `--fg`, `--fg-soft`, `--fg-muted`, `--accent`, `--line`, `--outline`, `--dim`, notes, portrait …), swapped by `html[data-theme='light']` — never hard-code ivory or wood in them. `public/theme.js` (blocking in `<head>` on every page) sets the theme before first paint; `scripts/theme.ts` runs the switch and fires `themechange` (the story re-tints, the Cal.com booker redraws in its light theme). `html[data-surface]` (light / dark, from the bar color in `tint.ts`) tells the navbar and the next cue which screen is on show, so they are ivory over dark screens and photos, bronze over light ones (`--on-screen`).
+**Light theme** (**the default**; the navbar's switch flips to dark, the visitor's choice is stored in `localStorage`; without JS the CSS default, dark, shows): every flat screen, the footer, the navbar menu and the booking page turn ivory with bronze text and `copper-700` accents. The photo scenes (hero, wooden room) and the booking page's photo band look **exactly the same in both themes**: the dark wood filter, ivory words, dark edges and bars. Tried and rejected: an ivory veil (milky), ivory text glows, a brown filter (muddy, see-through). Don't tint the photos per theme. All colors of flat screens and shared components come from the theme variables in `styles/theme.css` (`--page`, `--page-booking`, `--surface`, `--fg`, `--fg-soft`, `--fg-muted`, `--accent`, `--line`, `--outline`, `--dim`, notes, portrait …), swapped by `html[data-theme='light']` — never hard-code ivory or wood in them. `public/theme.js` (blocking in `<head>` on every page) sets the theme before first paint; `scripts/theme.ts` runs the switch and fires `themechange` (the story re-tints, the Cal.com booker redraws in its light theme). `html[data-surface]` (light / dark, from the bar color in `tint.ts`) tells the navbar and the next cue which screen is on show, so they are ivory over dark screens and photos, bronze over light ones (`--on-screen`).
 
 Colors (tuned to the dome: bronze, copper, wood, ivory):
 
@@ -125,11 +129,12 @@ Typography:
 
 ## Scenes (in order; Dutch copy used VERBATIM)
 
-Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, shape 3.2s, wooden room 2.2s, elements 2.6s, coaching 2.6s, Natalie 1.8s, invitation 1.8s.
+Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). The page itself doesn't scroll: the scenes lie on top of each other (`position: fixed`) and `navigation.ts` moves from one to the next. Build durations (`BUILD` in `navigation.ts`): hero 1.8s, shape 3.2s, wooden room 2.2s, elements 1.6s, list 2.6s, coaching 2.6s, Natalie 1.8s, invitation 1.8s.
 
 ### Transitions between scenes
 - **No slide.** The next scene **dissolves in place** over the previous one: the new stage fades 0 → 1, the previous stays and dims. 0.9s both ways (`FADE`); the footer slides back down in 0.6s (`BACK`).
 - Every transition is the same true crossfade; the previous dims to warm dark brown (`radial-gradient(#2A1E16, #120D0A)`, max opacity ~.55).
+- **Exceptions:** title → list of scene 04 (`gather.ts`, see 04), and **shape → wooden room** (`enter.ts`, 1.6s; a scene's own way in is a `wayIn(seconds)` timeline from `transition.ts`, which `navigation.ts` reads for its length and to mirror it on a step back). The photo is the inside of the dome, so the camera steps into it: the text gives way, the closed dome grows towards you (×6, turning a little) until its copper fills the screen, and inside it the room fades in, still zoomed in and dark; its own build then zooms out. Transform/opacity only. Stepping back is the mirror (you step out of the dome) and the shape comes back finished, without folding again.
 - All content of a scene is fully built **before** the next scene starts dissolving in.
 
 ### One step per screen (desktop and touch alike)
@@ -167,6 +172,7 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 (The original scene 02 stays removed; this is a new scene in its place.)
 - Flat `wood-950`, a soft copper glow behind the dome (fading to flat wood well before the edges).
 - Visual: the flat net of **30 rhombi** (Natalie's prototype, data from Paul Bourke) appears from the centre rhombus outward, then **folds itself** into the rhombic triacontahedron — the shape of the dome in the hero. The folds start at the centre and run out to the ends of the arms; a hinge glows `copper-300` only while it moves. Panels copper, lit from one side; seams aluminium; inner sides dark. Ends closed and still.
+- Once closed (build finished, scene on show), the dome turns and tilts gently towards the mouse (`fold/follow.ts`, eased; back to rest when the mouse leaves the window). Real mouse only, nothing on touch.
 - Drawn on a `<canvas>` (`fold/draw.ts`), driven by a proxy tween in `shape.ts`. Without JS / reduced motion: a static SVG of the closed dome, rendered at build time from the same `fold/geometry.ts`.
 - Desktop: text left, dome right. Phone/tablet portrait: dome on top, text grouped at the bottom.
 - Copy (sample, from Natalie's notes and the article — awaiting her approval):
@@ -187,8 +193,12 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Texts appear one by one.
 
 ### 04 · Three elements — what happens between you and the sound
-- Flat `wood-950`. Title + one line, then the three elements rise one by one. **Text only — no icons or glyphs**: a fine copper line above each element, its name in Cormorant, one sentence.
-- Desktop: three columns. Phone/tablet portrait: under each other.
+Two screens, so it reads calmly without many steps: the title, then the three elements together. (Tried and rejected: three equal columns — read as a feature list; cards with icons — looked generic; one screen per element — too much scrolling.)
+- `Elements.astro`: the title screen (`data-scene="elements"`, h2 + the one line, `elements.ts`), followed by `ElementsList.astro` (`data-scene="list"`, z-index 5, `list.ts`).
+- **The two screens are one thought** (`gather.ts`, `wayIn(1.2)`): instead of a crossfade, the line under the title gives way and the title rises and shrinks into the head of the list screen (the same words, small, `data-gather-target`), landing as that screen dissolves in (the head is sized to wrap on the same words as the title, so the handover is invisible); then the three elements rise under it. Measured from the real positions (again on resize and once fonts load). Stepping back is the mirror.
+- Flat `wood-950`, a soft copper glow in the middle of the list screen. **Text only, no icons, cards or numbers.**
+- The list: each element's name large in Cormorant (h3, the noun as the italic copper accent: De *persoon.*, Het *geluidsveld.*, De *koppeling.*) with its one sentence; quiet hairlines between them; they rise slowly one after the other.
+- Desktop: name left, sentence right, three rows. Phone/tablet portrait: name above sentence, the three under each other.
 - Copy (sample, from Natalie's email — awaiting her approval):
   - h2: **Wat er gebeurt** *tussen jou en het geluid.*
   - Je hoeft niets te doen. Je lichaam mag loslaten, tot rust komen en weer opladen. Drie dingen spelen daarin samen. (Natalie's documents speak of *loslaten → opladen* and avoid the word *ontspanning*.)
@@ -204,6 +214,7 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
   2. Then a clay line (`#C88F80`) walks alongside without touching the first → second note head → stem.
   3. Finally a **beam** joins both notes.
   Meaning: two separate voices sounding together = guiding without fixing. Each stroke draws at an even pace (no glide, no swelling, no floating).
+- Layout: notes and text form one group, centred in the screen (desktop: side by side, max 1440px wide; tablet portrait: notes above the text, the drawing's empty top and bottom cropped). Phone keeps the notes running in from the left edge, text at the bottom.
 - Copy (to the right of the notes on desktop; below the notes on phone/tablet portrait):
   - label: COACHING
   - h2: **Soms helpt het om** *samen te kijken.* (accent italic in copper)
@@ -232,13 +243,13 @@ The second half of what Natalie offers (beside the soundroom): a personal conver
   - Sommige ervaringen laten zich moeilijk in woorden vatten. Je ontdekt pas wat ze voor jou betekenen wanneer je ervoor openstaat.
   - Button: **Afspraak maken** → `/booking`
 - Button style (`CtaLink`): clean outline (1px ivory), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus ivory fills from left to right, text turns bronze, arrow `→` slides in.
-- Footer (`SiteFooter`) **below** the invitation scene, in normal flow (flat wood, aluminium text): *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`. With motion it is fixed above every scene (`z-index` 10; the scenes' own `z-index` is their order, 1–7).
+- Footer (`SiteFooter`) **below** the invitation scene, in normal flow (flat wood, aluminium text): *Natalie Vandervoort* · Schoten · `[CONTACTGEGEVENS]`. With motion it is fixed above every scene (`z-index` 15; the scenes' own `z-index` is their DOM order, set in `initScenes`).
 - Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
 Calm and mobile first: one column on every screen (centered, 560px from 700px wide). Its own quiet palette within the dark mood: wood-brown `night-950` page, plain `night-900` cards, `night-800` for the chosen number, ivory text, secondary text at 60% ivory. **Copper only for what you choose (the card's border) and the one button** — no badges, pills, icons, step numbers or tinted fills.
 - Navbar as on the story (links lead back into it).
-- **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it fades into the page color at top and bottom. On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
+- **Photo band** (`BookingVisual.astro`): `booking.avif` (Natalie smiling in the wooden opening of the dome), `min(48svh, 420px)` on phones, `min(56svh, 560px)` wider; it looks the same in both themes, like the story's photos: flat wood (`wood-950`) at its top and bottom, ivory words, copper accent; in the dark theme it flows into the page, in the light theme the ivory page starts under it with a straight edge. (Tried and rejected: blooming the wood into ivory with a gradient — muddy.) On it: h1 **Afspraak** *maken* and one line: *50 minuten · Schoten · vanaf 18 jaar*.
 - Each part has a small label (`SectionLabel.astro`: 12px, uppercase, 60% ivory).
 - **Sessie** (`Sessions.astro`): two plain rows (radio buttons, `name="session"`; no form, nothing is sent): name in Cormorant, one line in 60% ivory, the price on the right. Chosen: copper border. Data in `sessions.ts` (names, durations, prices and discount are Natalie's, descriptions are sample):
   - **Soundroom** — €75 — Je ligt in de koepel, omringd door muziek, en komt tot rust.
@@ -255,7 +266,8 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 
 - Stages are `100lvh` so they stay full screen when Safari's toolbars collapse; their content sits in `.frame` (`100svh`) so nothing hides behind the toolbars. No max height.
 - **Phone** (`≤ 559px`, or `≤ 820px` and taller than 520px): stacked, left aligned.
-- **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type, 8–12vw margins.
+- **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type; `--gutter` is **10vw** there (`base.css`), used by every scene.
+- **Desktop**: every scene (and the footer) uses one side margin, `--gutter` in `base.css`: `max(6vw, (100vw - 1240px) / 2)`, so all screens line up and on big screens the content stays in a centred 1240px column instead of hugging the left edge. The navbar stays at the screen edges.
 - **Phone landscape** (`≥ 560px` wide and `≤ 520px` high): desktop layout with compact, `vh`-based type and smaller images.
 - **Short phones** (`≤ 700px` high, e.g. iPhone SE): extra compact; nothing may overlap or fall off screen.
 
@@ -272,7 +284,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
   - `data-tint` on each scene = the measured color of its **top edge** when finished (every scene `#120A05`, the wood brown); flat scenes also have `data-tint-light="#F5F1E9"` for the light theme (`tintOf()` in `tint.ts`).
   - Safari never paints a photo under its bars, so photo scenes (hero, wooden room) fade into one flat color at their top and bottom edge with `<EdgeFade color>`; that color **is** the scene's `data-tint`. The other scenes are flat wood at the edges already.
   - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Every scene keeps **flat wood at the top and bottom edge** (glows sit in the middle; the footer and the booking page are flat wood too). Nothing may cast a shadow into the screen edges.
-  - Pages pass `tint` to `Base` for the first paint (default `#120A05`), and `tintLight` when their top turns light in the light theme (the booking page); `public/theme.js` applies it before first paint.
+  - Pages pass `tint` to `Base` for the first paint (default `#120A05`); every page starts with a photo (dark in both themes), so `public/theme.js` only sets the theme, the story re-tints per scene.
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `vercel.json`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Vercel Web Analytics loads from `/_vercel/insights` (same origin), so it needs no CSP change; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. Cal.com is allowed via `script-src https://app.cal.com` (embed.js), `frame-src https://app.cal.com` (the booker) and `font-src https://cal.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 

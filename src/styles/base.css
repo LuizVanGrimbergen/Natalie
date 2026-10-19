@@ -1,4 +1,15 @@
 @layer base {
+  /* The side margin of every scene on desktop: 6vw, but on big screens the content stays in
+     a centred column of 1240px, so you never have to look far to the left. */
+  :root {
+    --gutter: max(6vw, calc((100vw - 1240px) / 2));
+  }
+  /* Tablet portrait: the scenes stack like on a phone, with wider margins. */
+  @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    :root {
+      --gutter: 10vw;
+    }
+  }
   html {
     background: var(--tint, var(--color-bronze-950));
     -webkit-text-size-adjust: 100%;

@@ -1,0 +1,209 @@
+---
+// TODO(Natalie): sample copy from her notes (the three elements of a session), awaiting her approval.
+
+/**
+ * Scene 04, second screen: the title of the first screen, small (it shrinks into
+ * place in the step here, gather.ts), then the three elements together, each its name large
+ * (the noun as the copper accent) beside or above its one sentence, rising
+ * one after the other, quiet hairlines between them.
+ */
+const elements = [
+  {
+    lead: 'De',
+    accent: 'persoon.',
+    text: 'Jij, zoals je binnenkomt: je lichaam, je adem, de ruis in je hoofd, je vermoeidheid of alertheid.',
+  },
+  {
+    lead: 'Het',
+    accent: 'geluidsveld.',
+    text: 'De muziek zelf: klank, ritme, frequenties, stilte, en hoe de ruimte ze draagt.',
+  },
+  {
+    lead: 'De',
+    accent: 'koppeling.',
+    text: 'Wat er tussen jou en het geluid ontstaat: een adem die vertraagt, schouders die zakken, beelden, rust.',
+  },
+];
+---
+
+<section class="scene list" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="list" aria-label="De drie elementen">
+  <div class="stage">
+    <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
+    <div class="glow" aria-hidden="true"></div>
+    <div class="frame">
+      <div class="block">
+        <p class="display block__h" aria-hidden="true" data-gather-target>Wat er gebeurt <em>tussen jou en het geluid.</em></p>
+        <ol class="rows">
+        {
+          elements.map((element, i) => (
+            <li class="row" data-reveal={i + 1}>
+              <h3 class="display row__name">
+                {element.lead} <em>{element.accent}</em>
+              </h3>
+              <p class="row__text">{element.text}</p>
+            </li>
+          ))
+        }
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage {
+    background: var(--page);
+    color: var(--fg);
+  }
+  /* Warm light in the middle, flat wood at the edges. */
+  .glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 42% at 40% 50%, rgb(156 85 48 / 0.12), rgb(156 85 48 / 0) 100%);
+    pointer-events: none;
+  }
+  .block {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 1180px;
+  }
+  /* The title of the first screen, small; gather.ts sizes its width so it wraps like the title. */
+  .block__h {
+    margin-bottom: clamp(8px, 1.8vh, 20px);
+    font-size: clamp(24px, 2.2vw, 34px);
+    line-height: 1;
+  }
+  .block__h em {
+    color: var(--accent);
+  }
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Name on the left, its sentence on the right; a quiet hairline between the three. */
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4vw;
+    padding: clamp(18px, 3.4vh, 36px) 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .row:first-child {
+    border-top: 0;
+  }
+  .row__name {
+    font-size: clamp(40px, 4.6vw, 76px);
+    line-height: 1;
+  }
+  .row__name em {
+    color: var(--accent);
+  }
+  .row__text {
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--fg-soft);
+  }
+
+  /* Stacked (phone): name above its sentence, the three under each other. */
+  @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
+    .glow {
+      background: radial-gradient(ellipse 80% 40% at 40% 48%, rgb(156 85 48 / 0.14), rgb(156 85 48 / 0) 100%);
+    }
+    .block {
+      left: 24px;
+      right: 24px;
+    }
+    .block__h {
+      font-size: 22px;
+    }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 22px 0;
+    }
+    .row__name {
+      font-size: 40px;
+    }
+    .row__text {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+  @media (min-width: 600px) and (max-width: 820px) and (min-height: 521px) {
+    .block {
+      left: 48px;
+      right: 48px;
+    }
+    .row__name {
+      font-size: 52px;
+    }
+    .row__text {
+      font-size: 18px;
+    }
+  }
+  @media (max-width: 559px) and (max-height: 700px), (max-width: 820px) and (min-height: 521px) and (max-height: 700px) {
+    .block {
+      top: calc(50% + 24px);
+    }
+    .block__h {
+      font-size: 18px;
+    }
+    .row {
+      gap: 4px;
+      padding: 12px 0;
+    }
+    .row__name {
+      font-size: 30px;
+    }
+    .row__text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+  /* Phone landscape: compact, vh-based. */
+  @media (min-width: 560px) and (max-height: 520px) {
+    .block {
+      top: calc(50% + 20px);
+    }
+    .block__h {
+      font-size: clamp(15px, 4.6vh, 22px);
+      margin-bottom: 0;
+    }
+    .row {
+      padding: 2.4vh 0;
+    }
+    .row__name {
+      font-size: clamp(24px, 8vh, 40px);
+    }
+    .row__text {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  }
+  @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    .block {
+      left: var(--gutter);
+      right: var(--gutter);
+    }
+    .block__h {
+      font-size: clamp(26px, 3.6vw, 34px);
+    }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 3.4vh 0;
+    }
+    .row__name {
+      font-size: clamp(52px, 7.6vw, 76px);
+    }
+    .row__text {
+      font-size: clamp(18px, 2.4vw, 22px);
+    }
+  }
+</style>

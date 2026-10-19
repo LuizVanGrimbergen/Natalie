@@ -2,9 +2,12 @@ import gsap from 'gsap';
 
 export type Timeline = gsap.core.Timeline;
 
-/** A scene's build timeline. Positions in the scene files are relative; navigation.ts plays it in time once the scene is on screen. */
-export function build(): Timeline {
-  return gsap.timeline({ paused: true, defaults: { ease: 'none' } });
+/**
+ * A relative timeline (positions 0–1), paused: a scene's build or a transition.
+ * navigation.ts plays it in time once the scene is on screen.
+ */
+export function build(vars: gsap.TimelineVars = {}): Timeline {
+  return gsap.timeline({ paused: true, defaults: { ease: 'none' }, ...vars });
 }
 
 /**

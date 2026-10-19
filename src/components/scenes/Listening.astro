@@ -4,7 +4,7 @@ import interior from '../../assets/interior.avif';
 import EdgeFade from '../EdgeFade.astro';
 ---
 
-<section id="luisteren" class="scene listening" style="z-index: 3" data-tint="#120A05" data-scene="listening" aria-labelledby="listening-title">
+<section id="luisteren" class="scene listening" data-tint="#120A05" data-scene="listening" aria-labelledby="listening-title">
   <div class="stage">
     <div class="exit-dim exit-dim--photo" aria-hidden="true"></div>
     <Picture
@@ -80,7 +80,7 @@ import EdgeFade from '../EdgeFade.astro';
       0 0 2px rgb(10 6 3 / 0.6);
   }
   .copy__h {
-    left: 6vw;
+    left: var(--gutter);
     top: 12%;
     max-width: 30vw;
     font-size: clamp(44px, 5.2vw, 92px);
@@ -93,18 +93,18 @@ import EdgeFade from '../EdgeFade.astro';
     font-weight: 400;
   }
   .copy__a {
-    left: 6vw;
+    left: var(--gutter);
     top: 62%;
     max-width: 330px;
   }
   .copy__b {
-    right: 6vw;
+    right: var(--gutter);
     top: 34%;
     max-width: 300px;
     text-align: right;
   }
   .copy__c {
-    right: 6vw;
+    right: var(--gutter);
     bottom: 9%;
     max-width: 520px;
     text-align: right;
@@ -204,7 +204,7 @@ import EdgeFade from '../EdgeFade.astro';
   }
   @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
     .copy {
-      padding: 12vh 8vw max(16vh, 120px);
+      padding: 12vh var(--gutter) max(16vh, 120px);
     }
     .copy__h {
       font-size: clamp(52px, 7.5vw, 76px);

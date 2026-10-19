@@ -4,7 +4,7 @@ import door from '../../assets/door.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
-<section id="invitation" class="scene invitation" style="z-index: 7" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="invitation" aria-labelledby="invitation-title">
+<section id="invitation" class="scene invitation" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="invitation" aria-labelledby="invitation-title">
   <div class="stage">
     <div class="glow" aria-hidden="true"></div>
     <div class="frame">
@@ -55,7 +55,7 @@ import CtaLink from '../CtaLink.astro';
     grid-template-columns: 1fr 1fr;
     gap: 6vw;
     align-items: center;
-    padding: 0 6vw;
+    padding: 0 var(--gutter);
   }
   .text {
     display: flex;
@@ -158,7 +158,7 @@ import CtaLink from '../CtaLink.astro';
       grid-template-rows: none;
       align-content: center;
       gap: 32px;
-      padding: 10vh 10vw 8vh;
+      padding: 10vh var(--gutter) 8vh;
     }
     .door {
       height: min(32vh, 400px);

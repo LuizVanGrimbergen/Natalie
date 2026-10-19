@@ -1,5 +1,8 @@
 ---
-/** The top of the booking page: Natalie in the opening of the dome, the title and one line of facts. */
+/**
+ * The top of the booking page: Natalie in the opening of the dome, the title and one line of facts.
+ * Like the story's photo scenes it looks the same in both themes: dark wood edges, ivory words.
+ */
 import { Picture } from 'astro:assets';
 import photo from '../../assets/booking.avif';
 ---
@@ -28,7 +31,7 @@ import photo from '../../assets/booking.avif';
     position: relative;
     height: min(48svh, 420px);
     overflow: hidden;
-    background: var(--page-booking);
+    background: var(--color-wood-950);
   }
   .visual :global(.visual__img) {
     position: absolute;
@@ -39,17 +42,18 @@ import photo from '../../assets/booking.avif';
     /* Keeps Natalie's face in view in the band, on every width. */
     object-position: 38% 28%;
   }
-  /* The page's own color at the top (Safari's bar, the header) and at the bottom, where the text sits. */
+  /* Flat wood at the top (Safari's bar, the header) and at the bottom, where the text sits;
+     in the dark theme that is the page itself, in the light one the ivory page starts below. */
   .visual__shade {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       180deg,
-      var(--page-booking) 0%,
-      color-mix(in srgb, var(--page-booking) 20%, transparent) 24%,
-      color-mix(in srgb, var(--page-booking) 15%, transparent) 50%,
-      color-mix(in srgb, var(--page-booking) 85%, transparent) 82%,
-      var(--page-booking) 100%
+      var(--color-wood-950) 0%,
+      color-mix(in srgb, var(--color-wood-950) 20%, transparent) 24%,
+      color-mix(in srgb, var(--color-wood-950) 15%, transparent) 50%,
+      color-mix(in srgb, var(--color-wood-950) 85%, transparent) 82%,
+      var(--color-wood-950) 100%
     );
   }
   .visual__text {
@@ -60,17 +64,18 @@ import photo from '../../assets/booking.avif';
     display: flex;
     flex-direction: column;
     gap: 8px;
+    color: var(--color-ivory);
   }
   .visual__h {
     font-size: 44px;
     line-height: 1;
   }
   .visual__h em {
-    color: var(--accent);
+    color: var(--color-copper-300);
   }
   .visual__facts {
     font-size: 14px;
-    color: var(--fg-soft);
+    color: color-mix(in srgb, var(--color-ivory) 82%, transparent);
   }
 
   @media (min-width: 700px) {

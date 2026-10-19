@@ -2,7 +2,7 @@
 // TODO(Natalie): personal text below is sample copy awaiting her approval; swap the placeholder for her portrait.
 ---
 
-<section id="natalie" class="scene welcomes" style="z-index: 6" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="welcomes" aria-labelledby="welcomes-title">
+<section id="natalie" class="scene welcomes" data-tint="#120A05" data-tint-light="#F5F1E9" data-scene="welcomes" aria-labelledby="welcomes-title">
   <div class="stage">
     <div class="exit-dim exit-dim--dark" aria-hidden="true"></div>
     <div class="window-light" aria-hidden="true"></div>
@@ -54,7 +54,7 @@
     grid-template-columns: 6fr 5fr;
     gap: 5vw;
     align-items: center;
-    padding: 0 6vw;
+    padding: 0 var(--gutter);
   }
   .text {
     position: relative;
@@ -203,7 +203,7 @@
       grid-template-rows: none;
       align-content: center;
       gap: 28px;
-      padding: 10vh 10vw 6vh;
+      padding: 10vh var(--gutter) 6vh;
     }
     .portrait {
       height: min(30vh, 380px);

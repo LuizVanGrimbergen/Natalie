@@ -17,7 +17,7 @@
     justify-content: space-between;
     align-items: baseline;
     gap: 8px 48px;
-    padding: 32px 6vw max(40px, calc(env(safe-area-inset-bottom) + 24px));
+    padding: 32px var(--gutter) max(40px, calc(env(safe-area-inset-bottom) + 24px));
     background: var(--page);
     box-shadow: inset 0 1px 0 var(--line);
     font-size: 14px;
@@ -30,8 +30,8 @@
     left: 0;
     right: 0;
     top: 100%;
-    /* Above every scene (their z-index is their order, 1–7). */
-    z-index: 10;
+    /* Above every scene (their z-index is their order, 1–8). */
+    z-index: 15;
   }
   .footer__name {
     font-size: 20px;
