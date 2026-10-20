@@ -8,7 +8,7 @@ const sessions = [
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
     price: '€65',
     duration: '50 minuten',
-    extra: '+ €15 per bijkomende persoon, max. 3 personen',
+    extra: { price: '+ €15', text: 'per bijkomende persoon · max.\u00a03\u00a0personen' },
   },
   {
     name: 'Coaching',
@@ -22,7 +22,11 @@ const sessions = [
 <section class="details" aria-labelledby="booking-title">
   <h1 id="booking-title" class="display details__h" data-rise style="--i: 0">Afspraak <em>maken</em></h1>
   <p class="details__intro" data-rise style="--i: 1">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
-  <p class="label details__facts" data-rise style="--i: 2">Schoten, vanaf 18 jaar</p>
+  <p class="details__facts" data-rise style="--i: 2">
+    <span>Schoten</span>
+    <span class="details__dot" aria-hidden="true">·</span>
+    <span>18 tot 30 jaar</span>
+  </p>
 
   <h2 class="label details__label" data-rise style="--i: 3">Kies je sessie</h2>
   <ul class="sessions">
@@ -36,7 +40,13 @@ const sessions = [
             <span class="session__dot" aria-hidden="true">·</span>
             <span>{session.duration}</span>
           </p>
-          {session.extra && <p class="session__extra">{session.extra}</p>}
+          {
+            session.extra && (
+              <p class="session__extra">
+                <span class="session__price">{session.extra.price}</span> {session.extra.text}
+              </p>
+            )
+          }
         </li>
       ))
     }
@@ -68,8 +78,19 @@ const sessions = [
     line-height: 1.35;
     color: var(--color-body-on-ivory);
   }
+  /* Place and age as one clear line, like the prices. */
   .details__facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 500;
     color: var(--color-copper-700);
+  }
+  .details__dot {
+    font-weight: 400;
+    color: var(--color-muted-2);
   }
   .details__label {
     margin: 24px 0 0;
@@ -139,9 +160,10 @@ const sessions = [
     color: var(--color-muted-2);
   }
   .session__extra {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
-    color: var(--color-muted);
+    font-variant-numeric: lining-nums;
+    color: var(--color-body-on-ivory);
   }
 
   @media (max-width: 900px) {
