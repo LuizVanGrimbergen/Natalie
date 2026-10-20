@@ -181,7 +181,7 @@ Deliberately removed. Do not bring back.
 - Copy:
   - label: WIE NAAST JE, LUISTERT.
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en ik verwelkom hen er van harte.
+  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
   - *Natalie Van der Voort* (signature, Cormorant italic)
   - MEREON LEGACY (under the signature, small label in `muted`)
   - ⚠️ This personal text is sample copy; Natalie still has to approve it.
