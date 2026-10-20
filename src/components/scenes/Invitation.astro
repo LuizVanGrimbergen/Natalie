@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import chair from '../../assets/chair.avif';
+import interior from '../../assets/interior.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
@@ -19,8 +20,14 @@ import CtaLink from '../CtaLink.astro';
             <CtaLink href="/booking">Ontdek de sessies</CtaLink>
           </div>
         </div>
-        <figure class="door" aria-hidden="true" data-unveil>
-          <Picture class="door__img" src={chair} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[380, 760]} sizes="380px" />
+        <!-- Two photos together: the chair in the forest, and behind it a piece of the dome's wooden inside. -->
+        <figure class="duo" aria-hidden="true">
+          <div class="duo__second" data-duo-second>
+            <Picture class="duo__img" src={interior} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[300, 600]} sizes="240px" />
+          </div>
+          <div class="duo__main" data-unveil>
+            <Picture class="duo__img" src={chair} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[420, 840]} sizes="420px" />
+          </div>
         </figure>
       </div>
     </div>
@@ -69,24 +76,42 @@ import CtaLink from '../CtaLink.astro';
     line-height: 1.7;
     color: var(--color-body-on-ivory);
   }
-  .door {
+  /* In the duo's own height: the chair 88% high, the wood 60% high, lower and to the right, partly behind it. */
+  .duo {
+    position: relative;
     height: min(68%, 560px);
-    aspect-ratio: 330 / 490;
+    aspect-ratio: 0.984;
     justify-self: center;
+    margin: 0;
+  }
+  .duo__main,
+  .duo__second {
+    position: absolute;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .duo__main {
+    left: 0;
+    top: 0;
+    height: 88%;
+    box-shadow: 0 30px 60px -24px rgb(62 52 44 / 0.4);
     will-change: clip-path, transform;
   }
-  .door :global(.door__img) {
+  .duo__second {
+    right: 0;
+    bottom: 0;
+    height: 60%;
+  }
+  .duo :global(.duo__img) {
     display: block;
-    height: 100%;
     width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: 58% 50%;
-    border-radius: 999px 999px 2px 2px;
-    box-shadow: 0 40px 120px 10px rgb(200 143 128 / 0.35);
   }
 
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
-    /* The door takes all the height the text leaves free. */
+    /* The photos take all the height the text leaves free. */
     .grid {
       grid-template-columns: 1fr;
       grid-template-rows: minmax(0, 1fr) auto;
@@ -103,12 +128,13 @@ import CtaLink from '../CtaLink.astro';
       font-size: 16px;
       line-height: 1.6;
     }
-    .door {
+    .duo {
       height: 100%;
-      max-height: 480px;
+      /* Narrow enough that the wood stays clear of the dots on the right. */
+      max-height: min(480px, 78vw);
       max-width: 100%;
       align-self: end;
-      justify-self: center;
+      justify-self: start;
       order: -1;
     }
   }
@@ -144,7 +170,7 @@ import CtaLink from '../CtaLink.astro';
       font-size: 13px;
       line-height: 1.5;
     }
-    .door {
+    .duo {
       height: calc(100svh - 112px);
     }
   }
@@ -156,8 +182,8 @@ import CtaLink from '../CtaLink.astro';
       gap: 32px;
       padding: 10vh var(--gutter) 8vh;
     }
-    .door {
-      height: min(32vh, 400px);
+    .duo {
+      height: min(34vh, 420px);
       max-height: none;
       order: -1;
       justify-self: start;
