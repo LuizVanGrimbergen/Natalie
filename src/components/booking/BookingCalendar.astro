@@ -58,8 +58,9 @@ const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL?.trim();
   }
 
   @media (max-width: 900px) {
+    /* The placeholder only takes the room it needs; the real calendar keeps its own height (the iframe's). */
     .calendar {
-      min-height: 420px;
+      min-height: 0;
     }
     .calendar__empty {
       padding: 32px 24px;
