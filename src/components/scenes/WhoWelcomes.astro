@@ -152,7 +152,8 @@ import portrait from '../../assets/forest.avif';
     }
     .portrait {
       height: 100%;
-      max-height: 460px;
+      /* As tall as the room above the text allows, so the photo reaches up to the top margin. */
+      max-height: min(560px, 112vw);
       max-width: 100%;
       align-self: end;
       justify-self: center;
