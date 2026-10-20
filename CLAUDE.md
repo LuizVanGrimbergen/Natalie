@@ -57,7 +57,7 @@ src/
     booking/
       BookingDetails.astro          # title, intro, "Schoten · 18 tot 30 jaar", the two sessions, each with one quiet line: price (€) · duration
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
-      BookingMusic.astro            # one calm italic sentence + link: send Spotify songs to Natalie via WhatsApp (ready-made message)
+      BookingWhatsapp.astro         # one calm italic sentence + link: book via WhatsApp and send Spotify songs in the same message
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link; the one place they live
   scripts/scenes/
@@ -208,7 +208,7 @@ Deliberately removed. Do not bring back.
   - **Soundroom** — €65 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €15** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
   - **Coaching** — €75 · 65 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
   - Under each description one quiet line: **€65** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost below it at normal size, its amount in copper too. No column labels: the page must stay calm.
-- Below the sessions, one calm italic line (no label, no button): *Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.* + link **Stuur je liedjes via WhatsApp →** (opens a chat with "Hoi Natalie, deze liedjes zou ik graag horen (Spotify):"). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
+- Below the sessions, one calm italic line (no label, no button): *Maak je afspraak via WhatsApp en stuur meteen de liedjes van Spotify mee die je graag zou horen. Natalie zet ze voor je klaar.* + link **Afspraak maken via WhatsApp →**, opening a chat with a ready message (sessie, wanneer, liedjes). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
 - Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me link, new tab).
 - Animation (CSS only, `data-rise` + `--i` in `base.css`): title, intro, place, sessions, music line rise in one after another (fade + 24px), the agenda card and contact follow on the right; the lines between the sessions draw themselves from the left. Reduced motion: everything still.
 - Phone: stacked.

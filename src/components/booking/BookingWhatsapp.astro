@@ -1,5 +1,5 @@
 ---
-// Visitors can send Natalie the songs they would like to hear, as Spotify links, through WhatsApp.
+// Book with Natalie through WhatsApp and send the songs you would like to hear (Spotify) in the same message.
 // TODO(Natalie): sample copy, still to be approved.
 import { whatsapp } from '../../data/contact';
 
@@ -9,12 +9,17 @@ interface Props {
 }
 const { rise = 0 } = Astro.props;
 
-const message = 'Hoi Natalie, deze liedjes zou ik graag horen (Spotify):\n';
+const message = [
+  'Hoi Natalie, ik maak graag een afspraak.',
+  'Sessie (Soundroom of Coaching): ',
+  'Wanneer: ',
+  'Liedjes die ik graag zou horen (Spotify): ',
+].join('\n');
 ---
 
 <p class="music" data-rise style={`--i: ${rise}`}>
-  Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.
-  <a class="music__link" href={whatsapp(message)} target="_blank" rel="noopener">Stuur je liedjes via WhatsApp&nbsp;→</a>
+  Maak je afspraak via WhatsApp en stuur meteen de liedjes van Spotify mee die je graag zou horen. Natalie zet ze voor je klaar.
+  <a class="music__link" href={whatsapp(message)} target="_blank" rel="noopener">Afspraak maken via WhatsApp&nbsp;→</a>
 </p>
 
 <style>
