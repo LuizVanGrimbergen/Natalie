@@ -20,15 +20,15 @@ const sessions = [
 ---
 
 <section class="details" aria-labelledby="booking-title">
-  <h1 id="booking-title" class="display details__h">Afspraak <em>maken</em></h1>
-  <p class="details__intro">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
-  <p class="label details__facts">Schoten, vanaf 18 jaar</p>
+  <h1 id="booking-title" class="display details__h" data-rise style="--i: 0">Afspraak <em>maken</em></h1>
+  <p class="details__intro" data-rise style="--i: 1">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
+  <p class="label details__facts" data-rise style="--i: 2">Schoten, vanaf 18 jaar</p>
 
-  <h2 class="label details__label">Kies je sessie</h2>
+  <h2 class="label details__label" data-rise style="--i: 3">Kies je sessie</h2>
   <ul class="sessions">
     {
-      sessions.map((session) => (
-        <li class="session">
+      sessions.map((session, i) => (
+        <li class="session" data-rise style={`--i: ${4 + i}`}>
           <h3 class="display session__name">{session.name}</h3>
           <p class="session__text">{session.text}</p>
           <p class="session__meta">
@@ -42,7 +42,7 @@ const sessions = [
     }
   </ul>
 
-  <BookingMusic />
+  <BookingMusic rise={6} />
 </section>
 
 <style>
@@ -80,7 +80,7 @@ const sessions = [
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid rgb(156 85 48 / 0.25);
+    position: relative;
   }
   /* Each session a quiet block: name, what it is, then price and time. */
   .session {
@@ -88,7 +88,27 @@ const sessions = [
     flex-direction: column;
     gap: 8px;
     padding: 30px 0;
-    border-bottom: 1px solid rgb(156 85 48 / 0.25);
+    position: relative;
+  }
+  /* The lines between the sessions draw themselves from the left, a moment after their session rises. */
+  .sessions::before,
+  .session::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgb(156 85 48 / 0.25);
+    transform-origin: left;
+    animation: draw-in 1.1s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .sessions::before {
+    top: 0;
+    animation-delay: 0.5s;
+  }
+  .session::after {
+    bottom: 0;
+    animation-delay: calc(0.45s + var(--i, 0) * 0.11s);
   }
   .session__name {
     font-size: 32px;

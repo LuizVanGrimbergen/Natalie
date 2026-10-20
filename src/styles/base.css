@@ -53,6 +53,24 @@
   }
 }
 
+/* Plain pages (booking): parts rise in softly one after another, in the order of --i.
+   CSS only, so it needs no script; reduced motion switches it off below. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes draw-in {
+  from {
+    transform: scaleX(0);
+  }
+}
+[data-rise] {
+  animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(0.15s + var(--i, 0) * 0.11s);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

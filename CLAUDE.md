@@ -210,6 +210,7 @@ Deliberately removed. Do not bring back.
   - Under each description one quiet line: **€65** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost small and muted below it. No column labels: the page must stay calm.
 - Below the sessions, one calm italic line (no label, no button): *Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.* + link **Stuur je liedjes via WhatsApp →** (opens a chat with "Hoi Natalie, deze liedjes zou ik graag horen (Spotify):"). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
 - Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me link, new tab).
+- Animation (CSS only, `data-rise` + `--i` in `base.css`): title, intro, place, sessions, music line rise in one after another (fade + 24px), the agenda card and contact follow on the right; the lines between the sessions draw themselves from the left. Reduced motion: everything still.
 - Phone: stacked.
 
 ---

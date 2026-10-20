@@ -3,10 +3,16 @@
 // TODO(Natalie): sample copy, still to be approved.
 import { whatsapp } from '../../data/contact';
 
+interface Props {
+  /** Place in the page's rise-in order. */
+  rise?: number;
+}
+const { rise = 0 } = Astro.props;
+
 const message = 'Hoi Natalie, deze liedjes zou ik graag horen (Spotify):\n';
 ---
 
-<p class="music">
+<p class="music" data-rise style={`--i: ${rise}`}>
   Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.
   <a class="music__link" href={whatsapp(message)} target="_blank" rel="noopener">Stuur je liedjes via WhatsApp&nbsp;→</a>
 </p>
