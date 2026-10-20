@@ -1,0 +1,38 @@
+---
+// Visitors can send Natalie the songs they would like to hear, as Spotify links, through WhatsApp.
+// TODO(Natalie): sample copy, still to be approved.
+import CtaLink from '../CtaLink.astro';
+import { whatsapp } from '../../data/contact';
+
+const message = 'Hoi Natalie, deze liedjes zou ik graag horen (Spotify):\n';
+---
+
+<section class="music" aria-labelledby="music-title">
+  <h2 id="music-title" class="label music__label">Jouw muziek</h2>
+  <p class="music__text">
+    Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.
+  </p>
+  <div>
+    <CtaLink href={whatsapp(message)} external>Stuur je liedjes via WhatsApp</CtaLink>
+  </div>
+</section>
+
+<style>
+  .music {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .music__label {
+    margin: 0;
+    font-weight: 400;
+    color: var(--color-copper-700);
+  }
+  .music__text {
+    max-width: 460px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-body-on-ivory);
+  }
+</style>

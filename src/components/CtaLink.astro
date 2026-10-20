@@ -2,11 +2,13 @@
 /** Outline pill with a soft copper pulse; on hover bronze fills it from the left and an arrow slides in. */
 interface Props {
   href: string;
+  /** Open in a new tab (links that leave the site, e.g. WhatsApp). */
+  external?: boolean;
 }
-const { href } = Astro.props;
+const { href, external = false } = Astro.props;
 ---
 
-<a class="cta" href={href}><span><slot /></span><span class="cta__arrow" aria-hidden="true">→</span></a>
+<a class="cta" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}><span><slot /></span><span class="cta__arrow" aria-hidden="true">→</span></a>
 
 <style>
   .cta {
