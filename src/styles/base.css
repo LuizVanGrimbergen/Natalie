@@ -3,10 +3,16 @@
     background: var(--tint, var(--color-bronze-950));
     -webkit-text-size-adjust: 100%;
   }
-  /* One side margin for every scene: 6vw, and on big screens a centred column of
-     1240px, so the eye never has to travel far from left to right. */
+  /* One side margin for every scene: the text sits in a centred column (12vw, and
+     at most 1080px wide on big screens), so the eye never has to travel far from
+     left to right. Phone landscape keeps a narrow margin; there is no room. */
   :root {
-    --gutter: max(6vw, calc((100vw - 1240px) / 2));
+    --gutter: max(12vw, calc((100vw - 1080px) / 2));
+  }
+  @media (max-height: 520px) and (min-width: 560px) {
+    :root {
+      --gutter: 6vw;
+    }
   }
   body {
     margin: 0;

@@ -212,9 +212,9 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 
 - Stages are `100lvh` so they stay full screen when Safari's toolbars collapse; their content sits in `.frame` (`100svh`) so nothing hides behind the toolbars. No max height.
 - **Phone** (`≤ 559px`, or `≤ 820px` and taller than 520px): stacked, left aligned.
-- **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type, 8–12vw margins.
-- **Desktop**: every scene uses one side margin, `--gutter` in `base.css`: `max(6vw, (100vw - 1240px) / 2)`, so on big screens the content stays in a centred 1240px column instead of hugging the edges (no long left-to-right reading). The header stays at the screen edges.
-- **Phone landscape** (`≥ 560px` wide and `≤ 520px` high): desktop layout with compact, `vh`-based type and smaller images.
+- **Tablet portrait** (600–1100px and portrait): stacked like phone, but larger type, the same `--gutter` (12vw) side margin.
+- **Desktop**: every scene uses one side margin, `--gutter` in `base.css`: `max(12vw, (100vw - 1080px) / 2)`, so the text sits in a centred column (at most 1080px wide) instead of hugging the edges (no long left-to-right reading). The header stays at the screen edges.
+- **Phone landscape** (`≥ 560px` wide and `≤ 520px` high): desktop layout with compact, `vh`-based type and smaller images; `--gutter` drops to 6vw.
 - **Short phones** (`≤ 700px` high, e.g. iPhone SE): extra compact; nothing may overlap or fall off screen.
 
 ---
