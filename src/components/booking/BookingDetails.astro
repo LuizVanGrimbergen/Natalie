@@ -4,15 +4,19 @@ const sessions = [
   {
     name: 'Soundroom',
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
-    price: '€65',
-    duration: '50 minuten',
-    extra: '+ €15 per bijkomende persoon, max. 3 personen',
+    facts: [
+      { label: 'Prijs', value: '€65' },
+      { label: 'Duur', value: '50 minuten' },
+      { label: 'Per extra persoon', value: '+ €15', note: 'max. 3 personen' },
+    ],
   },
   {
     name: 'Coaching',
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
-    price: '€75',
-    duration: '65 minuten',
+    facts: [
+      { label: 'Prijs', value: '€75' },
+      { label: 'Duur', value: '65 minuten' },
+    ],
   },
 ];
 ---
@@ -27,15 +31,21 @@ const sessions = [
     {
       sessions.map((session) => (
         <li class="session">
-          <div class="session__head">
-            <h3 class="display session__name">{session.name}</h3>
-            <p class="session__price">
-              <span class="display session__amount">{session.price}</span>
-              <span class="label session__duration">{session.duration}</span>
-            </p>
-          </div>
+          <h3 class="display session__name">{session.name}</h3>
           <p class="session__text">{session.text}</p>
-          {session.extra && <p class="session__extra">{session.extra}</p>}
+          <dl class="facts">
+            {
+              session.facts.map((fact) => (
+                <div class="fact">
+                  <dt class="label fact__label">{fact.label}</dt>
+                  <dd class="fact__value">
+                    {fact.value}
+                    {fact.note && <span class="fact__note">{fact.note}</span>}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
         </li>
       ))
     }
@@ -79,48 +89,54 @@ const sessions = [
     list-style: none;
     border-top: 1px solid rgb(156 85 48 / 0.25);
   }
+  /* Each session a quiet block: name, what it is, then price and time in labelled columns. */
   .session {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 22px 0;
+    gap: 10px;
+    padding: 26px 0;
     border-bottom: 1px solid rgb(156 85 48 / 0.25);
-  }
-  .session__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-    max-width: 460px;
   }
   .session__name {
     font-size: 32px;
     line-height: 1.1;
   }
-  .session__price {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    white-space: nowrap;
-  }
-  .session__amount {
-    font-size: 34px;
-    line-height: 1;
-    color: var(--color-copper-700);
-  }
-  .session__duration {
-    color: var(--color-muted);
-  }
-  .session__text,
-  .session__extra {
+  .session__text {
     max-width: 460px;
     font-size: 16px;
     line-height: 1.65;
     color: var(--color-body-on-ivory);
   }
-  .session__extra {
-    color: var(--color-copper-700);
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 36px;
+    margin: 8px 0 0;
+  }
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fact__label {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: var(--color-muted);
+  }
+  .fact__value {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.1;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--color-bronze-900);
+  }
+  .fact__note {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
     font-weight: 400;
+    color: var(--color-muted);
   }
 
   @media (max-width: 900px) {
@@ -130,6 +146,9 @@ const sessions = [
     }
     .session__name {
       font-size: 28px;
+    }
+    .fact__value {
+      font-size: 20px;
     }
   }
 </style>
