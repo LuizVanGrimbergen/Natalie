@@ -189,15 +189,15 @@ Deliberately removed. Do not bring back.
 
 ### 06 · The invitation (`id="invitation"`)
 - Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
-- Image: `chair.avif` = a chair alone among the green in the forest, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
-- Desktop: text left, arch right. Phone/tablet portrait: arch on top.
+- Image: a **postcard** (an invitation you receive, Natalie's wish): `chair.avif` on cream paper with a wide bottom edge, *Schoten* in Cormorant italic copper, a stamp of the dome (`hero.avif`, scalloped edge via mask), tilted −3°, lying on a second card (+5°). Soft paper shadow, no filters.
+- Desktop: text left, postcard right. Phone/tablet portrait: postcard on top.
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
   - Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een gesprek met Natalie. Ervaar het op jouw manier.
   - Button: **Ontdek de sessies** → `/booking`
   - The chair is Natalie's pick for now; the photo/frame may still change (perhaps something with music).
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Animation: the arch reveals, then title, text, button.
+- Animation: the card beneath lands, then the postcard drops in and settles at its angle (opacity, y, rotate), then title, text, button.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".

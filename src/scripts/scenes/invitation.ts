@@ -1,12 +1,13 @@
 import { one, reveal } from './dom';
-import { build, rise, unveil, type Timeline } from './tweens';
+import { build, rise, type Timeline } from './tweens';
 
-/* 06 · The glowing door opens, then title, text and the invitation. */
+/* 06 · A postcard lands gently and settles at its angle, the one beneath it follows; then title, text and the invitation. */
 export function invitation(scene: HTMLElement): Timeline {
   const tl = build();
-  unveil(tl, one(scene, '[data-unveil]'), 0, 0.35, 40);
-  rise(tl, reveal(scene, 1), 0.05, 0.2);
-  rise(tl, reveal(scene, 2), 0.22, 0.2);
-  rise(tl, reveal(scene, 3), 0.38, 0.17);
+  tl.fromTo(one(scene, '[data-card-under]'), { opacity: 0, y: 40, rotate: 12 }, { opacity: 1, y: 0, rotate: 5, duration: 0.4, ease: 'power2.out' }, 0)
+    .fromTo(one(scene, '[data-card]'), { opacity: 0, y: 70, rotate: -10 }, { opacity: 1, y: 0, rotate: -3, duration: 0.45, ease: 'power2.out' }, 0.08);
+  rise(tl, reveal(scene, 1), 0.12, 0.2);
+  rise(tl, reveal(scene, 2), 0.28, 0.2);
+  rise(tl, reveal(scene, 3), 0.42, 0.17);
   return tl;
 }
