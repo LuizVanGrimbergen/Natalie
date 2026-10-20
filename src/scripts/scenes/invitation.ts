@@ -1,7 +1,7 @@
 import { one, reveal } from './dom';
 import { build, rise, unveil, type Timeline } from './tweens';
 
-/* 06 · The chair in the forest opens from the bottom, the dome's wood appears beside it; then title, text and the invitation. */
+/* 06 · The chair in the forest opens from the bottom, the dome in the forest appears beside it; then title, text and the invitation. */
 export function invitation(scene: HTMLElement): Timeline {
   const tl = build();
   unveil(tl, one(scene, '[data-unveil]'), 0, 0.32, 40);

@@ -1,7 +1,8 @@
 ---
 import { Picture } from 'astro:assets';
 import chair from '../../assets/chair.avif';
-import interior from '../../assets/interior.avif';
+// The dome among the trees, cropped so it sits in the part the chair photo leaves free.
+import domeForest from '../../assets/dome-forest.avif';
 import CtaLink from '../CtaLink.astro';
 ---
 
@@ -20,10 +21,10 @@ import CtaLink from '../CtaLink.astro';
             <CtaLink href="/booking">Ontdek de sessies</CtaLink>
           </div>
         </div>
-        <!-- Two photos together: the chair in the forest, and behind it a piece of the dome's wooden inside. -->
+        <!-- Two photos together: the chair in the forest, and behind it the dome among the trees. -->
         <figure class="duo" aria-hidden="true">
           <div class="duo__second" data-duo-second>
-            <Picture class="duo__img" src={interior} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[300, 600]} sizes="240px" />
+            <Picture class="duo__img duo__img--dome" src={domeForest} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[300, 600]} sizes="240px" />
           </div>
           <div class="duo__main" data-unveil>
             <Picture class="duo__img" src={chair} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[420, 840]} sizes="420px" />
@@ -76,7 +77,7 @@ import CtaLink from '../CtaLink.astro';
     line-height: 1.7;
     color: var(--color-body-on-ivory);
   }
-  /* In the duo's own height: the chair 88% high, the wood 60% high, lower and to the right, partly behind it. */
+  /* In the duo's own height: the chair 88% high, the dome 60% high, lower and to the right, partly behind it. */
   .duo {
     position: relative;
     height: min(68%, 560px);
@@ -109,6 +110,9 @@ import CtaLink from '../CtaLink.astro';
     object-fit: cover;
     object-position: 58% 50%;
   }
+  .duo :global(.duo__img--dome) {
+    object-position: 50% 50%;
+  }
 
   @media (max-width: 559px), (max-width: 820px) and (min-height: 521px) {
     /* The photos take all the height the text leaves free. */
@@ -130,7 +134,7 @@ import CtaLink from '../CtaLink.astro';
     }
     .duo {
       height: 100%;
-      /* Narrow enough that the wood stays clear of the dots on the right. */
+      /* Narrow enough that the second photo stays clear of the dots on the right. */
       max-height: min(480px, 78vw);
       max-width: 100%;
       align-self: end;

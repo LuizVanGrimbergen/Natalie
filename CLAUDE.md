@@ -77,7 +77,7 @@ src/
     tokens.css                      # design tokens (@theme)
     base.css                        # base elements, .display / .label, reduced motion
     scenes.css                      # scene/stage pinning mechanics, exit dims
-  assets/                           # hero.avif, interior.avif, forest.avif, chair.avif
+  assets/                           # hero.avif, interior.avif, forest.avif, chair.avif, dome-forest.avif
 ```
 
 Conventions: one component per file; styles live scoped in the component that owns them; global CSS only for tokens, base and shared scene mechanics. Animated elements are found via `data-*` attributes (`data-scene`, `data-reveal="n"`, `data-unveil`, …), never via styling classes.
@@ -192,7 +192,7 @@ Deliberately removed. Do not bring back.
 
 ### 06 · The invitation (`id="invitation"`)
 - Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
-- Images: **two photos together** (forest and dome): `chair.avif` in a 4:5 frame with a soft shadow, and behind it, lower and to the right, a smaller piece of the dome's wooden inside (`interior.avif`).
+- Images: **two photos together** (forest and dome): `chair.avif` in a 4:5 frame with a soft shadow, and behind it, lower and to the right, a smaller photo of the dome among the trees (`dome-forest.avif`, a crop of the forest photo with the dome in the part the chair leaves free).
 - Desktop: text left, photos right. Phone/tablet portrait: photos on top, aligned left (clear of the dots).
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
@@ -200,7 +200,7 @@ Deliberately removed. Do not bring back.
   - Button: **Ontdek de sessies** → `/booking`
   - The chair is Natalie's pick for now; the photo/frame may still change (perhaps something with music).
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Animation: the chair opens from the bottom, the wood rises in beside it, then title, text, button.
+- Animation: the chair opens from the bottom, the dome photo rises in beside it, then title, text, button.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
