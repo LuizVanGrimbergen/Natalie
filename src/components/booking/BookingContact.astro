@@ -1,5 +1,5 @@
 ---
-// Natalie's own contact details, below the calendar.
+// Natalie's own contact details, below the calendar. The number opens a WhatsApp chat.
 const email = 'nvandervoort@mereon.org';
 const phone = '+32 478 51 76 57';
 ---
@@ -7,7 +7,7 @@ const phone = '+32 478 51 76 57';
 <section class="contact" aria-labelledby="contact-title">
   <h2 id="contact-title" class="label contact__label">Contact</h2>
   <a class="contact__link" href={`mailto:${email}`}>{email}</a>
-  <a class="contact__link" href={`tel:${phone.replaceAll(' ', '')}`}>{phone}</a>
+  <a class="contact__link" href={`https://wa.me/${phone.replace(/\D/g, '')}`} target="_blank" rel="noopener">WhatsApp {phone}</a>
 </section>
 
 <style>

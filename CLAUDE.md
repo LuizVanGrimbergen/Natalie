@@ -56,7 +56,7 @@ src/
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
       BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions, each with labelled facts (prijs, duur, per extra persoon)
-      BookingContact.astro          # Natalie's email and phone, below the calendar (mailto/tel links)
+      BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
@@ -205,8 +205,8 @@ Deliberately removed. Do not bring back.
 - Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, SCHOTEN, VANAF 18 JAAR, KIES JE SESSIE:
   - **Soundroom** — €65 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — + €15 per bijkomende persoon, max. 3 personen
   - **Coaching** — €75 · 65 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
-  - Under each description a row of labelled facts (PRIJS / DUUR / PER EXTRA PERSOON) in Figtree 500 with lining numerals, prices always with the € sign. No Cormorant for figures: its old-style numerals read unclearly.
-- Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org · +32 478 51 76 57 (mailto/tel links).
+  - Under each description a row of labelled facts (PRIJS / DUUR / PER EXTRA PERSOON, labels in `copper-700`) in Figtree 500 with lining numerals, prices always with the € sign. No Cormorant for figures: its old-style numerals read unclearly.
+- Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me link, new tab).
 - Phone: stacked.
 
 ---
