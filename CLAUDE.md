@@ -55,9 +55,9 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions, each with labelled facts (prijs, duur, per extra persoon)
+      BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions, each with one quiet line: price (€) · duration
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
-      BookingMusic.astro            # "Jouw muziek": send Spotify songs to Natalie via WhatsApp (ready-made message)
+      BookingMusic.astro            # one calm italic sentence + link: send Spotify songs to Natalie via WhatsApp (ready-made message)
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link; the one place they live
   scripts/scenes/
@@ -207,8 +207,8 @@ Deliberately removed. Do not bring back.
 - Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, SCHOTEN, VANAF 18 JAAR, KIES JE SESSIE:
   - **Soundroom** — €65 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — + €15 per bijkomende persoon, max. 3 personen
   - **Coaching** — €75 · 65 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
-  - Under each description a row of labelled facts (PRIJS / DUUR / PER EXTRA PERSOON, labels in `copper-700`) in Figtree 500 with lining numerals, prices always with the € sign. No Cormorant for figures: its old-style numerals read unclearly.
-- Below the sessions, JOUW MUZIEK: *Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.* + button **Stuur je liedjes via WhatsApp** (opens a chat with "Hoi Natalie, deze liedjes zou ik graag horen (Spotify):"). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
+  - Under each description one quiet line: **€65** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost small and muted below it. No column labels: the page must stay calm.
+- Below the sessions, one calm italic line (no label, no button): *Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.* + link **Stuur je liedjes via WhatsApp →** (opens a chat with "Hoi Natalie, deze liedjes zou ik graag horen (Spotify):"). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
 - Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me link, new tab).
 - Phone: stacked.
 

@@ -1,24 +1,20 @@
 ---
-// Natalie's sessions and prices (her feedback of 19 October), with the price and duration set apart so they read at a glance.
+// Natalie's sessions and prices (her feedback of 19 October): one quiet line with price and duration per session.
 import BookingMusic from './BookingMusic.astro';
 
 const sessions = [
   {
     name: 'Soundroom',
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
-    facts: [
-      { label: 'Prijs', value: '€65' },
-      { label: 'Duur', value: '50 minuten' },
-      { label: 'Per extra persoon', value: '+ €15', note: 'max. 3 personen' },
-    ],
+    price: '€65',
+    duration: '50 minuten',
+    extra: '+ €15 per bijkomende persoon, max. 3 personen',
   },
   {
     name: 'Coaching',
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
-    facts: [
-      { label: 'Prijs', value: '€75' },
-      { label: 'Duur', value: '65 minuten' },
-    ],
+    price: '€75',
+    duration: '65 minuten',
   },
 ];
 ---
@@ -35,19 +31,12 @@ const sessions = [
         <li class="session">
           <h3 class="display session__name">{session.name}</h3>
           <p class="session__text">{session.text}</p>
-          <dl class="facts">
-            {
-              session.facts.map((fact) => (
-                <div class="fact">
-                  <dt class="label fact__label">{fact.label}</dt>
-                  <dd class="fact__value">
-                    {fact.value}
-                    {fact.note && <span class="fact__note">{fact.note}</span>}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
+          <p class="session__meta">
+            <span class="session__price">{session.price}</span>
+            <span class="session__dot" aria-hidden="true">·</span>
+            <span>{session.duration}</span>
+          </p>
+          {session.extra && <p class="session__extra">{session.extra}</p>}
         </li>
       ))
     }
@@ -93,12 +82,12 @@ const sessions = [
     list-style: none;
     border-top: 1px solid rgb(156 85 48 / 0.25);
   }
-  /* Each session a quiet block: name, what it is, then price and time in labelled columns. */
+  /* Each session a quiet block: name, what it is, then price and time. */
   .session {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 26px 0;
+    gap: 8px;
+    padding: 30px 0;
     border-bottom: 1px solid rgb(156 85 48 / 0.25);
   }
   .session__name {
@@ -111,35 +100,27 @@ const sessions = [
     line-height: 1.65;
     color: var(--color-body-on-ivory);
   }
-  .facts {
+  /* Price and time in plain numerals (Cormorant's old-style figures read unclearly). */
+  .session__meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px 36px;
-    margin: 8px 0 0;
-  }
-  .fact {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .fact__label {
-    font-size: 11px;
-    letter-spacing: 0.24em;
-    color: var(--color-copper-700);
-  }
-  .fact__value {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.1;
-    font-variant-numeric: lining-nums tabular-nums;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 400;
+    font-variant-numeric: lining-nums;
     color: var(--color-bronze-900);
   }
-  .fact__note {
-    display: block;
-    margin-top: 4px;
-    font-size: 13px;
-    font-weight: 400;
+  .session__price {
+    font-weight: 500;
+    color: var(--color-copper-700);
+  }
+  .session__dot {
+    color: var(--color-muted-2);
+  }
+  .session__extra {
+    font-size: 14px;
+    line-height: 1.5;
     color: var(--color-muted);
   }
 
@@ -151,8 +132,6 @@ const sessions = [
     .session__name {
       font-size: 28px;
     }
-    .fact__value {
-      font-size: 20px;
-    }
+
   }
 </style>

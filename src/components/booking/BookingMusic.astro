@@ -1,38 +1,45 @@
 ---
 // Visitors can send Natalie the songs they would like to hear, as Spotify links, through WhatsApp.
 // TODO(Natalie): sample copy, still to be approved.
-import CtaLink from '../CtaLink.astro';
 import { whatsapp } from '../../data/contact';
 
 const message = 'Hoi Natalie, deze liedjes zou ik graag horen (Spotify):\n';
 ---
 
-<section class="music" aria-labelledby="music-title">
-  <h2 id="music-title" class="label music__label">Jouw muziek</h2>
-  <p class="music__text">
-    Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.
-  </p>
-  <div>
-    <CtaLink href={whatsapp(message)} external>Stuur je liedjes via WhatsApp</CtaLink>
-  </div>
-</section>
+<p class="music">
+  Is er muziek die je graag zou horen? Stuur je liedjes van Spotify mee, dan zet Natalie ze voor je klaar.
+  <a class="music__link" href={whatsapp(message)} target="_blank" rel="noopener">Stuur je liedjes via WhatsApp&nbsp;→</a>
+</p>
 
 <style>
   .music {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 8px;
-  }
-  .music__label {
-    margin: 0;
-    font-weight: 400;
-    color: var(--color-copper-700);
-  }
-  .music__text {
-    max-width: 460px;
-    font-size: 16px;
-    line-height: 1.65;
+    max-width: 440px;
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.4;
     color: var(--color-body-on-ivory);
+  }
+  .music__link {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-style: normal;
+    font-size: 15px;
+    color: var(--color-copper-700);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+  }
+  .music__link:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+  .music__link:focus-visible {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 4px;
   }
 </style>
