@@ -1,6 +1,6 @@
 # Natalie — website
 
-A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Vandervoort.
+A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Van Der Voort.
 Natalie invites young people (20–30) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
@@ -185,7 +185,7 @@ Deliberately removed. Do not bring back.
   - label: WIE NAAST JE, LUISTERT.
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
   - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
-  - *Natalie Van der Voort* (signature, Cormorant italic)
+  - *Natalie Van Der Voort* (signature, Cormorant italic)
   - THE MEREON LEGACY (under the signature, small label in `muted`)
   - ⚠️ This personal text is sample copy; Natalie still has to approve it.
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
