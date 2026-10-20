@@ -189,14 +189,15 @@ Deliberately removed. Do not bring back.
 
 ### 06 · The invitation (`id="invitation"`)
 - Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
-- The invitation is a **poster** on the ivory wall (Natalie's wish): one cream sheet, centred, `chair.avif` edge to edge on top, the title, text and button printed below. Sizes inside follow the poster (container units). Phone: the poster fills the screen minus a margin; phone landscape: it lies down (forest left, words right).
+- Image: `chair.avif` = a chair alone among the green in the forest, in an **arch** (`border-radius: 999px 999px 2px 2px`), warm shadow. The reveal clip leaves room so the shadow isn't cut off.
+- Desktop: text left, arch right. Phone/tablet portrait: arch on top.
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
   - Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een gesprek met Natalie. Ervaar het op jouw manier.
   - Button: **Ontdek de sessies** → `/booking`
   - The chair is Natalie's pick for now; the photo/frame may still change (perhaps something with music).
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
-- Animation: the poster appears (opacity, y) while the forest settles in it (scale 1.1 → 1), then title, text, button.
+- Animation: the arch reveals, then title, text, button.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
