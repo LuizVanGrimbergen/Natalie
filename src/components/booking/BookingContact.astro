@@ -1,0 +1,44 @@
+---
+// Natalie's own contact details, below the calendar.
+const email = 'nvandervoort@mereon.org';
+const phone = '+32 478 51 76 57';
+---
+
+<section class="contact" aria-labelledby="contact-title">
+  <h2 id="contact-title" class="label contact__label">Contact</h2>
+  <a class="contact__link" href={`mailto:${email}`}>{email}</a>
+  <a class="contact__link" href={`tel:${phone.replaceAll(' ', '')}`}>{phone}</a>
+</section>
+
+<style>
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 28px;
+    margin-top: 28px;
+  }
+  .contact__label {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--color-muted);
+  }
+  .contact__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 17px;
+    color: var(--color-bronze-900);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+    transition: text-decoration-color 0.3s ease;
+  }
+  .contact__link:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+  .contact__link:focus-visible {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 4px;
+  }
+</style>

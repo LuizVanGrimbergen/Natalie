@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import BookingDetails from '../components/booking/BookingDetails.astro';
 import BookingCalendar from '../components/booking/BookingCalendar.astro';
+import BookingContact from '../components/booking/BookingContact.astro';
 ---
 
 <Base
@@ -14,7 +15,10 @@ import BookingCalendar from '../components/booking/BookingCalendar.astro';
     <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
     <main class="layout">
       <BookingDetails />
-      <BookingCalendar />
+      <div>
+        <BookingCalendar />
+        <BookingContact />
+      </div>
     </main>
   </div>
 </Base>

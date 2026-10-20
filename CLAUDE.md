@@ -55,7 +55,8 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions with prices (no contact)
+      BookingDetails.astro          # title, intro, "Schoten, vanaf 18 jaar", the two sessions: price (€) and duration set apart
+      BookingContact.astro          # Natalie's email and phone, below the calendar (mailto/tel links)
       BookingCalendar.astro         # Google Calendar embed or placeholder card
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
@@ -201,8 +202,11 @@ Deliberately removed. Do not bring back.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, `[KORTE INTRO OVER DE AFSPRAAK]`, definition list Locatie (Schoten — town only, no street address) / Duur / Prijs / Contact with placeholders.
-- Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card).
+- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, SCHOTEN, VANAF 18 JAAR, KIES JE SESSIE:
+  - **Soundroom** — €65 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — + €15 per bijkomende persoon, max. 3 personen
+  - **Coaching** — €75 · 65 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
+  - Prices always with the € sign, large in copper next to the name, duration beside them, so cost and time read at a glance.
+- Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org · +32 478 51 76 57 (mailto/tel links).
 - Phone: stacked.
 
 ---

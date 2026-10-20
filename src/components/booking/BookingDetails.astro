@@ -1,14 +1,18 @@
 ---
-// Natalie's sessions and prices (her feedback of 19 October); the calendar on the right stays a placeholder for now.
+// Natalie's sessions and prices (her feedback of 19 October), with the price and duration set apart so they read at a glance.
 const sessions = [
   {
     name: 'Soundroom',
-    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding, 65 euro voor 50 minuten.',
-    extra: '15 Euro extra per bijkomende persoon, max 3 personen.',
+    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
+    price: '€65',
+    duration: '50 minuten',
+    extra: '+ €15 per bijkomende persoon, max. 3 personen',
   },
   {
     name: 'Coaching',
-    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie, 75 euro voor 65 minuten.',
+    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
+    price: '€75',
+    duration: '65 minuten',
   },
 ];
 ---
@@ -23,7 +27,13 @@ const sessions = [
     {
       sessions.map((session) => (
         <li class="session">
-          <h3 class="display session__name">{session.name}</h3>
+          <div class="session__head">
+            <h3 class="display session__name">{session.name}</h3>
+            <p class="session__price">
+              <span class="display session__amount">{session.price}</span>
+              <span class="label session__duration">{session.duration}</span>
+            </p>
+          </div>
           <p class="session__text">{session.text}</p>
           {session.extra && <p class="session__extra">{session.extra}</p>}
         </li>
@@ -76,9 +86,30 @@ const sessions = [
     padding: 22px 0;
     border-bottom: 1px solid rgb(156 85 48 / 0.25);
   }
+  .session__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 460px;
+  }
   .session__name {
     font-size: 32px;
     line-height: 1.1;
+  }
+  .session__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .session__amount {
+    font-size: 34px;
+    line-height: 1;
+    color: var(--color-copper-700);
+  }
+  .session__duration {
+    color: var(--color-muted);
   }
   .session__text,
   .session__extra {
@@ -88,7 +119,8 @@ const sessions = [
     color: var(--color-body-on-ivory);
   }
   .session__extra {
-    color: var(--color-muted);
+    color: var(--color-copper-700);
+    font-weight: 400;
   }
 
   @media (max-width: 900px) {
