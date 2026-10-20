@@ -1,5 +1,6 @@
 ---
-// Natalie's sessions and prices (her feedback of 19 October): one quiet line with price and duration per session.
+// Natalie's sessions and prices (her feedback of 19 October): one quiet line per session with price, duration and who it is for
+// (the soundroom is for everyone, coaching for 18 to 30).
 import BookingWhatsapp from './BookingWhatsapp.astro';
 
 const sessions = [
@@ -8,6 +9,7 @@ const sessions = [
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
     price: '€65',
     duration: '50 minuten',
+    who: 'Voor iedereen',
     extra: { price: '+ €15', text: 'per bijkomende persoon · max.\u00a03\u00a0personen' },
   },
   {
@@ -15,6 +17,7 @@ const sessions = [
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
     price: '€75',
     duration: '65 minuten',
+    who: 'Van 18 tot 30 jaar',
   },
 ];
 ---
@@ -22,11 +25,7 @@ const sessions = [
 <section class="details" aria-labelledby="booking-title">
   <h1 id="booking-title" class="display details__h" data-rise style="--i: 0">Afspraak <em>maken</em></h1>
   <p class="details__intro" data-rise style="--i: 1">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
-  <p class="details__facts" data-rise style="--i: 2">
-    <span>Schoten</span>
-    <span class="details__dot" aria-hidden="true">·</span>
-    <span>18 tot 30 jaar</span>
-  </p>
+  <p class="details__facts" data-rise style="--i: 2">Schoten</p>
 
   <h2 class="label details__label" data-rise style="--i: 3">Kies je sessie</h2>
   <ul class="sessions">
@@ -40,6 +39,7 @@ const sessions = [
             <span class="session__dot" aria-hidden="true">·</span>
             <span>{session.duration}</span>
           </p>
+          <p class="session__who">{session.who}</p>
           {
             session.extra && (
               <p class="session__extra">
@@ -78,7 +78,7 @@ const sessions = [
     line-height: 1.35;
     color: var(--color-body-on-ivory);
   }
-  /* Place and age as one clear line, like the prices. */
+  /* The place as one clear line, like the prices. */
   .details__facts {
     display: flex;
     flex-wrap: wrap;
@@ -87,10 +87,6 @@ const sessions = [
     font-size: 18px;
     font-weight: 500;
     color: var(--color-copper-700);
-  }
-  .details__dot {
-    font-weight: 400;
-    color: var(--color-muted-2);
   }
   .details__label {
     margin: 24px 0 0;
@@ -155,6 +151,11 @@ const sessions = [
   .session__price {
     font-weight: 500;
     color: var(--color-copper-700);
+  }
+  .session__who {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-bronze-900);
   }
   .session__dot {
     color: var(--color-muted-2);
