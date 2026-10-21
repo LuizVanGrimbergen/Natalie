@@ -55,7 +55,7 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingDetails.astro          # title, intro, "Schoten", the two sessions, each with one quiet line: price (€) · duration, and who it is for below it
+      BookingDetails.astro          # title, intro, "Struikenlei, Schoten", the two sessions, each with one quiet line: price (€) · duration, and who it is for below it
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingWhatsapp.astro         # one calm italic sentence + link: book via WhatsApp and send Spotify songs in the same message
       BookingCalendar.astro         # Google Calendar embed or placeholder card
@@ -204,7 +204,7 @@ Deliberately removed. Do not bring back.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Schoten** (one clear copper line, not small caps), KIES JE SESSIE:
+- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps), KIES JE SESSIE:
   - **Soundroom** — €49 · 50 minuten — *Voor iedereen* (own line) — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €25** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
   - **Coaching** — €65 · 60 minuten — *Van 18 tot 30 jaar* (own line) — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
   - Under each description one quiet line: **€49** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost below it at normal size, its amount in copper too. No column labels: the page must stay calm.
