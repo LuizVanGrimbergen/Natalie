@@ -204,7 +204,7 @@ Deliberately removed. Do not bring back.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps) + link *Bekijk op Google Maps →* (opens the street in Maps; no embedded map: no cookies, page stays calm), KIES JE SESSIE, then *Van 18 tot 35 jaar* once above both sessions (the whole site is for 18–35):
+- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps) + link *Bekijk op Google Maps →* (on phone under the street; opens the street in Maps; no embedded map: no cookies, page stays calm), KIES JE SESSIE, then *Van 18 tot 35 jaar* once above both sessions (the whole site is for 18–35):
   - **Soundroom** — €49 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €25** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
   - **Coaching** — €65 · 60 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
   - Under each description one quiet line: **€49** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost below it at normal size, its amount in copper too. No column labels: the page must stay calm.
