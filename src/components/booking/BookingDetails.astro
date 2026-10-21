@@ -2,6 +2,7 @@
 // Natalie's sessions and prices (her feedback of 19 October): one quiet line per session with price and duration.
 // The whole site is for 18 to 35 (21 October), so the age stands once, above both sessions.
 import BookingWhatsapp from './BookingWhatsapp.astro';
+import { address, maps } from '../../data/contact';
 
 const sessions = [
   {
@@ -23,7 +24,10 @@ const sessions = [
 <section class="details" aria-labelledby="booking-title">
   <h1 id="booking-title" class="display details__h" data-rise style="--i: 0">Afspraak <em>maken</em></h1>
   <p class="details__intro" data-rise style="--i: 1">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
-  <p class="details__facts" data-rise style="--i: 2">Struikenlei, Schoten</p>
+  <p class="details__facts" data-rise style="--i: 2">
+    <span>{address}</span>
+    <a class="details__map" href={maps} target="_blank" rel="noopener">Bekijk op Google Maps&nbsp;→</a>
+  </p>
 
   <h2 class="label details__label" data-rise style="--i: 3">Kies je sessie</h2>
   <p class="details__who" data-rise style="--i: 3">Van 18 tot 35 jaar</p>
@@ -67,6 +71,24 @@ const sessions = [
   }
   .details__h em {
     color: var(--color-copper-700);
+  }
+  .details__map {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-copper-700);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+  }
+  .details__map:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+  .details__map:focus-visible {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 4px;
   }
   .details__intro {
     max-width: 440px;

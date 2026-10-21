@@ -59,7 +59,7 @@ src/
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingWhatsapp.astro         # one calm italic sentence + link: book via WhatsApp and send Spotify songs in the same message
       BookingCalendar.astro         # Google Calendar embed or placeholder card
-  data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link; the one place they live
+  data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link, address + Google Maps link; the one place they live
   scripts/scenes/
     index.ts                        # initScenes(): builds every scene + crossfade, picks the mode
     navigation.ts                   # one step per screen: crossfade, then the build plays in time; links, focus
@@ -204,7 +204,7 @@ Deliberately removed. Do not bring back.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps), KIES JE SESSIE, then *Van 18 tot 35 jaar* once above both sessions (the whole site is for 18–35):
+- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps) + link *Bekijk op Google Maps →* (opens the street in Maps; no embedded map: no cookies, page stays calm), KIES JE SESSIE, then *Van 18 tot 35 jaar* once above both sessions (the whole site is for 18–35):
   - **Soundroom** — €49 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €25** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
   - **Coaching** — €65 · 60 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
   - Under each description one quiet line: **€49** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost below it at normal size, its amount in copper too. No column labels: the page must stay calm.
