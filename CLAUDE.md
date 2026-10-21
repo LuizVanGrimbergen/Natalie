@@ -1,7 +1,7 @@
 # Natalie — website
 
 A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, for Natalie Van Der Voort.
-Natalie invites young people (20–30) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
+Natalie invites young people (18–35) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
 > Less technology, more feeling. The technology should be invisible.
@@ -55,7 +55,7 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingDetails.astro          # title, intro, "Struikenlei, Schoten", the two sessions, each with one quiet line: price (€) · duration, and who it is for below it
+      BookingDetails.astro          # title, intro, "Struikenlei, Schoten", the two sessions, each with one quiet line: price (€) · duration; the age (18–35) once above both
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingWhatsapp.astro         # one calm italic sentence + link: book via WhatsApp and send Spotify songs in the same message
       BookingCalendar.astro         # Google Calendar embed or placeholder card
@@ -182,7 +182,7 @@ Deliberately removed. Do not bring back.
 - Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
 - Portrait: the dome in the forest (`forest.avif`) stands in until there is a real photo of Natalie.
 - Copy:
-  - label: WIE NAAST JE, LUISTERT.
+  - label: EEN LUISTEREND OOR
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
   - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
   - *Natalie Van Der Voort* (signature, Cormorant italic)
@@ -204,9 +204,9 @@ Deliberately removed. Do not bring back.
 
 ### Booking page (`/booking`)
 - Header: wordmark + "← Terug".
-- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps), KIES JE SESSIE:
-  - **Soundroom** — €49 · 50 minuten — *Voor iedereen* (own line) — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €25** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
-  - **Coaching** — €65 · 60 minuten — *Van 18 tot 30 jaar* (own line) — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
+- Left: h1 **Afspraak** *maken*, intro *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number; one clear copper line, not small caps), KIES JE SESSIE, then *Van 18 tot 35 jaar* once above both sessions (the whole site is for 18–35):
+  - **Soundroom** — €49 · 50 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **+ €25** per bijkomende persoon · max. 3 personen (normal size, amount in copper)
+  - **Coaching** — €65 · 60 minuten — In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.
   - Under each description one quiet line: **€49** · 50 minuten (price in `copper-700`, Figtree with lining numerals, never Cormorant figures), the extra-person cost below it at normal size, its amount in copper too. No column labels: the page must stay calm.
 - Below the sessions, one calm italic line (no label, no button): *Maak je afspraak via WhatsApp en stuur meteen de liedjes van Spotify mee die je graag zou horen. Natalie zet ze voor je klaar.* + link **Afspraak maken via WhatsApp →**, opening a chat with a ready message (sessie, wanneer, liedjes). No form on the site. ⚠️ Sample copy; Natalie still has to approve it.
 - Right: card with the **Google Calendar appointment schedule** (embed URL in env var `PUBLIC_BOOKING_URL`; without it, a tidy placeholder card), below it CONTACT: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me link, new tab).

@@ -1,6 +1,6 @@
 ---
-// Natalie's sessions and prices (her feedback of 19 October): one quiet line per session with price, duration and who it is for
-// (the soundroom is for everyone, coaching for 18 to 30).
+// Natalie's sessions and prices (her feedback of 19 October): one quiet line per session with price and duration.
+// The whole site is for 18 to 35 (21 October), so the age stands once, above both sessions.
 import BookingWhatsapp from './BookingWhatsapp.astro';
 
 const sessions = [
@@ -9,7 +9,6 @@ const sessions = [
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
     price: '€49',
     duration: '50 minuten',
-    who: 'Voor iedereen',
     extra: { price: '+ €25', text: 'per bijkomende persoon · max.\u00a03\u00a0personen' },
   },
   {
@@ -17,7 +16,6 @@ const sessions = [
     text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
     price: '€65',
     duration: '60 minuten',
-    who: 'Van 18 tot 30 jaar',
   },
 ];
 ---
@@ -28,6 +26,7 @@ const sessions = [
   <p class="details__facts" data-rise style="--i: 2">Struikenlei, Schoten</p>
 
   <h2 class="label details__label" data-rise style="--i: 3">Kies je sessie</h2>
+  <p class="details__who" data-rise style="--i: 3">Van 18 tot 35 jaar</p>
   <ul class="sessions">
     {
       sessions.map((session, i) => (
@@ -39,7 +38,6 @@ const sessions = [
             <span class="session__dot" aria-hidden="true">·</span>
             <span>{session.duration}</span>
           </p>
-          <p class="session__who">{session.who}</p>
           {
             session.extra && (
               <p class="session__extra">
@@ -152,7 +150,7 @@ const sessions = [
     font-weight: 500;
     color: var(--color-copper-700);
   }
-  .session__who {
+  .details__who {
     font-size: 16px;
     font-weight: 500;
     color: var(--color-bronze-900);
