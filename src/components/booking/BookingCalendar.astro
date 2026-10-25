@@ -1,6 +1,12 @@
 ---
 // Google Calendar appointment schedule embed URL (…/appointments/schedules/…?gv=true).
-const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL?.trim();
+const rawUrl = import.meta.env.PUBLIC_BOOKING_URL?.trim();
+// hl=nl: Google shows the schedule in Dutch, whatever the visitor's browser language.
+const bookingUrl = rawUrl && (() => {
+  const url = new URL(rawUrl);
+  url.searchParams.set('hl', 'nl');
+  return url.toString();
+})();
 ---
 
 <section class="calendar" aria-label="Kies een moment">
