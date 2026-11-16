@@ -13,3 +13,14 @@ export const address = 'Struikenlei, Schoten';
 
 /** The street in Google Maps; on a phone it opens the maps app. */
 export const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, België`)}`;
+
+/**
+ * The legal details a Belgian self-employed person must show on the website: the registered office
+ * (sociale zetel, never the home address) and the enterprise number (KBO). Shown on /booking only
+ * once both are filled in.
+ */
+export const business = {
+  name: 'Natalie Van Der Voort',
+  seat: 'Paalstraat 149, 2900 Schoten',
+  enterpriseNumber: 'BE 0882.177.881',
+};

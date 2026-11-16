@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import BookingDetails from '../components/booking/BookingDetails.astro';
-import BookingCalendar from '../components/booking/BookingCalendar.astro';
+import BookingIntro from '../components/booking/BookingIntro.astro';
+import BookingSteps from '../components/booking/BookingSteps.astro';
 import BookingContact from '../components/booking/BookingContact.astro';
+import BookingLegal from '../components/booking/BookingLegal.astro';
 ---
 
 <Base
@@ -13,15 +14,19 @@ import BookingContact from '../components/booking/BookingContact.astro';
 >
   <div class="page">
     <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
+    <!-- One calm column on every screen: the intro, then the three steps, then contact. -->
     <main class="layout">
-      <BookingDetails />
-      <div>
-        <div data-rise style="--i: 2"><BookingCalendar /></div>
-        <div data-rise style="--i: 5"><BookingContact /></div>
-      </div>
+      <BookingIntro />
+      <BookingSteps />
+      <div data-rise style="--i: 7"><BookingContact /><BookingLegal /></div>
     </main>
   </div>
 </Base>
+
+<script>
+  import { initBooking } from '../scripts/booking';
+  initBooking();
+</script>
 
 <style>
   .page {
@@ -31,24 +36,22 @@ import BookingContact from '../components/booking/BookingContact.astro';
     color: var(--color-bronze-900);
   }
   .layout {
-    display: grid;
-    grid-template-columns: 5fr 6fr;
-    gap: 6vw;
-    align-items: start;
-    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+    max-width: 720px;
     margin: 0 auto;
-    padding: clamp(120px, 16vh, 180px) 6vw 80px;
+    padding: clamp(120px, 16vh, 170px) 24px 80px;
   }
-  @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 1fr;
-      gap: 48px;
-      padding: 104px 24px 56px;
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html) {
+      scroll-behavior: smooth;
     }
   }
-  @media (min-width: 600px) and (max-width: 900px) {
+  @media (max-width: 600px) {
     .layout {
-      padding: 120px 48px 72px;
+      gap: 36px;
+      padding: 96px 16px 56px;
     }
   }
 </style>

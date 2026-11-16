@@ -10,40 +10,34 @@ const SWIPE_MIN = 36;
 
 /**
  * Turns wheel, touch and keyboard input into single steps: one gesture is
- * exactly one step, however long the trackpad keeps scrolling or the finger
- * keeps moving. The page itself never scrolls.
+ * exactly one step, however hard the flick, however long the trackpad keeps
+ * scrolling or the finger keeps moving. The page itself never scrolls.
  *
- * A trackpad keeps sending ever smaller events after the fingers let go
- * (momentum), often without a gap before the next gesture. So a new gesture
- * also starts when the direction flips, or when the deltas grow again while
- * the momentum was dying down (a fresh push).
+ * A trackpad keeps sending events for a second or more after the fingers let
+ * go (momentum), and their size goes up and down. A new gesture only starts
+ * after a quiet gap (WHEEL_GAP) or when the direction flips (scrolling back).
+ * An earlier rule also started one when the deltas grew again ("a fresh push"),
+ * but a hard flick's own momentum did that too, and one flick went 2–3 screens.
  */
 export function onStep(step: (dir: Step) => void) {
   let last = 0;
   let sum = 0;
   let used = false;
   let sign = 0;
-  let peak = 0;
-  let previous = 0;
   addEventListener(
     'wheel',
     (event) => {
       event.preventDefault();
       const now = performance.now();
       const delta = event.deltaY;
-      const size = Math.abs(delta);
       const dir = Math.sign(delta);
-      const fading = peak > 0 && previous < peak * 0.7;
-      const fresh = now - last > WHEEL_GAP || (dir !== 0 && dir !== sign) || (fading && size > previous * 1.6 && size > 6);
+      const fresh = now - last > WHEEL_GAP || (dir !== 0 && dir !== sign);
       if (fresh) {
         sum = 0;
         used = false;
         sign = dir;
-        peak = 0;
       }
       last = now;
-      previous = size;
-      peak = Math.max(peak, size);
       if (used) return;
       sum += delta;
       if (Math.abs(sum) < WHEEL_MIN) return;
@@ -70,6 +64,11 @@ export function onStep(step: (dir: Step) => void) {
 
   addEventListener('keydown', (event) => {
     if (event.target !== document.body) return;
+    // A held key repeats: one press is one screen.
+    if (event.repeat) {
+      if (['ArrowDown', 'PageDown', ' ', 'ArrowUp', 'PageUp'].includes(event.key)) event.preventDefault();
+      return;
+    }
     if (['ArrowDown', 'PageDown', ' '].includes(event.key)) step(1);
     else if (['ArrowUp', 'PageUp'].includes(event.key)) step(-1);
     else return;

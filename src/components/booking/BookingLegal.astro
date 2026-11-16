@@ -1,0 +1,25 @@
+---
+// Natalie's legal details (registered office + enterprise number), below the contact block.
+// Nothing renders until both are filled in, so visitors never see a placeholder.
+import { business } from '../../data/contact';
+
+const { name, seat, enterpriseNumber } = business;
+---
+
+{
+  seat && enterpriseNumber && (
+    <p class="legal">
+      {name} · {seat} · ondernemingsnummer {enterpriseNumber}
+    </p>
+  )
+}
+
+<style>
+  .legal {
+    margin-top: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    font-variant-numeric: lining-nums;
+    color: var(--color-muted);
+  }
+</style>

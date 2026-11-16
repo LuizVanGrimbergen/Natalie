@@ -4,7 +4,7 @@ import { invitation } from './invitation';
 import { listening } from './listening';
 import { initNavigation } from './navigation';
 import { perspectives } from './perspectives';
-import { crossfade } from './transition';
+import { slideUp } from './transition';
 import type { Timeline } from './tweens';
 import { welcomes } from './welcomes';
 
@@ -23,11 +23,11 @@ const builders: Record<string, (scene: HTMLElement) => Timeline> = {
   invitation,
 };
 
-/** Builds every scene and every crossfade once, then hands them to the screen-by-screen navigation. */
+/** Builds every scene and every slide once, then hands them to the screen-by-screen navigation. */
 export function initScenes() {
   const scenes = [...all(document, '[data-scene]')];
   const builds = scenes.map((scene) => builders[scene.dataset.scene!](scene));
-  const fades = scenes.slice(1).map((scene, i) => crossfade(scenes[i], scene));
+  const fades = scenes.slice(1).map((scene, i) => slideUp(scenes[i], scene));
   initNavigation(scenes, builds, fades);
   window.__scenesReady = true;
 }

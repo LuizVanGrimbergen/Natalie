@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import NextCue from '../components/NextCue.astro';
 import ProgressRail from '../components/ProgressRail.astro';
+import SoundToggle from '../components/SoundToggle.astro';
+import BookPill from '../components/BookPill.astro';
 import Hero from '../components/scenes/Hero.astro';
 import Listening from '../components/scenes/Listening.astro';
 import Perspectives from '../components/scenes/Perspectives.astro';
@@ -43,9 +45,15 @@ const heroPreload = await getImage({ src: hero, widths: [800, 1200, 1600], sizes
 
   <NextCue />
   <ProgressRail />
+  <SoundToggle />
+  <BookPill />
 </Base>
 
 <script>
   import { initScenes } from '../scripts/scenes';
+  import { initSound } from '../scripts/sound';
+  import { initBookStatic } from '../scripts/scenes/book';
   if (document.documentElement.classList.contains('motion')) initScenes();
+  else initBookStatic();
+  initSound();
 </script>

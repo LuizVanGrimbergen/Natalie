@@ -16,8 +16,10 @@ import CtaLink from '../CtaLink.astro';
             Je hoeft niet precies te weten wat je zoekt. Soms is even tijd voor jezelf al een mooi begin: in de soundroom, of in een
             gesprek met Natalie. Ervaar het op jouw manier.
           </p>
-          <div data-reveal="3">
-            <CtaLink href="/booking">Ontdek de sessies</CtaLink>
+          <p class="text__facts" data-reveal="3">Soundroom vanaf €35 · Coaching €65</p>
+          <div class="text__actions" data-reveal="3">
+            <CtaLink href="/booking">Kies je sessie</CtaLink>
+            <a class="text__gift" href="/gift">of geef het cadeau</a>
           </div>
         </div>
         <figure class="photo" aria-hidden="true" data-unveil>
@@ -56,6 +58,39 @@ import CtaLink from '../CtaLink.astro';
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
+  /* One quiet practical line above the button: what a session costs, in plain numerals. */
+  .text__facts {
+    margin-bottom: -6px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    font-variant-numeric: lining-nums;
+    color: var(--color-copper-700);
+  }
+  /* The button, and beside it a quiet way to give the experience to someone else. */
+  .text__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 22px;
+  }
+  .text__gift {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-bronze-900);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.45);
+    text-underline-offset: 5px;
+    transition: text-decoration-color 0.3s ease;
+  }
+  @media (hover: hover) {
+    .text__gift:hover {
+      text-decoration-color: var(--color-copper-700);
+    }
   }
   .text__h {
     font-size: clamp(40px, 5.2vw, 96px);

@@ -1,0 +1,70 @@
+---
+/**
+ * "Boek een sessie": a small pill top right that goes straight to /booking, so whoever is ready doesn't have
+ * to go through the whole story. Hidden on the hero (the header link is there) and on the invitation (its own
+ * button is). scripts/scenes/book.ts shows it and matches it to light and dark scenes; without the step
+ * navigation (reduced motion, no JS) it shows once the hero has scrolled away.
+ */
+---
+
+<a class="book" href="/booking" data-book>Boek een sessie<span class="book__arrow" aria-hidden="true">&nbsp;→</span></a>
+
+<style>
+  .book {
+    position: fixed;
+    top: max(14px, calc(env(safe-area-inset-top) + 8px));
+    right: max(16px, calc(env(safe-area-inset-right) + 8px));
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgb(234 211 194 / 0.35);
+    border-radius: 999px;
+    background: rgb(18 16 13 / 0.45);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-sand);
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 -6px;
+    transition:
+      opacity 0.5s ease,
+      translate 0.5s ease,
+      background 0.5s ease,
+      color 0.5s ease,
+      border-color 0.5s ease,
+      visibility 0s 0.5s;
+  }
+  .book.is-shown {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition:
+      opacity 0.5s ease,
+      translate 0.5s ease,
+      background 0.5s ease,
+      color 0.5s ease,
+      border-color 0.5s ease,
+      visibility 0s;
+  }
+  .book.is-light {
+    border-color: rgb(30 23 18 / 0.3);
+    background: rgb(245 241 233 / 0.82);
+    color: var(--color-bronze-900);
+  }
+  .book:hover {
+    border-color: var(--color-copper-300);
+  }
+  .book.is-light:hover {
+    border-color: var(--color-copper-700);
+  }
+  .book:focus-visible {
+    outline: 2px solid var(--color-copper-300);
+    outline-offset: 4px;
+  }
+  .book.is-light:focus-visible {
+    outline-color: var(--color-copper-700);
+  }
+</style>

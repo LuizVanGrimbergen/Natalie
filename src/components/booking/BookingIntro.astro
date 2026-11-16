@@ -1,0 +1,100 @@
+---
+// The top of the booking page: title, intro, where the dome stands, and who it is for.
+// The whole site is for 18 to 35 (21 October), so the age stands once, here; a gift voucher has no age, so its
+// link sits right under it.
+import { address, maps } from '../../data/contact';
+---
+
+<header class="intro">
+  <h1 class="display intro__h" data-rise style="--i: 0">Afspraak <em>maken</em></h1>
+  <p class="intro__lead" data-rise style="--i: 1">Sommige ervaringen vragen geen woorden, maar ruimte.</p>
+  <p class="intro__facts" data-rise style="--i: 2">
+    <span class="intro__place">{address}</span>
+    <a class="intro__map" href={maps} target="_blank" rel="noopener">Bekijk op Google Maps&nbsp;→</a>
+  </p>
+  <p class="intro__who" data-rise style="--i: 2">
+    Van 18 tot 35 jaar
+    <a class="intro__gift" href="/gift">Iemand anders verrassen? Geef een cadeaubon&nbsp;→</a>
+  </p>
+</header>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .intro__h {
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.98;
+  }
+  .intro__h em {
+    color: var(--color-copper-700);
+  }
+  .intro__lead {
+    max-width: 480px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(22px, 2.2vw, 28px);
+    line-height: 1.35;
+    color: var(--color-body-on-ivory);
+  }
+  /* The place as one clear line, like the prices. */
+  .intro__facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 12px;
+    margin-top: 6px;
+  }
+  .intro__place {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-copper-700);
+  }
+  .intro__map {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-copper-700);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+  }
+  .intro__map:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+  .intro__who {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-bronze-900);
+  }
+  /* A voucher has no age on it, so it stands right under the age. */
+  .intro__gift {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-copper-700);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+  }
+  .intro__gift:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+
+  @media (max-width: 600px) {
+    /* The map link on its own line under the street, so it reads as the address. */
+    .intro__facts {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

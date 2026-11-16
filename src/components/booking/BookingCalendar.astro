@@ -1,18 +1,41 @@
 ---
-// Google Calendar appointment schedule embed URL (…/appointments/schedules/…?gv=true).
-const rawUrl = import.meta.env.PUBLIC_BOOKING_URL?.trim();
+// Google Calendar appointment schedule embed URLs (…/appointments/schedules/…?gv=true): one per session,
+// as the two last differently long. Until Natalie has a second schedule, both fall back to PUBLIC_BOOKING_URL.
+// scripts/booking.ts swaps the iframe when the visitor chooses another session.
+const fallback = import.meta.env.PUBLIC_BOOKING_URL?.trim();
 // hl=nl: Google shows the schedule in Dutch, whatever the visitor's browser language.
-const bookingUrl = rawUrl && (() => {
-  const url = new URL(rawUrl);
+function dutch(raw?: string) {
+  const value = raw?.trim() || fallback;
+  if (!value) return undefined;
+  const url = new URL(value);
   url.searchParams.set('hl', 'nl');
   return url.toString();
-})();
+}
+const soundroomUrl = dutch(import.meta.env.PUBLIC_BOOKING_URL_SOUNDROOM);
+const coachingUrl = dutch(import.meta.env.PUBLIC_BOOKING_URL_COACHING);
+const bookingUrl = soundroomUrl ?? coachingUrl;
+// The same schedule as Google's own full page (without the embed flag): on a phone easier than a box in a page.
+function fullPage(embed?: string) {
+  if (!embed) return undefined;
+  const url = new URL(embed);
+  url.searchParams.delete('gv');
+  return url.toString();
+}
+const fullUrl = fullPage(bookingUrl);
 ---
 
-<section class="calendar" aria-label="Kies een moment">
+<section class="calendar" aria-label="Agenda">
   {
     bookingUrl ? (
-      <iframe class="calendar__frame" src={bookingUrl} title="Afsprakenplanning van Natalie (Google Agenda)" loading="lazy" />
+      <iframe
+        class="calendar__frame"
+        src={bookingUrl}
+        data-booking-calendar
+        data-soundroom={soundroomUrl}
+        data-coaching={coachingUrl}
+        title="Afsprakenplanning van Natalie (Google Agenda)"
+        loading="lazy"
+      />
     ) : (
       <div class="calendar__empty">
         <p class="label calendar__label">Agenda</p>
@@ -24,6 +47,13 @@ const bookingUrl = rawUrl && (() => {
     )
   }
 </section>
+{
+  fullUrl && (
+    <a class="calendar__open" href={fullUrl} target="_blank" rel="noopener" data-booking-open>
+      Open de agenda op volledig scherm&nbsp;↗
+    </a>
+  )
+}
 
 <style>
   .calendar {
@@ -32,8 +62,7 @@ const bookingUrl = rawUrl && (() => {
     overflow: hidden;
     background: rgb(255 253 248 / 0.7);
     border: 1px solid rgb(156 85 48 / 0.18);
-    border-radius: 4px;
-    box-shadow: 0 40px 120px -30px rgb(200 143 128 / 0.45);
+    border-radius: 12px;
   }
   .calendar__frame {
     flex: 1;
@@ -63,10 +92,37 @@ const bookingUrl = rawUrl && (() => {
     color: var(--color-body-on-ivory);
   }
 
+  .calendar__open {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--color-copper-700);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.4);
+    text-underline-offset: 5px;
+  }
+  .calendar__open:hover {
+    text-decoration-color: var(--color-copper-700);
+  }
+  .calendar__open:focus-visible {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 4px;
+  }
+
+  .calendar__open[hidden] {
+    display: none;
+  }
+
   @media (max-width: 900px) {
     /* The placeholder only takes the room it needs; the real calendar keeps its own height (the iframe's). */
     .calendar {
       min-height: 0;
+    }
+    /* Tall enough on a phone for the month and the times under it, so the box hardly scrolls by itself. */
+    .calendar__frame {
+      min-height: 1180px;
     }
     .calendar__empty {
       padding: 32px 24px;
