@@ -17,3 +17,8 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     Cross-Origin-Opener-Policy = "same-origin"
 
+# A Dutch address for the gift page, for sharing (Instagram, December).
+[[redirects]]
+  from = "/cadeau"
+  to = "/gift"
+  status = 301

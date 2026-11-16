@@ -1,0 +1,251 @@
+---
+/**
+ * Choosing the voucher (for how many people) and ordering it from Natalie. One person is chosen from the start,
+ * so the order links work without JavaScript too; scripts/gift.ts keeps them in step with the choice.
+ */
+import { whatsapp } from '../../data/contact';
+import { MAX, orderMail, orderMessage, personsText, price } from '../../data/gift';
+
+const options = Array.from({ length: MAX }, (_, i) => i + 1);
+---
+
+<section class="order" aria-labelledby="order-title" data-gift>
+  <h2 id="order-title" class="order__title" data-rise style="--i: 4">Voor hoeveel personen?</h2>
+  <fieldset class="options" data-rise style="--i: 5">
+    <legend class="visually-hidden">Voor hoeveel personen is de cadeaubon?</legend>
+    {
+      options.map((persons) => (
+        <label class="option">
+          <input class="option__input" type="radio" name="persons" value={persons} checked={persons === 1} />
+          <span class="option__mark" aria-hidden="true">
+            <svg viewBox="0 0 16 16" focusable="false">
+              <path d="M3.5 8.5l3 3 6-7" />
+            </svg>
+          </span>
+          <span class="option__main">
+            <span class="option__name">{personsText(persons)}</span>
+            <span class="option__price">€{price(persons)}</span>
+          </span>
+        </label>
+      ))
+    }
+  </fieldset>
+
+  <ol class="how" data-rise style="--i: 6">
+    <li><strong>Stuur Natalie een berichtje.</strong> Ze maakt de bon op naam in orde, met jouw boodschap erbij als je wil.</li>
+    <li><strong>Geef hem door.</strong> Digitaal, om door te sturen of af te drukken.</li>
+    <li><strong>Wie hem krijgt, kiest zelf een moment</strong> in de agenda. De bon blijft een jaar geldig.</li>
+  </ol>
+
+  <div class="actions" data-rise style="--i: 7">
+    <a class="order__wa" href={whatsapp(orderMessage(1))} target="_blank" rel="noopener" data-gift-whatsapp>
+      Bestel via WhatsApp<span aria-hidden="true">&nbsp;→</span>
+    </a>
+    <a class="order__mail" href={orderMail(1)} data-gift-mail>of per e-mail</a>
+  </div>
+</section>
+
+<style>
+  .order {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .order__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(26px, 2.6vw, 32px);
+    line-height: 1.15;
+    color: var(--color-bronze-900);
+  }
+
+  /* ---- Options: whole cards to tap (as on the booking page) ---- */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .option {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    padding: 18px 16px;
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: inset 0 0 0 1px rgb(156 85 48 / 0.22);
+    cursor: pointer;
+    transition: box-shadow 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  }
+  .option:active {
+    transform: scale(0.99);
+  }
+  .option:has(.option__input:checked) {
+    background: rgb(255 250 243 / 0.95);
+    box-shadow:
+      inset 0 0 0 2px var(--color-copper-700),
+      0 18px 40px -24px rgb(156 85 48 / 0.45);
+  }
+  .option:has(.option__input:focus-visible) {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 3px;
+  }
+  .option__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .option__mark {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    border: 1px solid rgb(156 85 48 / 0.6);
+    border-radius: 50%;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .option__mark svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--color-ivory);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    transition: stroke-dashoffset 0.3s ease 0.05s;
+  }
+  .option__input:checked ~ .option__mark {
+    background: var(--color-copper-700);
+    border-color: var(--color-copper-700);
+  }
+  .option__input:checked ~ .option__mark svg {
+    stroke-dashoffset: 0;
+  }
+  .option__main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .option__name {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--color-bronze-900);
+  }
+  .option__price {
+    font-size: 17px;
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+    color: var(--color-copper-700);
+  }
+
+  /* ---- How it goes ---- */
+  /* Numbered in small copper circles, like the booking steps. */
+  .how {
+    display: grid;
+    gap: 12px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: how;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-body-on-ivory);
+  }
+  .how li {
+    position: relative;
+    padding-left: 40px;
+    counter-increment: how;
+  }
+  .how li::before {
+    content: counter(how);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--color-copper-700);
+    border-radius: 50%;
+    font-size: 13px;
+    font-variant-numeric: lining-nums;
+    color: var(--color-copper-700);
+  }
+  .how strong {
+    font-weight: 500;
+    color: var(--color-bronze-900);
+  }
+
+  /* ---- Ordering ---- */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    margin-top: 8px;
+  }
+  .order__wa {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border-radius: 999px;
+    background: var(--color-bronze-900);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--color-ivory);
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .order__wa:active {
+    transform: scale(0.98);
+  }
+  .order__mail {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 15px;
+    color: var(--color-bronze-900);
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.45);
+    text-underline-offset: 5px;
+  }
+  @media (hover: hover) {
+    .option:hover {
+      box-shadow: inset 0 0 0 1px rgb(156 85 48 / 0.55);
+    }
+    .order__wa:hover {
+      background: var(--color-copper-700);
+    }
+    .order__mail:hover {
+      text-decoration-color: var(--color-copper-700);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .options {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .option__main {
+      flex: 1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .how {
+      font-size: 15px;
+    }
+    .order__wa {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

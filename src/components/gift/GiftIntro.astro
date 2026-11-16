@@ -1,0 +1,52 @@
+---
+// The top of the gift page: title, a line of feeling, what the gift is, and that it has no age on it
+// (the sessions themselves are for 18 to 35; a voucher can go to anyone).
+---
+
+<header class="intro">
+  <p class="label intro__label" data-rise style="--i: 0">Cadeaubon</p>
+  <h1 class="display intro__h" data-rise style="--i: 0">Geef een moment <em>cadeau.</em></h1>
+  <p class="intro__lead" data-rise style="--i: 1">Geen spullen, maar ruimte. Om even te zijn.</p>
+  <p class="intro__p" data-rise style="--i: 2">
+    Een klankervaring in een houten koepel midden in het bos: muziek die je van alle kanten omringt, vijftig minuten lang.
+    Voor iemand die je graag ziet, alleen of samen. Er staat geen leeftijd op.
+  </p>
+</header>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .intro__label {
+    color: var(--color-copper-700);
+  }
+  .intro__h {
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.98;
+  }
+  .intro__h em {
+    color: var(--color-copper-700);
+  }
+  .intro__lead {
+    max-width: 480px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(22px, 2.2vw, 28px);
+    line-height: 1.35;
+    color: var(--color-body-on-ivory);
+  }
+  .intro__p {
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-body-on-ivory);
+  }
+  @media (max-width: 600px) {
+    .intro__p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+</style>

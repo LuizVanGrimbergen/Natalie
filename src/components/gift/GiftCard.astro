@@ -1,0 +1,145 @@
+---
+/**
+ * The voucher itself, drawn as a small ticket: the dome in the forest on one side, the text on the other, a
+ * perforated seam between them. It follows the choice below it (persons and price, via scripts/gift.ts).
+ * Decorative: the same facts are in the text and the options, so screen readers skip it.
+ */
+import { Picture } from 'astro:assets';
+import hero from '../../assets/hero.avif';
+import { BASE, personsText } from '../../data/gift';
+---
+
+<figure class="card" aria-hidden="true" data-rise style="--i: 3">
+  <div class="card__photo">
+    <Picture class="card__img" src={hero} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[360, 720]} sizes="(max-width: 600px) 92vw, 300px" />
+  </div>
+  <div class="card__seam"></div>
+  <div class="card__text">
+    <p class="label card__label">Cadeaubon</p>
+    <p class="display card__title">Een klankervaring <em>in het bos.</em></p>
+    <p class="card__meta">Soundroom · 50 minuten</p>
+    <p class="card__for">
+      <span>Voor <span data-gift-persons>{personsText(1)}</span></span>
+      <span class="card__price">€<span data-gift-price>{BASE}</span></span>
+    </p>
+  </div>
+</figure>
+
+<style>
+  .card {
+    --paper: #fbf6ee;
+    display: grid;
+    grid-template-columns: 40% auto 1fr;
+    margin: 0;
+    border-radius: 16px;
+    background: var(--paper);
+    box-shadow:
+      inset 0 0 0 1px rgb(156 85 48 / 0.22),
+      0 30px 70px -36px rgb(156 85 48 / 0.55);
+    overflow: hidden;
+  }
+  .card__photo {
+    position: relative;
+    min-height: 100%;
+  }
+  .card__photo :global(.card__img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+  /* The tear line: a dashed seam with a half-moon notch at either end, like a ticket. */
+  .card__seam {
+    position: relative;
+    width: 1px;
+    margin: 0 0 0 -1px;
+    background: repeating-linear-gradient(180deg, rgb(156 85 48 / 0.45) 0 6px, transparent 6px 12px);
+  }
+  .card__seam::before,
+  .card__seam::after {
+    content: '';
+    position: absolute;
+    left: -9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-ivory-warm);
+    box-shadow: inset 0 0 0 1px rgb(156 85 48 / 0.22);
+  }
+  .card__seam::before {
+    top: -9px;
+  }
+  .card__seam::after {
+    bottom: -9px;
+  }
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px 28px;
+  }
+  .card__label {
+    color: var(--color-copper-700);
+  }
+  .card__title {
+    font-size: clamp(30px, 3.4vw, 40px);
+    line-height: 1.05;
+    color: var(--color-bronze-900);
+  }
+  .card__title em {
+    color: var(--color-copper-700);
+  }
+  .card__meta {
+    font-size: 15px;
+    font-variant-numeric: lining-nums;
+    color: var(--color-body-on-ivory);
+  }
+  .card__for {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgb(156 85 48 / 0.2);
+    font-size: 16px;
+    font-variant-numeric: lining-nums;
+    color: var(--color-bronze-900);
+  }
+  .card__price {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-copper-700);
+  }
+
+  /* Phones: photo on top, the seam runs across. */
+  @media (max-width: 600px) {
+    .card {
+      grid-template-columns: 1fr;
+      grid-template-rows: 180px auto 1fr;
+    }
+    .card__seam {
+      width: auto;
+      height: 1px;
+      margin: -1px 0 0;
+      background: repeating-linear-gradient(90deg, rgb(156 85 48 / 0.45) 0 6px, transparent 6px 12px);
+    }
+    .card__seam::before,
+    .card__seam::after {
+      top: -9px;
+      bottom: auto;
+    }
+    .card__seam::before {
+      left: -9px;
+    }
+    .card__seam::after {
+      left: auto;
+      right: -9px;
+    }
+    .card__text {
+      padding: 24px 22px;
+    }
+  }
+</style>
