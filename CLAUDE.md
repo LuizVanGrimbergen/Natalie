@@ -72,6 +72,7 @@ src/
       AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, the hero photo wider than the column
       AboutChapter.astro            # one chapter: years label, title, her paragraphs; rises on scroll (CSS only)
       AboutPhoto.astro              # a photo between chapters, wider than the column
+      AboutPhotoPair.astro          # two photos side by side inside a chapter (the build), stacked on small phones
       AboutClosing.astro            # her last sentence large in copper, signature, Kies je sessie / of geef het cadeau
     gift/
       GiftIntro.astro               # title, lead, what the gift is ("Voor jong en oud")
@@ -102,7 +103,7 @@ src/
     tokens.css                      # design tokens (@theme)
     base.css                        # base elements, .display / .label, reduced motion
     scenes.css                      # scene/stage pinning mechanics
-  assets/                           # hero.avif, interior.avif, forest.avif, door.avif
+  assets/                           # hero.avif, interior.avif, forest.avif, autumn-glow.jpg (scene 06); interior-window.jpg, build-overhead.jpg, build-workshop.jpg (story)
 ```
 
 Conventions: one component per file; styles live scoped in the component that owns them; global CSS only for tokens, base and shared scene mechanics. Animated elements are found via `data-*` attributes (`data-scene`, `data-reveal="n"`, `data-unveil`, …), never via styling classes.
@@ -218,7 +219,7 @@ Deliberately removed. Do not bring back.
 
 ### 06 · The invitation (`id="invitation"`)
 - Ivory with a warm band in the middle (plain ivory at the top and bottom edges, for Safari's bars), soft clay glow.
-- Image: `door.avif` = the glowing opening of the dome with the orange lamp, in a calm 4:5 frame with a soft shadow (not the forest photo: that is scene 05's).
+- Image: `autumn-glow.jpg` = Natalie's photo of November: the room in the autumn forest at dusk, its opening glowing with the orange lamp, in a calm 4:5 frame with a soft shadow (not the forest photo: that is scene 05's).
 - Desktop: text left, photo right. Phone/tablet portrait: photo on top, aligned left (clear of the dots).
 - Copy:
   - h2: **Misschien is dit iets** *voor jou.*
@@ -258,7 +259,7 @@ The page that matters most, built phone-first. **One calm column on every screen
 ### Natalie's story (`/about`, also `/verhaal`)
 Her own text of November, **verbatim** (paragraph breaks restored from the PDF wrapping); only the chapter labels with the years are added. A reading page, not a scene: one 640px column, Figtree 18px / 1.8, ivory.
 - Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then the hero photo (16:10, wider than the column; edge to edge on phones).
-- Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting** · the interior photo · *Vandaag* **Een plek om verder te ontdekken**.
+- Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting**, with two of Natalie's build photos side by side after the 2025 paragraph (`AboutPhotoPair`: the build from above, Natalie in the workshop; the latter is only 326px wide) · her photo of the inside looking out through an opening to the trees · *Vandaag* **Een plek om verder te ontdekken**.
 - Close: her last sentence (*Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.*) large in copper italic, her signature + THE MEREON LEGACY, then **Kies je sessie** (CtaLink) and *of geef het cadeau*.
 - Chapters rise in as they scroll into view with CSS scroll-driven animations (`animation-timeline: view()`, under `@supports` and no reduced motion); without support they are simply there. No JS on this page.
 - Linked from scene 05 (*Lees mijn verhaal →*).
@@ -319,9 +320,8 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Google Calendar appointment schedule URL
 - Natalie's confirmation that the dome may be shown and that the copper palette is right
 - Domain name
-- Higher-resolution `door.avif` (currently 330×490, soft on retina screens)
 - In Natalie's Google appointment schedule: turn off Google Meet, add the questions (then set `formAsksSongs = true` in `data/booking.ts`, after one test booking) "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?", and a second appointment schedule so Soundroom (50 min) and Coaching (60 min) each have their own (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`)
 - The soundtrack (royalty-free) for the sound toggle
-- Story page: Natalie's approval of the chapter labels (years) and the photos (the interior is a render; her own photos of the build would fit here)
+- Story page: Natalie's approval of the chapter labels (years); a larger version of the workshop photo (now 326×580)
 - Gift page: how a voucher is paid, and how a receiver mentions it when booking (e.g. a code in the Google form)
 - Netlify subdomain, then hand-over to Natalie's account
