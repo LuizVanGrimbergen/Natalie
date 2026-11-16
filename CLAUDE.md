@@ -1,6 +1,6 @@
 # Natalie — website
 
-A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page and a gift page, for Natalie Van Der Voort.
+A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, a gift page and Natalie's story, for Natalie Van der Voort.
 Natalie invites young people (18–35) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
@@ -44,11 +44,14 @@ src/
     index.astro                     # the story: header + the five scenes, starts the scene script
     booking.astro                   # booking page
     gift.astro                      # gift voucher page (/gift)
+    about.astro                     # Natalie's story (/about), in her own words
   components/
     SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     BookPill.astro                  # "Boek een sessie": small pill top right on the middle scenes, to /booking
     SoundToggle.astro               # optional music: round frosted button bottom right, off by default (renders only with a soundtrack)
     CtaLink.astro                   # outline pill button with pulse + hover fill
+    StarMark.astro                  # Natalie's mark: five rhombi around one point (as on her Instagram), thin line SVG
+    QuietLink.astro                 # quiet second link: words on a thin copper line + round copper mark (arrow or gift)
     NextCue.astro                   # "next" cue: round button, self-drawing arrow, pulse ring (no words)
     ProgressRail.astro              # one clickable dot per scene on the right edge, a pill on the one on show
     EdgeFade.astro                  # photo scenes fade into one flat color at top/bottom (Safari's bars)
@@ -65,11 +68,18 @@ src/
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingLegal.astro            # registered office + enterprise number, small, under the contact; renders only once both are filled in
       BookingCalendar.astro         # Google Calendar embed (per session) + full-screen link, or placeholder card
+    about/
+      AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, the hero photo wider than the column
+      AboutChapter.astro            # one chapter: years label, title, her paragraphs; rises on scroll (CSS only)
+      AboutPhoto.astro              # a photo between chapters, wider than the column
+      AboutClosing.astro            # her last sentence large in copper, signature, Kies je sessie / of geef het cadeau
     gift/
-      GiftIntro.astro               # label, title, lead, what the gift is ("Er staat geen leeftijd op")
-      GiftCard.astro                # the voucher drawn as a ticket (hero photo, perforated seam), follows the choice
-      GiftOrder.astro               # 1/2/3 personen, how it goes, order via WhatsApp (prefilled) or e-mail
+      GiftIntro.astro               # title, lead, what the gift is ("Voor jong en oud")
+      GiftCard.astro                # the voucher as a gift card (copper panel with her star, perforated seam), follows the choice
+      GiftOrder.astro               # Kies je cadeaubon (card + 1/2/3 personen) and Hoe werkt het? + order via WhatsApp or e-mail
+      GiftContact.astro             # name, e-mail, WhatsApp, registered office + enterprise number
   data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
+  data/booking.ts                   # formAsksSongs: songs + persons via the Google form (true) or WhatsApp after booking (false, for now)
   data/gift.ts                      # voucher prices (35 + 25 per extra person, max 3), the order message + mailto
   data/sound.ts                     # the optional soundtrack path (public/audio/) + its credit/licence
   scripts/gift.ts                   # keeps the voucher and both order links in step with the number of people
@@ -91,7 +101,7 @@ src/
     global.css                      # imports only
     tokens.css                      # design tokens (@theme)
     base.css                        # base elements, .display / .label, reduced motion
-    scenes.css                      # scene/stage pinning mechanics, exit dims
+    scenes.css                      # scene/stage pinning mechanics
   assets/                           # hero.avif, interior.avif, forest.avif, door.avif
 ```
 
@@ -121,7 +131,7 @@ Colors (tuned to the dome: bronze, copper, wood, ivory):
 
 Typography:
 - Display: **Cormorant Garamond 300**, `letter-spacing: -0.02em`, large titles with `clamp(...)`.
-- **Every scene title has one italic accent in `copper-700`** (e.g. *om te voelen.*, *Wel om de deur open te houden.*, *voor jou.*). Keep this consistent.
+- **Every scene title has one italic accent in `copper-700`** (`copper-300` on the dark wooden room) (e.g. *om te voelen.*, *Wel om de deur open te houden.*, *voor jou.*). Keep this consistent.
 - Body: **Figtree 300/400**, 17–18px desktop, 15–16px phone, `line-height` 1.6–1.75.
 - Labels: 12px, `letter-spacing: .34em`, uppercase.
 - Contrast: all text at least 4.5:1 (3:1 from 24px). Text on images gets a soft dark scrim + text-shadow.
@@ -136,7 +146,6 @@ Each scene is a **full-screen stage** (`100lvh`, content in a `100svh` frame). T
 - **Slide up** (changed in November, on request; it used to be a dissolve in place): the next scene slides up from the bottom while the previous one moves up and out with it, like turning a page upward. 0.9s both ways (`FADE`), `power1.inOut`. A step back is the mirror: both slide down.
 - `transition.ts` (`slideUp`): each scene element is moved only by the slide that brings it in (`yPercent` 100 → 0); the outgoing scene moves its `.stage` (0 → −100), so two slides never drive the same element. A jump back over several scenes (a dot on the rail) puts the earlier scene in place underneath and slides the one on screen down off it.
 - The Safari bars follow how far the new scene has slid in (`shown()` in `transition.ts`).
-- The `.exit-dim` layers in the scenes are left over from the dissolve and no longer used.
 - All content of a scene is fully built **before** the next scene starts sliding in.
 
 ### One step per screen (desktop and touch alike)
@@ -174,12 +183,12 @@ Deliberately removed. Do not bring back.
 - Image: `interior.avif` = rendered inside of the dome (rhombic triacontahedron seen from inside, wooden panels with grain, thin semi-transparent white seams, warm light from below).
 - No visible lamp / no "sun".
 - Scrim: dark wash along the edges and behind text for readability.
-- Copy (desktop: spread out; phone/tablet portrait: title on top, the rest grouped at the bottom):
-  - h2: **Soms hoef je alleen maar te luisteren.** (top left)
-  - Een geometrische ruimte met unieke luidsprekers, en muziek die je van alle kanten omringt. (bottom left)
-  - Een ervaring om te voelen (right middle, right aligned)
-  - *Geen afleiding, geen verwachtingen. Alleen de klanken en wat ze in je oproepen.* (bottom right, italic, larger)
-- Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Texts appear one by one.
+- Copy, in two voices only, like scenes 04 and 05 (calmer, on Natalie's request of November: four type styles in four corners felt restless). Desktop: label + title top left, body bottom left, closing line bottom right on the same baseline; phone/tablet portrait: label + title on top, the rest grouped at the bottom:
+  - label (copper-300): EEN ERVARING OM TE VOELEN
+  - h2: **Soms hoef je alleen maar** *te luisteren.* (accent italic in copper-300, on dark)
+  - Een geometrische ruimte met unieke luidsprekers, en muziek die je van alle kanten omringt. (Figtree)
+  - *Geen afleiding, geen verwachtingen. Alleen de klanken en wat ze in je oproepen.* (Cormorant italic)
+- Animation: the image starts zoomed in `scale(1.4)` and dark → zooms out and brightens (a camera stepping inside). Label + title rise together, then the body, then the closing line fades in.
 
 ### 04 · New perspectives — guiding, not fixing
 - Background goes from copper-brown `#6B4A36` → ivory in the first ~17% of the build; only then text.
@@ -202,8 +211,9 @@ Deliberately removed. Do not bring back.
   - label: EEN LUISTEREND OOR
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
   - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
-  - *Natalie Van Der Voort* (signature, Cormorant italic)
+  - *Natalie Van der Voort* (signature, Cormorant italic)
   - THE MEREON LEGACY (under the signature, small label in `muted`)
+  - Under the signature: *Lees mijn verhaal* (`QuietLink`, arrow) to `/about`
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
 ### 06 · The invitation (`id="invitation"`)
@@ -216,6 +226,7 @@ Deliberately removed. Do not bring back.
   - A quiet practical line (15px, copper, lining numerals): **Soundroom vanaf €35 · Coaching €65**
   - Button: **Kies je sessie** → `/booking` (matches step 1 on the booking page)
   - The photo may still change (Natalie is still looking, perhaps something with music).
+- Second links (`QuietLink`: *Lees mijn verhaal*, *of geef het cadeau*): 14px words on a faint 1px copper line, then a 34px round mark (1px copper ring) with an arrow or a gift. Hover/focus: the line draws itself full copper from the left, the mark fills copper with an ivory icon, the arrow nudges right, the gift tilts. Hover only under `@media (hover: hover)`.
 - Button style (`CtaLink`): clean outline (1px bronze), 14px, pill, min height 44px; soft copper **pulse ring** every ~3.2s; on hover/focus dark bronze fills from left to right, text turns ivory, arrow `→` slides in.
 - Animation: the photo opens from the bottom, then title, text, button.
 
@@ -229,7 +240,9 @@ The page that matters most, built phone-first. **One calm column on every screen
   - Each step is a rounded card (18px) with a numbered circle and a Cormorant title. The open one is brighter with a soft shadow; steps still to come are there but faded (`is-locked`).
   - **1 Kies je sessie**: two tappable option cards: **Soundroom** — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **€35** · 50 minuten — **+ €25** per bijkomende persoon · max. 3 personen; **Coaching** — … met begeleiding van Natalie. — **€65** · 60 minuten. Prices in `copper-700`, Figtree lining numerals.
   - **2 Jouw muziek**: there is always music; the choice is who picks it. Two option cards (side by side from 600px): **Ik kies zelf liedjes** — *Geef bij het boeken de liedjes door die je graag wil horen (tot 13 liedjes).* (2 for coaching, following the session); **Ik kies liever niet** — *Natalie kiest de muziek voor je. Je hoeft niets voor te bereiden.* Folded summaries: *Eigen liedjes* / *Natalie kiest*.
-  - **3 Kies een moment**: with own songs the line *Vergeet niet je liedjes door te geven in het formulier: tot 13 liedjes.* (2 for coaching); the Google agenda of the chosen session; *Open de agenda op volledig scherm ↗*; *Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.*
+  - **3 Kies een moment**: the Google agenda of the chosen session; *Open de agenda op volledig scherm ↗*; *Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.* The songs and the number of people depend on `formAsksSongs` (`data/booking.ts`):
+    - `false` (now: Natalie's Google form doesn't ask for them yet): above the agenda *Kies hieronder je moment. Stuur Natalie daarna je liedjes via WhatsApp: tot 13 liedjes.* (2 for coaching), or with 2–3 people and Natalie's music *Kies hieronder je moment. Laat Natalie daarna via WhatsApp weten dat jullie met 2 komen.*; under the agenda a soft panel *NA HET BOEKEN* with a dark pill **Stuur je liedjes via WhatsApp →** (or **Laat het Natalie weten via WhatsApp →**), a wa.me message ready: session, number of people, and a numbered list to fill in. Step 2's own-songs card says *Stuur na het boeken de liedjes door…*.
+    - `true` (once the form has "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?"): *Vergeet niet je liedjes door te geven in het formulier: tot 13 liedjes.* and *Vermeld in het formulier dat jullie met 2 komen.*; step 2 says *Geef bij het boeken…*.
   - Option cards: whole card is the target, a radio stays in the page for keyboard and screen readers. Chosen: 2px copper outline, warmer background, the round mark fills copper and draws a tick. Hover: outline darkens; press: scales to .99.
   - **Soundroom: how many people** — once Soundroom is chosen, a panel under the cards: *Met hoeveel zijn jullie?* with a − **1** + stepper (48px buttons, 1 to 3, the ends disabled), *persoon/personen*, and *Totaal* **€35 / €60 / €85** (base €35 + €25 per extra person; `data-price`, `data-extra`, `data-max` on the radio). Coaching is one-on-one: no panel. The Google form can't take the number, so with 2 or 3 step 3 says *Vermeld in het formulier dat jullie met 2 komen.*
   - A choice **only marks the card**; **Volgende →** (dark pill, full width on phones, disabled until the step has a choice; only with JavaScript) opens the next step that still needs a choice. The finished step folds into one line: its title, what was chosen in copper (*Soundroom · 2 personen · €60*, *Eigen liedjes*), and **Wijzig** (on phones a small grid: number + title, the choice under the title, Wijzig on the right). Wijzig reopens that step; Volgende from there goes on to the first step still open, so with the music already chosen straight back to the agenda.
@@ -238,19 +251,27 @@ The page that matters most, built phone-first. **One calm column on every screen
   - ⚠️ Nothing in a step may stick out past its card: on a phone Chrome then widens the whole page (`innerHeight` jumped 844 → 925 with an earlier negative-margin summary), the view shifts and taps land ~80px too low.
   - Without JavaScript (`[data-booking-ready]` missing) every step is open and the agenda shows at once.
 - **Agenda** (`BookingCalendar.astro`): Google Calendar appointment schedule, one per session (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`, each falling back to `PUBLIC_BOOKING_URL`), `hl=nl`, loaded only once step 3 opens. 720px high on desktop, 1180px on phones so the month and the times fit without the box scrolling by itself; rounded 12px.
-- **Contact** below: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me, new tab); then the legal line (name · sociale zetel · ondernemingsnummer, 13px, `muted`): a Belgian self-employed person must show the business address — the registered office, never the home address. Natalie Van Der Voort · Paalstraat 149, 2900 Schoten · ondernemingsnummer BE 0882.177.881 (`business` in `data/contact.ts`; hidden if emptied).
+- **Contact** below: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me, new tab); then the legal line (name · sociale zetel · ondernemingsnummer, 13px, `muted`): a Belgian self-employed person must show the business address — the registered office, never the home address. Natalie Van der Voort · Paalstraat 149, 2900 Schoten · ondernemingsnummer BE 0882.177.881 (`business` in `data/contact.ts`; hidden if emptied).
 - Animation on load (CSS only, `data-rise` + `--i` in `base.css`): intro, progress, the three steps and contact rise one after another.
 - Checked with real touch taps (mobile emulation) at 320×568 and 390×844, and with a mouse at 1440×900: no sideways scroll, all targets ≥ 44px.
 
-### Gift page (`/gift`)
-Added in November on Natalie's request: a gift for December, "een experience kasootje", **with no age on it** (the sessions are 18–35; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie.
-- Header: wordmark + "← Terug". Intro: label CADEAUBON, h1 **Geef een moment** *cadeau.*, *Geen spullen, maar ruimte. Om even te zijn.*, then: Een klankervaring in een geometrische ruimte midden in het bos: muziek die je van alle kanten omringt, vijftig minuten lang. Voor iemand die je graag ziet, alleen of samen. Er staat geen leeftijd op.
-- The voucher (`GiftCard`, `aria-hidden`): a ticket with the hero photo left (on top on phones), a dashed seam with half-moon notches, *Cadeaubon*, *Een klankervaring* *in het bos.*, Soundroom · 50 minuten, *Voor 1 persoon* + price.
-- **Voor hoeveel personen?** three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice.
-- How it goes (copper numbered circles): **Stuur Natalie een berichtje.** Ze maakt de bon op naam in orde, met jouw boodschap erbij als je wil. — **Geef hem door.** Digitaal, om door te sturen of af te drukken. — **Wie hem krijgt, kiest zelf een moment** in de agenda. De bon blijft een jaar geldig.
-- **Bestel via WhatsApp →** (dark pill, wa.me with *Hoi Natalie, ik wil graag een cadeaubon geven voor de soundroom, voor 2 personen (€60).*) and *of per e-mail* (mailto, subject *Cadeaubon soundroom*). Then contact + legal line, as on /booking.
-- Ways in: on the invitation scene *of geef het cadeau* beside the button; on /booking *Iemand anders verrassen? Geef een cadeaubon →* right under the age.
-- ⚠️ Sample copy; validity (one year), payment and delivery still to be confirmed by Natalie.
+### Natalie's story (`/about`, also `/verhaal`)
+Her own text of November, **verbatim** (paragraph breaks restored from the PDF wrapping); only the chapter labels with the years are added. A reading page, not a scene: one 640px column, Figtree 18px / 1.8, ivory.
+- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then the hero photo (16:10, wider than the column; edge to edge on phones).
+- Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting** · the interior photo · *Vandaag* **Een plek om verder te ontdekken**.
+- Close: her last sentence (*Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.*) large in copper italic, her signature + THE MEREON LEGACY, then **Kies je sessie** (CtaLink) and *of geef het cadeau*.
+- Chapters rise in as they scroll into view with CSS scroll-driven animations (`animation-timeline: view()`, under `@supports` and no reduced motion); without support they are simply there. No JS on this page.
+- Linked from scene 05 (*Lees mijn verhaal →*).
+
+### Gift page (`/gift`, also `/cadeau`)
+Added in November on Natalie's request: a gift for December, "een experience kasootje", **for young and old** (the sessions are 18–35; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie. Copy: Natalie's text of November, verbatim.
+- Header: wordmark + "← Terug". h1 **Geef een moment** *cadeau.*, *Geen spullen, maar een bijzondere ervaring. Even weg van de drukte, midden in het bos.*, then: In de Soundroom word je vijftig minuten lang omringd door klank, in een unieke geometrische ruimte tussen de bomen. Een moment om te luisteren, te voelen en gewoon te zijn. / Voor iemand die je graag ziet. Om alleen te beleven of samen te delen. Voor jong en oud.
+- Each part below opens with a thin copper rule and a Cormorant h2.
+- **Kies je cadeaubon**: the voucher (`GiftCard`, `aria-hidden`), a gift card in Natalie's Instagram style: a copper panel left (on top on phones) with her star mark (`StarMark`) in thin ivory lines and SOUNDROOM under it, a dashed seam with half-moon notches, *Cadeaubon*, *Een bijzondere klankervaring* *in het bos.*, Soundroom · 50 minuten · Schoten, *Voor 1 persoon* + price. Then three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice. Under them, italic: *Kies voor hoeveel personen je deze ervaring cadeau wilt doen.*
+- **Hoe werkt het?** (copper numbered circles, title on its own line): **Bestel je cadeaubon** Stuur Natalie een berichtje via WhatsApp of e-mail. Ze maakt de bon persoonlijk op naam, met een eigen boodschap als je dat graag wilt. — **Geef hem cadeau** Je ontvangt de cadeaubon digitaal. Klaar om door te sturen of mooi af te drukken. — **Laat de ervaring beginnen** Wie de bon krijgt, kiest zelf een geschikt moment in de agenda. De cadeaubon is één jaar geldig.
+- **Bestel via WhatsApp →** (dark pill, wa.me with *Hoi Natalie, ik wil graag een cadeaubon geven voor de soundroom, voor 2 personen (€60).*) and *Of bestel via e-mail.* (`QuietLink`, mailto, subject *Cadeaubon soundroom*).
+- **Contact** (`GiftContact`): **Natalie Van der Voort**, e-mail, WhatsApp, then small: Paalstraat 149, 2900 Schoten / Ondernemingsnummer BE 0882.177.881.
+- Ways in: on the invitation scene *of geef het cadeau* (`QuietLink`, gift icon) beside the button; on /booking *Iemand anders verrassen? Geef een cadeaubon →* right under the age; at the end of Natalie's story.
 
 ---
 
@@ -280,7 +301,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
   - Safari also samples the background of fixed elements at the screen edges, so every `.scene` has `background-color: var(--tint)` (its stage covers it). Light scenes keep **plain ivory at the top and bottom edge** (scene 06's warm gradient sits in the middle; the booking page is ivory too). Nothing may cast a shadow into the screen edges.
   - A scene that arrives in another color and then lifts (perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
   - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge).
-- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `netlify.toml`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. `media-src 'self'` lets the soundtrack play from `public/audio/`; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
+- Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `netlify.toml`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Everything under `/_astro/*` (hashed names) is cached for a year (`immutable`); the two first fonts (Cormorant 300, Figtree 300) are preloaded in `Base.astro`. `media-src 'self'` lets the soundtrack play from `public/audio/`; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
 - SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
 
 ---
@@ -299,7 +320,8 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Natalie's confirmation that the dome may be shown and that the copper palette is right
 - Domain name
 - Higher-resolution `door.avif` (currently 330×490, soft on retina screens)
-- In Natalie's Google appointment schedule: turn off Google Meet, add the questions "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?", and a second appointment schedule so Soundroom (50 min) and Coaching (60 min) each have their own (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`)
+- In Natalie's Google appointment schedule: turn off Google Meet, add the questions (then set `formAsksSongs = true` in `data/booking.ts`, after one test booking) "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?", and a second appointment schedule so Soundroom (50 min) and Coaching (60 min) each have their own (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`)
 - The soundtrack (royalty-free) for the sound toggle
-- Gift page: Natalie's approval of the copy, the validity (one year?), how a voucher is paid and delivered, and how a receiver mentions it when booking (e.g. a code in the Google form)
+- Story page: Natalie's approval of the chapter labels (years) and the photos (the interior is a render; her own photos of the build would fit here)
+- Gift page: how a voucher is paid, and how a receiver mentions it when booking (e.g. a code in the Google form)
 - Netlify subdomain, then hand-over to Natalie's account
