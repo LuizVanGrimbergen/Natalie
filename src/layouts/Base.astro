@@ -9,6 +9,9 @@ import '@fontsource/figtree/latin-400.css';
 import '@fontsource/figtree/latin-500.css';
 import '../styles/global.css';
 import hero from '../assets/hero.avif';
+// The two faces every page needs first (titles, body text): preloaded, so the text doesn't swap late.
+import displayFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2?url';
+import bodyFont from '@fontsource/figtree/files/figtree-latin-300-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -35,6 +38,8 @@ const ogUrl = new URL(og.src, Astro.site);
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_BE" />
