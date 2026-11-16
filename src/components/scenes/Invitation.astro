@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets';
 // The glowing opening of the dome with the orange lamp (still small: 330×490).
 import door from '../../assets/door.avif';
 import CtaLink from '../CtaLink.astro';
+import QuietLink from '../QuietLink.astro';
 ---
 
 <section id="invitation" class="scene invitation" style="z-index: 5" data-tint="#F5F1E9" data-scene="invitation" data-enter="light" aria-labelledby="invitation-title">
@@ -19,7 +20,7 @@ import CtaLink from '../CtaLink.astro';
           <p class="text__facts" data-reveal="3">Soundroom vanaf €35 · Coaching €65</p>
           <div class="text__actions" data-reveal="3">
             <CtaLink href="/booking">Kies je sessie</CtaLink>
-            <a class="text__gift" href="/gift">of geef het cadeau</a>
+            <QuietLink href="/gift" icon="gift">of geef het cadeau</QuietLink>
           </div>
         </div>
         <figure class="photo" aria-hidden="true" data-unveil>
@@ -74,23 +75,6 @@ import CtaLink from '../CtaLink.astro';
     flex-wrap: wrap;
     align-items: center;
     gap: 4px 22px;
-  }
-  .text__gift {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    font-size: 14px;
-    letter-spacing: 0.02em;
-    color: var(--color-bronze-900);
-    text-decoration: underline;
-    text-decoration-color: rgb(156 85 48 / 0.45);
-    text-underline-offset: 5px;
-    transition: text-decoration-color 0.3s ease;
-  }
-  @media (hover: hover) {
-    .text__gift:hover {
-      text-decoration-color: var(--color-copper-700);
-    }
   }
   .text__h {
     font-size: clamp(40px, 5.2vw, 96px);

@@ -1,0 +1,121 @@
+---
+/**
+ * The quiet second choice beside a CtaLink, or a way on to another page: words with a thin copper line under
+ * them, and a small round copper mark with an icon (an arrow, or a gift). On hover/focus the line draws itself
+ * full from the left, the mark fills copper and the icon moves a little. Light scenes and pages only.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  icon?: 'arrow' | 'gift';
+}
+const { href, icon = 'arrow', ...rest } = Astro.props;
+---
+
+<a class:list={['quiet', `quiet--${icon}`]} href={href} {...rest}>
+  <span class="quiet__text"><slot /></span>
+  <span class="quiet__mark" aria-hidden="true">
+    {
+      icon === 'gift' ? (
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path d="M2.5 5.5h11v2.5h-11zM3.5 8v5.5h9V8M8 5.5v8" />
+          <path d="M8 5.5C6.8 3 4.2 2.6 4.4 4.3c.1.9 1.8 1.2 3.6 1.2M8 5.5c1.2-2.5 3.8-2.9 3.6-1.2-.1.9-1.8 1.2-3.6 1.2" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" />
+        </svg>
+      )
+    }
+  </span>
+</a>
+
+<style>
+  .quiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-bronze-900);
+    text-decoration: none;
+  }
+  /* The words, with a faint line that draws itself full in copper on hover. */
+  .quiet__text {
+    position: relative;
+    padding-bottom: 3px;
+    background: linear-gradient(rgb(156 85 48 / 0.3), rgb(156 85 48 / 0.3)) left bottom / 100% 1px no-repeat;
+  }
+  .quiet__text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-copper-700);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.6, 0, 0.2, 1);
+  }
+  .quiet__mark {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(156 85 48 / 0.45);
+    color: var(--color-copper-700);
+    transition:
+      background 0.4s ease,
+      box-shadow 0.4s ease,
+      color 0.4s ease;
+  }
+  .quiet__mark svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  .quiet:focus-visible {
+    outline: 2px solid var(--color-copper-700);
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+  .quiet:focus-visible .quiet__text::after {
+    transform: scaleX(1);
+  }
+  .quiet:focus-visible .quiet__mark {
+    background: var(--color-copper-700);
+    box-shadow: inset 0 0 0 1px var(--color-copper-700);
+    color: var(--color-ivory);
+  }
+  .quiet:active .quiet__mark {
+    transform: scale(0.94);
+  }
+  /* Hover only where there is a real pointer: on a phone a tapped link kept its tint. */
+  @media (hover: hover) {
+    .quiet:hover .quiet__text::after {
+      transform: scaleX(1);
+    }
+    .quiet:hover .quiet__mark {
+      background: var(--color-copper-700);
+      box-shadow: inset 0 0 0 1px var(--color-copper-700);
+      color: var(--color-ivory);
+    }
+    .quiet--arrow:hover .quiet__mark svg {
+      transform: translateX(2px);
+    }
+    .quiet--gift:hover .quiet__mark svg {
+      transform: translateY(-1px) rotate(-8deg);
+    }
+  }
+</style>
