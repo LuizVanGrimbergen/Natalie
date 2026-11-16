@@ -20,7 +20,7 @@ export const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURI
  * once both are filled in.
  */
 export const business = {
-  name: 'Natalie Van Der Voort',
+  name: 'Natalie Van der Voort',
   seat: 'Paalstraat 149, 2900 Schoten',
   enterpriseNumber: 'BE 0882.177.881',
 };
