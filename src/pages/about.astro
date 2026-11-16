@@ -1,12 +1,13 @@
 ---
 /**
- * Natalie's story (/about, also /verhaal): how the soundroom came to be, in her own words (text of November,
- * used verbatim; only the chapter labels with the years are added). One reading column, three chapters, a
+ * Natalie's story (/about, also /verhaal): how the soundroom came to be, in her own words (texts of November,
+ * used verbatim; only the chapter labels with the years are added). Her opening words ("Ik geloof diep…") come first. One reading column, three chapters, a
  * photo between them, her last sentence as the close. Photos: the room in the forest, the build (her own photos of November), the inside looking out. Linked from scene 05, where she introduces herself.
  */
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import AboutIntro from '../components/about/AboutIntro.astro';
+import AboutLead from '../components/about/AboutLead.astro';
 import AboutChapter from '../components/about/AboutChapter.astro';
 import AboutPhoto from '../components/about/AboutPhoto.astro';
 import AboutClosing from '../components/about/AboutClosing.astro';
@@ -25,6 +26,7 @@ import buildWorkshop from '../assets/build-workshop.jpg';
     <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
     <main class="layout">
       <AboutIntro />
+      <AboutLead />
 
       <AboutChapter id="began" label="2018 — 2023" title="Waar het begon" first>
         <p>
