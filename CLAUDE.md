@@ -70,7 +70,6 @@ src/
       BookingCalendar.astro         # Google Calendar embed (per session) + full-screen link, or placeholder card
     about/
       AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, the hero photo wider than the column
-      AboutLead.astro               # her opening words ("Ik geloof diep…"), Cormorant, between the first photo and chapter 1
       AboutChapter.astro            # one chapter: years label, title, her paragraphs; rises on scroll (CSS only)
       AboutPhoto.astro              # a photo between chapters, wider than the column
       AboutPhotoPair.astro          # two photos side by side inside a chapter (the build), stacked on small phones
@@ -207,15 +206,15 @@ Deliberately removed. Do not bring back.
 
 ### 05 · Who welcomes you
 - Ivory, soft window light on the wall (blurred diagonal patch of light).
-- Desktop: text left, portrait right (4:5). Phone/tablet portrait: small portrait on top, text below.
+- Desktop: text left (7fr), portrait right (4fr, 4:5). Tablet portrait: small portrait on top, text below. Phones and phone landscape: no portrait (the long text needs the room); phone landscape sets the text in two columns; short phones (≤700px high) drop the label and put signature and link on one row. Type scales with the viewport height so the three paragraphs always fit one screen (checked from 320×568 to 1920×1080).
 - Portrait: the dome in the forest (`forest.avif`) stands in until there is a real photo of Natalie.
 - Copy:
   - label: EEN LUISTEREND OOR
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Ik geloof niet dat jonge mensen gerepareerd moeten worden. Wel dat er nood is aan veilige plekken waar ze gewoon even kunnen zijn. Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
+  - Natalie's text "Deur open" (28 October), verbatim, three paragraphs (it replaced the earlier sample about "gerepareerd"): *Ik geloof diep dat jonge mensen behoefte hebben aan veilige plekken waar ze even kunnen vertragen, …* / *Vanuit die overtuiging heb ik deze ruimte met veel liefde gecreëerd. …* / *Het mooiste compliment dat ik kan krijgen, … opnieuw echt thuiskomen bij zichzelf.*
   - *Natalie Van der Voort* (signature, Cormorant italic)
   - THE MEREON LEGACY (under the signature, small label in `muted`)
-  - Under the signature: *Lees mijn verhaal* (`QuietLink`, arrow) to `/about`
+  - Beside the signature (under it on tall phones): *Lees mijn verhaal* (`QuietLink`, arrow) to `/about`
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
 ### 06 · The invitation (`id="invitation"`)
@@ -259,7 +258,7 @@ The page that matters most, built phone-first. **One calm column on every screen
 
 ### Natalie's story (`/about`, also `/verhaal`)
 Her own text of November, **verbatim** (paragraph breaks restored from the PDF wrapping); only the chapter labels with the years are added. A reading page, not a scene: one 640px column, Figtree 18px / 1.8, ivory.
-- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then the hero photo (16:10, wider than the column; edge to edge on phones), then her opening words in Cormorant 23–27px, verbatim (*Ik geloof diep dat jonge mensen behoefte hebben aan veilige plekken…*, three paragraphs, the last words *echt thuiskomen bij zichzelf.* in copper italic), closed by a thin copper rule.
+- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then the hero photo (16:10, wider than the column; edge to edge on phones).
 - Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting**, with two of Natalie's build photos side by side after the 2025 paragraph (`AboutPhotoPair`: the build from above, Natalie in the workshop; the latter is only 326px wide) · her photo of the inside looking out through an opening to the trees · *Vandaag* **Een plek om verder te ontdekken**.
 - Close: her last sentence (*Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.*) large in copper italic, her signature + THE MEREON LEGACY, then **Kies je sessie** (CtaLink) and *of geef het cadeau*.
 - Chapters rise in as they scroll into view with CSS scroll-driven animations (`animation-timeline: view()`, under `@supports` and no reduced motion); without support they are simply there. No JS on this page.
