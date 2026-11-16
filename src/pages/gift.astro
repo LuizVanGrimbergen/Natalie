@@ -2,25 +2,22 @@
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import GiftIntro from '../components/gift/GiftIntro.astro';
-import GiftCard from '../components/gift/GiftCard.astro';
 import GiftOrder from '../components/gift/GiftOrder.astro';
-import BookingContact from '../components/booking/BookingContact.astro';
-import BookingLegal from '../components/booking/BookingLegal.astro';
+import GiftContact from '../components/gift/GiftContact.astro';
 ---
 
 <Base
   title="Natalie — Geef een moment cadeau"
-  description="Een cadeaubon voor een klankervaring in een geometrische ruimte in het bos. Voor 1 tot 3 personen, zonder leeftijd."
+  description="Geen spullen, maar een bijzondere ervaring: vijftig minuten klank in een geometrische ruimte in het bos. Een cadeaubon voor 1 tot 3 personen, voor jong en oud."
   tint="#F5F1E9"
 >
   <div class="page">
     <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
-    <!-- One calm column, like the booking page: the intro, the voucher, the choice and how to order, contact. -->
+    <!-- One calm column, like the booking page: the intro, choosing the voucher, how it works, contact. -->
     <main class="layout">
       <GiftIntro />
-      <GiftCard />
       <GiftOrder />
-      <div data-rise style="--i: 8"><BookingContact /><BookingLegal /></div>
+      <div data-rise style="--i: 8"><GiftContact /></div>
     </main>
   </div>
 </Base>

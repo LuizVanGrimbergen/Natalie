@@ -1,55 +1,98 @@
 ---
 /**
- * Choosing the voucher (for how many people) and ordering it from Natalie. One person is chosen from the start,
- * so the order links work without JavaScript too; scripts/gift.ts keeps them in step with the choice.
+ * Choosing the voucher (for how many people), how it goes, and ordering it from Natalie. One person is chosen
+ * from the start, so the order links work without JavaScript too; scripts/gift.ts keeps the voucher (GiftCard)
+ * and both links in step with the choice.
  */
 import { whatsapp } from '../../data/contact';
 import { MAX, orderMail, orderMessage, personsText, price } from '../../data/gift';
+import GiftCard from './GiftCard.astro';
+import QuietLink from '../QuietLink.astro';
 
 const options = Array.from({ length: MAX }, (_, i) => i + 1);
+const steps = [
+  {
+    title: 'Bestel je cadeaubon',
+    text: 'Stuur Natalie een berichtje via WhatsApp of e-mail. Ze maakt de bon persoonlijk op naam, met een eigen boodschap als je dat graag wilt.',
+  },
+  {
+    title: 'Geef hem cadeau',
+    text: 'Je ontvangt de cadeaubon digitaal. Klaar om door te sturen of mooi af te drukken.',
+  },
+  {
+    title: 'Laat de ervaring beginnen',
+    text: 'Wie de bon krijgt, kiest zelf een geschikt moment in de agenda. De cadeaubon is één jaar geldig.',
+  },
+];
 ---
 
-<section class="order" aria-labelledby="order-title" data-gift>
-  <h2 id="order-title" class="order__title" data-rise style="--i: 4">Voor hoeveel personen?</h2>
-  <fieldset class="options" data-rise style="--i: 5">
-    <legend class="visually-hidden">Voor hoeveel personen is de cadeaubon?</legend>
-    {
-      options.map((persons) => (
-        <label class="option">
-          <input class="option__input" type="radio" name="persons" value={persons} checked={persons === 1} />
-          <span class="option__mark" aria-hidden="true">
-            <svg viewBox="0 0 16 16" focusable="false">
-              <path d="M3.5 8.5l3 3 6-7" />
-            </svg>
-          </span>
-          <span class="option__main">
-            <span class="option__name">{personsText(persons)}</span>
-            <span class="option__price">€{price(persons)}</span>
-          </span>
-        </label>
-      ))
-    }
-  </fieldset>
+<div class="order" data-gift>
+  <section class="part" aria-labelledby="choose-title">
+    <h2 id="choose-title" class="order__title" data-rise style="--i: 3">Kies je cadeaubon</h2>
+    <GiftCard />
+    <fieldset class="options" data-rise style="--i: 5" aria-describedby="choose-hint">
+      <legend class="visually-hidden">Voor hoeveel personen is de cadeaubon?</legend>
+      {
+        options.map((persons) => (
+          <label class="option">
+            <input class="option__input" type="radio" name="persons" value={persons} checked={persons === 1} />
+            <span class="option__mark" aria-hidden="true">
+              <svg viewBox="0 0 16 16" focusable="false">
+                <path d="M3.5 8.5l3 3 6-7" />
+              </svg>
+            </span>
+            <span class="option__main">
+              <span class="option__name">{personsText(persons)}</span>
+              <span class="option__price">€{price(persons)}</span>
+            </span>
+          </label>
+        ))
+      }
+    </fieldset>
+    <p id="choose-hint" class="order__hint" data-rise style="--i: 5">Kies voor hoeveel personen je deze ervaring cadeau wilt doen.</p>
+  </section>
 
-  <ol class="how" data-rise style="--i: 6">
-    <li><strong>Stuur Natalie een berichtje.</strong> Ze maakt de bon op naam in orde, met jouw boodschap erbij als je wil.</li>
-    <li><strong>Geef hem door.</strong> Digitaal, om door te sturen of af te drukken.</li>
-    <li><strong>Wie hem krijgt, kiest zelf een moment</strong> in de agenda. De bon blijft een jaar geldig.</li>
-  </ol>
-
-  <div class="actions" data-rise style="--i: 7">
-    <a class="order__wa" href={whatsapp(orderMessage(1))} target="_blank" rel="noopener" data-gift-whatsapp>
-      Bestel via WhatsApp<span aria-hidden="true">&nbsp;→</span>
-    </a>
-    <a class="order__mail" href={orderMail(1)} data-gift-mail>of per e-mail</a>
-  </div>
-</section>
+  <section class="part" aria-labelledby="how-title">
+    <h2 id="how-title" class="order__title" data-rise style="--i: 6">Hoe werkt het?</h2>
+    <ol class="how" data-rise style="--i: 6">
+      {
+        steps.map((step) => (
+          <li>
+            <strong>{step.title}</strong>
+            {step.text}
+          </li>
+        ))
+      }
+    </ol>
+    <div class="actions" data-rise style="--i: 7">
+      <a class="order__wa" href={whatsapp(orderMessage(1))} target="_blank" rel="noopener" data-gift-whatsapp>
+        Bestel via WhatsApp<span aria-hidden="true">&nbsp;→</span>
+      </a>
+      <QuietLink href={orderMail(1)} data-gift-mail>Of bestel via e-mail.</QuietLink>
+    </div>
+  </section>
+</div>
 
 <style>
   .order {
     display: flex;
     flex-direction: column;
+    gap: 64px;
+  }
+  /* Each part opens with a thin copper rule, like a new page in the story. */
+  .part {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+    padding-top: 40px;
+    border-top: 1px solid rgb(156 85 48 / 0.2);
+  }
+  .order__hint {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--color-body-on-ivory);
   }
   .order__title {
     font-family: var(--font-display);
@@ -178,7 +221,10 @@ const options = Array.from({ length: MAX }, (_, i) => i + 1);
     font-variant-numeric: lining-nums;
     color: var(--color-copper-700);
   }
+  /* The step's title on its own line, its text under it. */
   .how strong {
+    display: block;
+    margin-bottom: 2px;
     font-weight: 500;
     color: var(--color-bronze-900);
   }
@@ -207,25 +253,12 @@ const options = Array.from({ length: MAX }, (_, i) => i + 1);
   .order__wa:active {
     transform: scale(0.98);
   }
-  .order__mail {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    font-size: 15px;
-    color: var(--color-bronze-900);
-    text-decoration: underline;
-    text-decoration-color: rgb(156 85 48 / 0.45);
-    text-underline-offset: 5px;
-  }
   @media (hover: hover) {
     .option:hover {
       box-shadow: inset 0 0 0 1px rgb(156 85 48 / 0.55);
     }
     .order__wa:hover {
       background: var(--color-copper-700);
-    }
-    .order__mail:hover {
-      text-decoration-color: var(--color-copper-700);
     }
   }
 

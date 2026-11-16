@@ -9,15 +9,15 @@ import hero from '../../assets/hero.avif';
 import { BASE, personsText } from '../../data/gift';
 ---
 
-<figure class="card" aria-hidden="true" data-rise style="--i: 3">
+<figure class="card" aria-hidden="true" data-rise style="--i: 4">
   <div class="card__photo">
     <Picture class="card__img" src={hero} formats={['avif', 'webp']} fallbackFormat="jpg" alt="" widths={[360, 720]} sizes="(max-width: 600px) 92vw, 300px" />
   </div>
   <div class="card__seam"></div>
   <div class="card__text">
     <p class="label card__label">Cadeaubon</p>
-    <p class="display card__title">Een klankervaring <em>in het bos.</em></p>
-    <p class="card__meta">Soundroom · 50 minuten</p>
+    <p class="display card__title">Een bijzondere klankervaring <em>in het bos.</em></p>
+    <p class="card__meta">Soundroom · 50 minuten · Schoten</p>
     <p class="card__for">
       <span>Voor <span data-gift-persons>{personsText(1)}</span></span>
       <span class="card__price">€<span data-gift-price>{BASE}</span></span>
