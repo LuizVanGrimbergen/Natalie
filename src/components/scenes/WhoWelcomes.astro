@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import QuietLink from '../QuietLink.astro';
 // TODO(Natalie): her portrait is still to be taken; until then the dome in the forest stands in.
 import portrait from '../../assets/forest.avif';
 ---
@@ -20,10 +21,13 @@ import portrait from '../../assets/forest.avif';
             kunnen zijn.<br />
             Daarom maakte ik deze ruimte en verwelkom ik hen er graag.
           </p>
-          <p class="text__sign" data-reveal="4">
-            <em class="display">Natalie Van Der Voort</em>
-            <span class="label text__org">The Mereon Legacy</span>
-          </p>
+          <div class="text__end" data-reveal="4">
+            <p class="text__sign">
+              <em class="display">Natalie Van Der Voort</em>
+              <span class="label text__org">The Mereon Legacy</span>
+            </p>
+            <QuietLink href="/about">Lees mijn verhaal</QuietLink>
+          </div>
         </div>
         <figure class="portrait" data-unveil>
           <div class="portrait__frame">
@@ -102,6 +106,13 @@ import portrait from '../../assets/forest.avif';
     display: block;
     margin-top: 6px;
     color: var(--color-muted);
+  }
+  /* Her signature, with the way to her whole story (/about) under it. */
+  .text__end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
   }
 
   .portrait {

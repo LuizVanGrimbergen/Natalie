@@ -22,3 +22,10 @@
   from = "/cadeau"
   to = "/gift"
   status = 301
+
+# A Dutch address for Natalie's story.
+[[redirects]]
+  from = "/verhaal"
+  to = "/about"
+  status = 301
+

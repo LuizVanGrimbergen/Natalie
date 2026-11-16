@@ -1,0 +1,132 @@
+---
+/**
+ * Natalie's story (/about, also /verhaal): how the soundroom came to be, in her own words (text of November,
+ * used verbatim; only the chapter labels with the years are added). One reading column, three chapters, a
+ * photo between them, her last sentence as the close. Linked from scene 05, where she introduces herself.
+ */
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import AboutIntro from '../components/about/AboutIntro.astro';
+import AboutChapter from '../components/about/AboutChapter.astro';
+import AboutPhoto from '../components/about/AboutPhoto.astro';
+import AboutClosing from '../components/about/AboutClosing.astro';
+import interior from '../assets/interior.avif';
+---
+
+<Base
+  title="Natalie — Mijn verhaal"
+  description="Hoe de soundroom ontstond: van gesprekken met Frans Van Hauwaert in 2018 tot een geometrische ruimte in het bos, waar klank en vorm elkaar ontmoeten."
+  tint="#F5F1E9"
+>
+  <div class="page">
+    <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
+    <main class="layout">
+      <AboutIntro />
+
+      <AboutChapter id="began" label="2018 — 2023" title="Waar het begon" first>
+        <p>
+          Het idee om een bijzondere muziekruimte te creëren ontstond in 2018, tijdens een van de vele inspirerende gesprekken
+          met mijn dierbare vriend Frans Van Hauwaert, een uitzonderlijk akoestisch talent uit Kalmthout.
+        </p>
+        <p>
+          Meer dan veertig jaar lang wijdde Frans zijn leven aan de zoektocht naar de meest natuurgetrouwe weergave van muziek.
+          Daarbij durfde hij de conventionele regels van de akoestiek voortdurend in vraag te stellen. Met zijn unieke
+          luidsprekers, eerst in piramidevorm en later als piramidon, bracht hij muziek tot leven op een manier die velen
+          verbaasde door haar ongekende realisme, diepte en helderheid.
+        </p>
+        <p>
+          Zijn visie liet een diepe indruk op mij na. Wat begon als een reeks boeiende gesprekken, groeide langzaam uit tot een
+          gedeelde droom: een ruimte creëren waarin muziek niet alleen gehoord, maar ook werkelijk beleefd kon worden.
+        </p>
+        <p>
+          Na Frans’ onverwachte overlijden in 2023 zette ik mijn muzikale ontdekkingsreis verder. Zijn luidsprekers kregen daarin
+          een steeds belangrijkere plaats. Samen met Peter Bovée, zeer goede vriend van Frans, begon ik te experimenteren met de
+          bouw van een nieuwe generatie luidsprekers. Dat proces was niet alleen een technische uitdaging, maar ook een manier
+          om Frans’ nalatenschap levend te houden en tegelijk nieuwe mogelijkheden te verkennen.
+        </p>
+      </AboutChapter>
+
+      <AboutChapter id="direction" label="2024 — 2025" title="Een nieuwe richting">
+        <p>
+          In 2024 ontmoette ik Lynnclaire Dennis tijdens een congres over wetenschap en bewustzijn. Die ontmoeting groeide uit
+          tot een bijzondere persoonlijke band en een inspirerende samenwerking. Ze opende voor mij een nieuwe wereld waarin
+          geometrie, klank en welzijn op een verrassende manier samenkomen.
+        </p>
+        <p>
+          Sindsdien werk ik nauw samen met het team van The Mereon Legacy. Samen blijven we zoeken naar de diepere verbanden
+          tussen vorm, trilling en onze beleving van de werkelijkheid. Die nieuwe inzichten brachten me ertoe om niet langer
+          alleen naar de luidsprekers zelf te kijken, maar ook naar de ruimte waarin muziek klinkt en naar de invloed die vorm en
+          omgeving op onze ervaring kunnen hebben.
+        </p>
+        <p>
+          Via Lynnclaire kwam ik in contact met een ontwerper die eerder al een muziekruimte had gerealiseerd. Dat gesprek bracht
+          alles in beweging. Plots kreeg mijn droom een duidelijke richting en begon het idee van een geometrische soundroom
+          steeds concreter te worden.
+        </p>
+        <p>
+          In 2025 besloot ik de stap te zetten en mijn droom werkelijkheid te laten worden. De bouw van de soundroom werd een
+          intens en bijzonder proces waarin muziek, architectuur en ambacht samenkwamen. Elk detail kreeg aandacht: de
+          geometrische vorm, de akoestiek, de natuurlijke materialen en de verfijnde afwerking. Niets mocht aan het toeval worden
+          overgelaten.
+        </p>
+        <p>
+          Gelukkig stond ik er niet alleen voor. Met de hulp, kennis en toewijding van Jonathan, Peter, Tim, mijn broer Michaël
+          en vele andere dierbare mensen groeide het oorspronkelijke idee langzaam uit tot een tastbare werkelijkheid. Iedereen
+          droeg op zijn eigen manier bij aan het ontstaan van deze bijzondere plek.
+        </p>
+        <p>
+          Na zes maanden bouwen was de ruimte eindelijk klaar. Wat ooit begon als een droom in gesprekken, stond nu voor me als
+          een echte ruimte: zorgvuldig vormgegeven, met de hand opgebouwd en doordrongen van de energie van iedereen die eraan
+          had meegewerkt.
+        </p>
+      </AboutChapter>
+
+      <AboutPhoto src={interior} alt="Binnen in de soundroom: houten panelen in een geometrische vorm, warm licht van onderen" />
+
+      <AboutChapter id="discover" label="Vandaag" title="Een plek om verder te ontdekken">
+        <p>
+          Toch voelde de voltooiing niet als een eindpunt. Integendeel: het was het begin van een nieuwe fase. Wat begon als een
+          passie voor muziek, groeide uit tot iets veel groters. De soundroom werd een plek om te luisteren, te voelen, te
+          verwonderen en te ontdekken. Een ruimte waar klank en geometrie elkaar ontmoeten en waar nieuwe ervaringen mogen
+          ontstaan.
+        </p>
+        <p>
+          Wanneer ik er binnenstap, ervaar ik een bijzondere rust. De ruimte nodigt uit om even stil te worden, aandachtig te
+          luisteren en opnieuw contact te maken met wat zich vaak onder de oppervlakte bevindt. Muziek wordt er meer dan geluid;
+          ze wordt een ervaring die je raakt, omringt en soms zelfs op een andere manier naar de wereld laat kijken.
+        </p>
+        <p>
+          Vandaag zie ik de soundroom als een veilige haven. Een plek van rust, verbinding en nieuwsgierigheid. Een plek waar de
+          herinnering aan Frans voortleeft, waar nieuwe ideeën kunnen ontstaan en waar mensen samen kunnen ervaren wat klank,
+          vorm en aandacht met ons kunnen doen.
+        </p>
+      </AboutChapter>
+
+      <AboutClosing />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .page {
+    position: relative;
+    min-height: 100svh;
+    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 50%, var(--color-ivory) 100%);
+    color: var(--color-bronze-900);
+  }
+  /* A reading column: narrower than the booking page, so a line stays easy to follow. */
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(120px, 16vh, 170px) 24px 96px;
+  }
+  @media (max-width: 600px) {
+    .layout {
+      gap: 56px;
+      padding: 96px 20px 64px;
+    }
+  }
+</style>

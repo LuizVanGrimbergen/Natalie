@@ -1,0 +1,65 @@
+---
+/**
+ * The end of Natalie's story: her last sentence, large, then her signature and the way in (a session, or the
+ * experience as a gift).
+ */
+import CtaLink from '../CtaLink.astro';
+import QuietLink from '../QuietLink.astro';
+---
+
+<footer class="closing">
+  <p class="display closing__line">
+    Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.
+  </p>
+  <p class="closing__sign">
+    <em class="display">Natalie Van Der Voort</em>
+    <span class="label closing__org">The Mereon Legacy</span>
+  </p>
+  <div class="closing__actions">
+    <CtaLink href="/booking">Kies je sessie</CtaLink>
+    <QuietLink href="/gift" icon="gift">of geef het cadeau</QuietLink>
+  </div>
+</footer>
+
+<style>
+  .closing {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding-top: 48px;
+    border-top: 1px solid rgb(156 85 48 / 0.22);
+  }
+  .closing__line {
+    font-style: italic;
+    font-size: clamp(32px, 3.8vw, 46px);
+    line-height: 1.2;
+    color: var(--color-copper-700);
+  }
+  .closing__sign {
+    font-size: 30px;
+  }
+  .closing__sign em {
+    display: block;
+    letter-spacing: 0;
+    color: var(--color-bronze-900);
+  }
+  .closing__org {
+    display: block;
+    margin-top: 6px;
+    color: var(--color-muted);
+  }
+  .closing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 22px;
+  }
+  @media (max-width: 600px) {
+    .closing {
+      gap: 28px;
+    }
+    .closing__sign {
+      font-size: 26px;
+    }
+  }
+</style>
