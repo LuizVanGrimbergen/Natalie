@@ -12,6 +12,7 @@ The original HTML prototype has been fully rebuilt in this codebase; **the code 
 
 - **Everything is in English** — file names, folders, identifiers, ids, comments, docs.
 - **Only the visitor-facing text on the website is Dutch** (copy, labels, page titles, alt/aria text). Copy is given below and must be used **verbatim**.
+- **Never use the word "koepel"** in Dutch copy (site, meta, social posts). Say *soundroom*, *ruimte* or *geometrische ruimte* instead. ("Dome" in English code and docs is fine.)
 
 ---
 
@@ -243,7 +244,7 @@ The page that matters most, built phone-first. **One calm column on every screen
 
 ### Gift page (`/gift`)
 Added in November on Natalie's request: a gift for December, "een experience kasootje", **with no age on it** (the sessions are 18–35; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie.
-- Header: wordmark + "← Terug". Intro: label CADEAUBON, h1 **Geef een moment** *cadeau.*, *Geen spullen, maar ruimte. Om even te zijn.*, then: Een klankervaring in een houten koepel midden in het bos: muziek die je van alle kanten omringt, vijftig minuten lang. Voor iemand die je graag ziet, alleen of samen. Er staat geen leeftijd op.
+- Header: wordmark + "← Terug". Intro: label CADEAUBON, h1 **Geef een moment** *cadeau.*, *Geen spullen, maar ruimte. Om even te zijn.*, then: Een klankervaring in een geometrische ruimte midden in het bos: muziek die je van alle kanten omringt, vijftig minuten lang. Voor iemand die je graag ziet, alleen of samen. Er staat geen leeftijd op.
 - The voucher (`GiftCard`, `aria-hidden`): a ticket with the hero photo left (on top on phones), a dashed seam with half-moon notches, *Cadeaubon*, *Een klankervaring* *in het bos.*, Soundroom · 50 minuten, *Voor 1 persoon* + price.
 - **Voor hoeveel personen?** three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice.
 - How it goes (copper numbered circles): **Stuur Natalie een berichtje.** Ze maakt de bon op naam in orde, met jouw boodschap erbij als je wil. — **Geef hem door.** Digitaal, om door te sturen of af te drukken. — **Wie hem krijgt, kiest zelf een moment** in de agenda. De bon blijft een jaar geldig.
