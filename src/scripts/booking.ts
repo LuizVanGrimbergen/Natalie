@@ -7,6 +7,8 @@
  * sets how many songs to give.
  * Without JavaScript every step stays open (no [data-booking-ready]) and the agenda is there at once.
  */
+import { whatsapp } from '../data/contact';
+
 const STEPS = 3;
 /** The opening transition of a step body (BookingSteps.astro). */
 const OPEN_MS = 450;
@@ -34,6 +36,11 @@ export function initBooking() {
   const total = root.querySelector<HTMLElement>('[data-total]');
   const personsNote = root.querySelector<HTMLElement>('[data-persons-note]');
   const personsCount = root.querySelector<HTMLElement>('[data-persons-count]');
+  // Until the Google form asks for the songs and the number of people: a WhatsApp message after booking.
+  const viaWhatsapp = root.dataset.songsVia === 'whatsapp';
+  const after = root.querySelector<HTMLElement>('[data-after]');
+  const afterLink = root.querySelector<HTMLAnchorElement>('[data-after-whatsapp]');
+  const afterText = root.querySelector<HTMLElement>('[data-after-text]');
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const checked = (inputs: NodeListOf<HTMLInputElement>) => [...inputs].find((input) => input.checked);
@@ -92,11 +99,25 @@ export function initBooking() {
       if (minus) minus.disabled = people <= 1;
       if (plus) plus.disabled = people >= maxPeople(session);
     }
-    if (personsNote) personsNote.hidden = !(group && people > 1);
+    const many = group && people > 1;
+    const own = choice?.value === 'own';
+    // Via WhatsApp the songs line covers the number of people too (the message carries both).
+    if (personsNote) personsNote.hidden = !many || (viaWhatsapp && own);
     if (personsCount) personsCount.textContent = String(people);
 
     // Your own songs: the reminder in step 3, and in step 2 how many, for the session chosen.
-    if (songsLine) songsLine.hidden = choice?.value !== 'own';
+    if (songsLine) songsLine.hidden = !own;
+    if (viaWhatsapp && after) {
+      after.hidden = !session || !(own || many);
+      if (session && afterLink && afterText) {
+        const who = many ? `, met ${people} personen` : '';
+        const text = own
+          ? `Hoi Natalie, ik heb net een sessie geboekt: ${session.dataset.name}${who}. Dit zijn de liedjes die ik graag wil horen (tot ${session.dataset.songs}):\n1. \n2. \n3. `
+          : `Hoi Natalie, ik heb net een sessie geboekt: ${session.dataset.name}. We komen met ${people} personen.`;
+        afterLink.href = whatsapp(text);
+        afterText.textContent = own ? 'Stuur je liedjes via WhatsApp' : 'Laat het Natalie weten via WhatsApp';
+      }
+    }
     if (session) {
       const songs = `tot ${session.dataset.songs} liedjes`;
       if (songCount) songCount.textContent = songs;

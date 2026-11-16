@@ -8,6 +8,8 @@
  * Prices and sessions: Natalie's feedback of 19 October and the meeting of November (soundroom €35).
  */
 import BookingCalendar from './BookingCalendar.astro';
+import { formAsksSongs } from '../../data/booking';
+import { whatsapp } from '../../data/contact';
 
 const sessions = [
   {
@@ -38,7 +40,9 @@ const music = [
   {
     id: 'own',
     name: 'Ik kies zelf liedjes',
-    text: 'Geef bij het boeken de liedjes door die je graag wil horen',
+    text: formAsksSongs
+      ? 'Geef bij het boeken de liedjes door die je graag wil horen'
+      : 'Stuur na het boeken de liedjes door die je graag wil horen',
     count: true,
     summary: 'Eigen liedjes',
   },
@@ -53,7 +57,7 @@ const music = [
 const steps = ['Sessie', 'Muziek', 'Moment'];
 ---
 
-<div class="booking" data-booking>
+<div class="booking" data-booking data-songs-via={formAsksSongs ? 'form' : 'whatsapp'}>
   <ol class="progress" aria-hidden="true" data-rise style="--i: 3">
     {
       steps.map((label, i) => (
@@ -183,14 +187,40 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
     </div>
     <div class="step__body">
       <div class="step__inner">
-        {/* The songs and the number of people are questions in the Google booking form. */}
-        <p class="step__note" data-songs-line>
-          Vergeet niet je liedjes door te geven in het formulier: <span data-song-count>tot 13 voor de soundroom, 2 bij coaching</span>.
-        </p>
+        {/* The songs and the number of people: in the Google booking form once it asks for them
+            (data/booking.ts), until then on WhatsApp after booking, with a message ready (scripts/booking.ts). */}
+        {
+          formAsksSongs ? (
+            <p class="step__note" data-songs-line>
+              Vergeet niet je liedjes door te geven in het formulier: <span data-song-count>tot 13 voor de soundroom, 2 bij coaching</span>.
+            </p>
+          ) : (
+            <>
+              <p class="step__note" data-songs-line>
+                Kies hieronder je moment. Stuur Natalie daarna je liedjes via WhatsApp: <span data-song-count>tot 13 voor de soundroom, 2 bij coaching</span>.
+              </p>
+              <p class="step__note" data-persons-note hidden>
+                Kies hieronder je moment. Laat Natalie daarna via WhatsApp weten dat jullie met <span data-persons-count>2</span> komen.
+              </p>
+            </>
+          )
+        }
         <BookingCalendar />
-        <p class="step__note" data-persons-note hidden>
-          Vermeld in het formulier dat jullie met <span data-persons-count>2</span> komen.
-        </p>
+        {
+          formAsksSongs ? (
+            <p class="step__note" data-persons-note hidden>
+              Vermeld in het formulier dat jullie met <span data-persons-count>2</span> komen.
+            </p>
+          ) : (
+            <div class="after" data-after hidden>
+              <p class="label after__label">Na het boeken</p>
+              <a class="after__wa" href={whatsapp()} target="_blank" rel="noopener" data-after-whatsapp>
+                <span data-after-text>Stuur je liedjes via WhatsApp</span>
+                <span aria-hidden="true">&nbsp;→</span>
+              </a>
+            </div>
+          )
+        }
         <p class="step__note step__note--quiet">Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.</p>
       </div>
     </div>
@@ -628,6 +658,50 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
   }
   .step__note[hidden] {
     display: none;
+  }
+  /* After booking (until the Google form asks for it): send the songs / the number of people on WhatsApp. */
+  .after {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 22px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgb(156 85 48 / 0.06);
+  }
+  .after[hidden] {
+    display: none;
+  }
+  .after__label {
+    color: var(--color-copper-700);
+  }
+  .after__wa {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border-radius: 999px;
+    background: var(--color-bronze-900);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--color-ivory);
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .after__wa:active {
+    transform: scale(0.98);
+  }
+  @media (hover: hover) {
+    .after__wa:hover {
+      background: var(--color-copper-700);
+    }
+  }
+  @media (max-width: 600px) {
+    .after__wa {
+      justify-content: center;
+      width: 100%;
+    }
   }
   .step__note--quiet {
     margin-top: 18px;
