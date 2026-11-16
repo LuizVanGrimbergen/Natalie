@@ -10,9 +10,8 @@ export function listening(scene: HTMLElement): Timeline {
     { opacity: 0, duration: 0.4 },
     0,
   );
-  rise(tl, reveal(scene, 1), 0.14, 0.12);
-  rise(tl, reveal(scene, 2), 0.28, 0.12);
-  rise(tl, reveal(scene, 3), 0.42, 0.11);
-  fade(tl, reveal(scene, 4), 0.55, 0.11);
+  rise(tl, reveal(scene, 1), 0.14, 0.14);
+  rise(tl, reveal(scene, 2), 0.34, 0.12);
+  fade(tl, reveal(scene, 3), 0.5, 0.12);
   return tl;
 }
