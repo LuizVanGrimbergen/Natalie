@@ -7,7 +7,7 @@
 import { email } from './contact';
 
 export const BASE = 35;
-export const EXTRA = 25;
+const EXTRA = 25;
 export const MAX = 3;
 
 export const price = (persons: number) => BASE + EXTRA * (persons - 1);

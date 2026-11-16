@@ -10,7 +10,7 @@ export function build(): Timeline {
 /**
  * Put every tween of a timeline in its start state right away. A paused
  * timeline otherwise renders nothing until it plays, so a scene would
- * dissolve in already finished and then jump back.
+ * slide in already finished and then jump back.
  */
 export function prime(tl: Timeline): Timeline {
   return tl.progress(1).progress(0);

@@ -4,7 +4,7 @@
      normal flow, showing its final composition.
      html.motion (set in <head> by public/motion.js): the page doesn't scroll.
      The scenes lie on top of each other, one screen each, and
-     scripts/scenes/navigation.ts dissolves from one to the next per step. */
+     scripts/scenes/navigation.ts slides from one to the next per step. */
   /* Safari colors its bars from fixed elements at the screen edges too, so every
      scene's own background is the animated bar color (its stage covers it). */
   .scene {
@@ -51,17 +51,4 @@
     opacity: 0;
   }
 
-  .exit-dim {
-    position: absolute;
-    inset: 0;
-    z-index: 8;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .exit-dim--dark {
-    background: radial-gradient(ellipse 90% 80% at 50% 40%, #2a1e16, #120d0a);
-  }
-  .exit-dim--light {
-    background: var(--color-ivory);
-  }
 }
