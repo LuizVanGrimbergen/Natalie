@@ -2,7 +2,7 @@
 /**
  * Natalie's story (/about, also /verhaal): how the soundroom came to be, in her own words (text of November,
  * used verbatim; only the chapter labels with the years are added). One reading column, three chapters, a
- * photo between them, her last sentence as the close. Linked from scene 05, where she introduces herself.
+ * photo between them, her last sentence as the close. Photos: the room in the forest, the build (her own photos of November), the inside looking out. Linked from scene 05, where she introduces herself.
  */
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
@@ -10,7 +10,10 @@ import AboutIntro from '../components/about/AboutIntro.astro';
 import AboutChapter from '../components/about/AboutChapter.astro';
 import AboutPhoto from '../components/about/AboutPhoto.astro';
 import AboutClosing from '../components/about/AboutClosing.astro';
-import interior from '../assets/interior.avif';
+import AboutPhotoPair from '../components/about/AboutPhotoPair.astro';
+import interiorWindow from '../assets/interior-window.jpg';
+import buildOverhead from '../assets/build-overhead.jpg';
+import buildWorkshop from '../assets/build-workshop.jpg';
 ---
 
 <Base
@@ -69,6 +72,12 @@ import interior from '../assets/interior.avif';
           geometrische vorm, de akoestiek, de natuurlijke materialen en de verfijnde afwerking. Niets mocht aan het toeval worden
           overgelaten.
         </p>
+        <AboutPhotoPair
+          photos={[
+            { src: buildOverhead, alt: 'De bouw van binnenuit: een ladder met emmers en klemmen tussen de houten panelen', position: '50% 40%' },
+            { src: buildWorkshop, alt: 'Natalie aan het werk in de werkplaats, met gehoorbescherming', position: '50% 30%' },
+          ]}
+        />
         <p>
           Gelukkig stond ik er niet alleen voor. Met de hulp, kennis en toewijding van Jonathan, Peter, Tim, mijn broer Michaël
           en vele andere dierbare mensen groeide het oorspronkelijke idee langzaam uit tot een tastbare werkelijkheid. Iedereen
@@ -81,7 +90,7 @@ import interior from '../assets/interior.avif';
         </p>
       </AboutChapter>
 
-      <AboutPhoto src={interior} alt="Binnen in de soundroom: houten panelen in een geometrische vorm, warm licht van onderen" />
+      <AboutPhoto src={interiorWindow} alt="Binnen in de soundroom: houten panelen en een open raam naar de bomen" />
 
       <AboutChapter id="discover" label="Vandaag" title="Een plek om verder te ontdekken">
         <p>
