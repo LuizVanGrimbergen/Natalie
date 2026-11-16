@@ -1,0 +1,29 @@
+---
+/**
+ * Natalie's mark: five rhombi around one point, as on her Instagram profile and posts (the faces of the room
+ * seen from inside). A thin line drawing; the line keeps its width at every size. Decorative.
+ */
+interface Props {
+  class?: string;
+  /** Line width in screen pixels. */
+  stroke?: number;
+}
+const { class: className, stroke = 1 } = Astro.props;
+---
+
+<svg class:list={['star', className]} viewBox="170 130 740 707" aria-hidden="true" focusable="false">
+  <g fill="none" stroke="currentColor" stroke-width={stroke} stroke-linejoin="miter" vector-effect="non-scaling-stroke">
+    <path d="M540 145 655 332 540 520 425 332Z" vector-effect="non-scaling-stroke" />
+    <path d="M540 520 682 352 896 404 753 572Z" vector-effect="non-scaling-stroke" />
+    <path d="M540 520 398 352 184 404 326 572Z" vector-effect="non-scaling-stroke" />
+    <path d="M540 520 743 603 760 822 556 740Z" vector-effect="non-scaling-stroke" />
+    <path d="M540 520 337 603 320 822 524 740Z" vector-effect="non-scaling-stroke" />
+  </g>
+</svg>
+
+<style>
+  .star {
+    display: block;
+    overflow: visible;
+  }
+</style>
