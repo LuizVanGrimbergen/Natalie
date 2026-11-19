@@ -63,7 +63,7 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingIntro.astro            # title, intro, "Struikenlei, Schoten" + Maps link, the age (18–35)
+      BookingIntro.astro            # title, intro, "Schoten" + Maps link, the age (18–35)
       BookingSteps.astro            # the three steps (session, music, moment), one open at a time; holds the agenda
       BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
       BookingLegal.astro            # registered office + enterprise number, small, under the contact; renders only once both are filled in
@@ -211,7 +211,7 @@ Deliberately removed. Do not bring back.
 - Copy:
   - label: EEN LUISTEREND OOR
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
-  - Natalie's text "Deur open" (28 October), verbatim, three paragraphs (it replaced the earlier sample about "gerepareerd"): *Ik geloof diep dat jonge mensen behoefte hebben aan veilige plekken waar ze even kunnen vertragen, …* / *Vanuit die overtuiging heb ik deze ruimte met veel liefde gecreëerd. …* / *Het mooiste compliment dat ik kan krijgen, … opnieuw echt thuiskomen bij zichzelf.*
+  - Natalie's text "Deur open" (28 October; she took out "diep" on 16 November), verbatim, three paragraphs (it replaced the earlier sample about "gerepareerd"): *Ik geloof dat jonge mensen behoefte hebben aan veilige plekken waar ze even kunnen vertragen, …* / *Vanuit die overtuiging heb ik deze ruimte met veel liefde gecreëerd. …* / *Het mooiste compliment dat ik kan krijgen, … opnieuw echt thuiskomen bij zichzelf.*
   - *Natalie Van der Voort* (signature, Cormorant italic)
   - THE MEREON LEGACY (under the signature, small label in `muted`)
   - Beside the signature (under it on tall phones): *Lees mijn verhaal* (`QuietLink`, arrow) to `/about`
@@ -235,11 +235,11 @@ Deliberately removed. Do not bring back.
 The page that matters most, built phone-first. **One calm column on every screen** (max 720px, centred): intro, the three steps, contact. Booking goes through the agenda, not WhatsApp (meeting of November); WhatsApp and e-mail stay as contact. No form is sent from the site, no English version, no reviews (for now).
 
 - Header: wordmark + "← Terug".
-- **Intro** (`BookingIntro.astro`): h1 **Afspraak** *maken*, *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Struikenlei, Schoten** (street without number, copper) + *Bekijk op Google Maps →* (under the street on phones; no embedded map), *Van 18 tot 35 jaar* (the whole site is for 18–35).
+- **Intro** (`BookingIntro.astro`): h1 **Afspraak** *maken*, *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Schoten** (the town only, no street; copper) + *Bekijk op Google Maps →* (under the town on phones; no embedded map), *Van 18 tot 35 jaar* (the whole site is for 18–35).
 - **Three steps** (`BookingSteps.astro` + `scripts/booking.ts`), one open at a time, **nothing chosen at first**:
   - A progress line above them: three numbered dots *Sessie — Muziek — Moment* joined by lines; the step you are on has a copper ring, finished ones are filled copper (labels hidden under 360px).
   - Each step is a rounded card (18px) with a numbered circle and a Cormorant title. The open one is brighter with a soft shadow; steps still to come are there but faded (`is-locked`).
-  - **1 Kies je sessie**: two tappable option cards: **Soundroom** — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **€35** · 50 minuten — **+ €25** per bijkomende persoon · max. 3 personen; **Coaching** — … met begeleiding van Natalie. — **€65** · 60 minuten. Prices in `copper-700`, Figtree lining numerals.
+  - **1 Kies je sessie**: two tappable option cards: **Soundroom** — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **€35** · 50 minuten — **+ €25** per bijkomende persoon · max. 3 personen; **Coaching** — … met begeleiding van Natalie. — **€65** · 50 minuten (Natalie can have only one Google schedule, so every session is 50 minutes). Prices in `copper-700`, Figtree lining numerals.
   - **2 Jouw muziek**: there is always music; the choice is who picks it. Two option cards (side by side from 600px): **Ik kies zelf liedjes** — *Geef bij het boeken de liedjes door die je graag wil horen (tot 13 liedjes).* (2 for coaching, following the session); **Ik kies liever niet** — *Natalie kiest de muziek voor je. Je hoeft niets voor te bereiden.* Folded summaries: *Eigen liedjes* / *Natalie kiest*.
   - **3 Kies een moment**: the Google agenda of the chosen session; *Open de agenda op volledig scherm ↗*; *Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.* The songs and the number of people depend on `formAsksSongs` (`data/booking.ts`):
     - `false` (now: Natalie's Google form doesn't ask for them yet): above the agenda *Kies hieronder je moment. Stuur Natalie daarna je liedjes via WhatsApp: tot 13 liedjes.* (2 for coaching), or with 2–3 people and Natalie's music *Kies hieronder je moment. Laat Natalie daarna via WhatsApp weten dat jullie met 2 komen.*; under the agenda a soft panel *NA HET BOEKEN* with a dark pill **Stuur je liedjes via WhatsApp →** (or **Laat het Natalie weten via WhatsApp →**), a wa.me message ready: session, number of people, and a numbered list to fill in. Step 2's own-songs card says *Stuur na het boeken de liedjes door…*.
@@ -320,7 +320,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
 - Google Calendar appointment schedule URL
 - Natalie's confirmation that the dome may be shown and that the copper palette is right
 - Domain name
-- In Natalie's Google appointment schedule: turn off Google Meet, add the questions (then set `formAsksSongs = true` in `data/booking.ts`, after one test booking) "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?", and a second appointment schedule so Soundroom (50 min) and Coaching (60 min) each have their own (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`)
+- In Natalie's Google appointment schedule: turn off Google Meet, add the questions (then set `formAsksSongs = true` in `data/booking.ts`, after one test booking) "Welke liedjes wil je horen?" and "Met hoeveel personen kom je?". Her Google account allows only one appointment schedule, so both sessions are 50 minutes on it; `PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING` stay for a second schedule later
 - The soundtrack (royalty-free) for the sound toggle
 - Story page: Natalie's approval of the chapter labels (years); a larger version of the workshop photo (now 326×580)
 - Gift page: how a voucher is paid, and how a receiver mentions it when booking (e.g. a code in the Google form)

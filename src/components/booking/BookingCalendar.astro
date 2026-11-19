@@ -1,6 +1,6 @@
 ---
 // Google Calendar appointment schedule embed URLs (…/appointments/schedules/…?gv=true): one per session,
-// as the two last differently long. Until Natalie has a second schedule, both fall back to PUBLIC_BOOKING_URL.
+// should they ever differ. Google allows Natalie only one schedule, so both sessions last 50 minutes and fall back to PUBLIC_BOOKING_URL.
 // scripts/booking.ts swaps the iframe when the visitor chooses another session.
 const fallback = import.meta.env.PUBLIC_BOOKING_URL?.trim();
 // hl=nl: Google shows the schedule in Dutch, whatever the visitor's browser language.

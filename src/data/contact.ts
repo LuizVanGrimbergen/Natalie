@@ -8,10 +8,10 @@ export function whatsapp(text?: string) {
   return text ? `${url}?text=${encodeURIComponent(text)}` : url;
 }
 
-/** Where the dome stands: the street only, no number (Natalie gives the exact spot herself). */
-export const address = 'Struikenlei, Schoten';
+/** Where the dome stands: only the town, no street (Natalie gives the exact spot herself). */
+export const address = 'Schoten';
 
-/** The street in Google Maps; on a phone it opens the maps app. */
+/** The town in Google Maps; on a phone it opens the maps app. */
 export const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, België`)}`;
 
 /**
