@@ -111,8 +111,11 @@ export function initBooking() {
       after.hidden = !session || !(own || many);
       if (session && afterLink && afterText) {
         const who = many ? `, met ${people} personen` : '';
+        // A few numbered lines to fill in, never more than the session allows (coaching: 2).
+        const max = Number(session.dataset.songs) || 3;
+        const lines = Array.from({ length: Math.min(max, 3) }, (_, i) => `${i + 1}. `).join('\n');
         const text = own
-          ? `Hoi Natalie, ik heb net een sessie geboekt: ${session.dataset.name}${who}. Dit zijn de liedjes die ik graag wil horen (tot ${session.dataset.songs}):\n1. \n2. \n3. `
+          ? `Hoi Natalie, ik heb net een sessie geboekt: ${session.dataset.name}${who}. Dit zijn de liedjes die ik graag wil horen (tot ${session.dataset.songs}):\n${lines}`
           : `Hoi Natalie, ik heb net een sessie geboekt: ${session.dataset.name}. We komen met ${people} personen.`;
         afterLink.href = whatsapp(text);
         afterText.textContent = own ? 'Stuur je liedjes via WhatsApp' : 'Laat het Natalie weten via WhatsApp';
