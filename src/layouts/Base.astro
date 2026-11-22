@@ -54,6 +54,8 @@ const jsonLd = JSON.stringify(graph(Astro.site!, { url: canonical, title, descri
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <!-- Google Search Console: proves the site is ours (the file in public/ does the same). -->
+    <meta name="google-site-verification" content="CWKjNy5_3esZoycByWI2MNYXtl50oiFb87Qs9OZEhkk" />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
