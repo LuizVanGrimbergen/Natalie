@@ -11,7 +11,7 @@ const { src, alt } = Astro.props;
 ---
 
 <figure class="photo">
-  <Picture class="photo__img" src={src} formats={['avif', 'webp']} fallbackFormat="jpg" alt={alt} widths={[640, 960]} sizes="(max-width: 600px) calc(100vw - 40px), 640px" />
+  <Picture class="photo__img" src={src} formats={['avif', 'webp']} quality={38} fallbackFormat="jpg" alt={alt} widths={[640, 960]} sizes="(max-width: 600px) calc(100vw - 40px), 640px" />
 </figure>
 
 <style>

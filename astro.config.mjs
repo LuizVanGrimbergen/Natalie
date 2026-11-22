@@ -10,7 +10,12 @@ const site = process.env.SITE_URL || 'https://natalie-soundroom.netlify.app';
 export default defineConfig({
   site,
   // about.html rather than about/index.html: Netlify serves /about as is, without a 301 to /about/.
-  build: { format: 'file' },
+  build: {
+    format: 'file',
+    // Styles inline in the page, not as separate files: no render-blocking requests before the first paint.
+    // The CSP allows inline styles (style-src 'unsafe-inline').
+    inlineStylesheets: 'always',
+  },
   vite: {
     plugins: [tailwindcss()],
     // Never inline small scripts into the HTML: the Content-Security-Policy (netlify.toml) only allows script files.

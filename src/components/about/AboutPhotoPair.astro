@@ -17,6 +17,7 @@ const { photos } = Astro.props;
           class="pair__img"
           src={photo.src}
           formats={['avif', 'webp']}
+          quality={38}
           fallbackFormat="jpg"
           alt={photo.alt}
           widths={[360, 720].filter((w) => w <= photo.src.width).concat(photo.src.width < 360 ? [photo.src.width] : [])}
