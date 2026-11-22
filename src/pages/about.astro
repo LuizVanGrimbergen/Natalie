@@ -11,15 +11,19 @@ import AboutChapter from '../components/about/AboutChapter.astro';
 import AboutPhoto from '../components/about/AboutPhoto.astro';
 import AboutClosing from '../components/about/AboutClosing.astro';
 import AboutPhotoPair from '../components/about/AboutPhotoPair.astro';
+import domeAutumn from '../assets/dome-autumn.jpg';
 import interiorWindow from '../assets/interior-window.jpg';
 import buildOverhead from '../assets/build-overhead.jpg';
 import buildWorkshop from '../assets/build-workshop.jpg';
 ---
 
 <Base
-  title="Natalie — Mijn verhaal"
+  title="Mijn verhaal — Hoe het ruimteschip in het bos ontstond · Natalie Van der Voort"
   description="Hoe de soundroom ontstond: van gesprekken met Frans Van Hauwaert in 2018 tot een geometrische ruimte in het bos, waar klank en vorm elkaar ontmoeten."
   tint="#F5F1E9"
+  pageType="AboutPage"
+  image={domeAutumn}
+  imageAlt="Het ruimteschip met koperen panelen tussen de herfstbomen"
 >
   <div class="page">
     <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>

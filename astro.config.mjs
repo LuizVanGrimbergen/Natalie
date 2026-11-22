@@ -2,12 +2,15 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// Absolute URL for canonical + Open Graph. Set SITE_URL once the domain is known.
-// On Netlify, URL is the site's main address (e.g. https://<name>.netlify.app).
-const site = process.env.SITE_URL || process.env.URL || 'http://localhost:4321';
+// Absolute URL for canonical, Open Graph, JSON-LD and the sitemap. Set SITE_URL once the domain is known.
+// The fallback is the live Netlify address, never localhost: the site is also built on this machine and
+// deployed from there (netlify deploy), and a localhost canonical tells Google the page lives nowhere.
+const site = process.env.SITE_URL || 'https://natalie-soundroom.netlify.app';
 
 export default defineConfig({
   site,
+  // about.html rather than about/index.html: Netlify serves /about as is, without a 301 to /about/.
+  build: { format: 'file' },
   vite: {
     plugins: [tailwindcss()],
     // Never inline small scripts into the HTML: the Content-Security-Policy (netlify.toml) only allows script files.

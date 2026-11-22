@@ -1,5 +1,5 @@
 ---
-// A photo between two chapters, a little wider than the text, as a pause in the reading.
+// A photo between two chapters, as wide as the text, as a pause in the reading.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -11,14 +11,12 @@ const { src, alt } = Astro.props;
 ---
 
 <figure class="photo">
-  <Picture class="photo__img" src={src} formats={['avif', 'webp']} fallbackFormat="jpg" alt={alt} widths={[640, 960]} sizes="(max-width: 600px) 100vw, 760px" />
+  <Picture class="photo__img" src={src} formats={['avif', 'webp']} fallbackFormat="jpg" alt={alt} widths={[640, 960]} sizes="(max-width: 600px) calc(100vw - 40px), 640px" />
 </figure>
 
 <style>
   .photo {
-    width: min(760px, calc(100vw - 48px));
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
     aspect-ratio: 3 / 2;
     overflow: hidden;
     box-shadow: 0 40px 80px -40px rgb(62 52 44 / 0.45);
@@ -31,7 +29,6 @@ const { src, alt } = Astro.props;
   }
   @media (max-width: 600px) {
     .photo {
-      width: 100vw;
       aspect-ratio: 4 / 3;
       box-shadow: none;
     }

@@ -9,6 +9,8 @@ import '@fontsource/figtree/latin-400.css';
 import '@fontsource/figtree/latin-500.css';
 import '../styles/global.css';
 import hero from '../assets/hero.avif';
+import type { ImageMetadata } from 'astro';
+import { graph, SITE_NAME } from '../data/schema';
 // The two faces every page needs first (titles, body text): preloaded, so the text doesn't swap late.
 import displayFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2?url';
 import bodyFont from '@fontsource/figtree/files/figtree-latin-300-normal.woff2?url';
@@ -20,12 +22,28 @@ interface Props {
   story?: boolean;
   /** Color of the browser bars and overscroll area (Safari tints from the page background). */
   tint?: string;
+  /** The picture shown when the page is shared (default: the hero, the room in the forest at dusk). */
+  image?: ImageMetadata;
+  imageAlt?: string;
+  /** schema.org type of the page (WebPage, AboutPage, …). */
+  pageType?: string;
 }
 
-const { title, description, story = false, tint = '#12100D' } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const og = await getImage({ src: hero, width: 1200, height: 630, format: 'jpg', quality: 80 });
+const {
+  title,
+  description,
+  story = false,
+  tint = '#12100D',
+  image = hero,
+  imageAlt = 'Het geometrische ruimteschip van hout tussen de bomen in het bos',
+  pageType,
+} = Astro.props;
+// Pages are built as files (about.html), served without a trailing slash: the canonical says the same.
+const canonical = new URL(Astro.url.pathname.replace(/(index)?(\.html)?\/?$/, '') || '/', Astro.site);
+const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
 const ogUrl = new URL(og.src, Astro.site);
+// A data block, not a script: the Content-Security-Policy (script-src 'self') doesn't apply to it.
+const jsonLd = JSON.stringify(graph(Astro.site!, { url: canonical, title, description, image: ogUrl, type: pageType }));
 ---
 
 <!doctype html>
@@ -35,13 +53,18 @@ const ogUrl = new URL(og.src, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={tint} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <!-- A plain-text summary of the site for AI assistants (llmstxt.org). -->
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt" />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="nl_BE" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -49,7 +72,13 @@ const ogUrl = new URL(og.src, Astro.site);
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
 
     {
       // A file, not inline, so the Content-Security-Policy can forbid inline scripts.

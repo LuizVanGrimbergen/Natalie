@@ -10,29 +10,8 @@
 import BookingCalendar from './BookingCalendar.astro';
 import { formAsksSongs } from '../../data/booking';
 import { whatsapp } from '../../data/contact';
+import { sessions } from '../../data/sessions';
 
-const sessions = [
-  {
-    id: 'soundroom',
-    name: 'Soundroom',
-    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding.',
-    price: '€35',
-    duration: '50 minuten',
-    songs: 13,
-    // Up to 3 people in the soundroom, €25 for each one after the first.
-    amount: 35,
-    extra: { price: '+ €25', text: 'per bijkomende persoon · max. 3 personen', amount: 25, max: 3 },
-  },
-  {
-    id: 'coaching',
-    name: 'Coaching',
-    text: 'In verbinding gaan met klank & ruimte, op jouw tempo, met begeleiding van Natalie.',
-    price: '€65',
-    duration: '50 minuten',
-    songs: 2,
-    amount: 65,
-  },
-];
 
 // There is always music in a session; the choice is who picks it. The song count follows the session
 // (13 for the soundroom, 2 for coaching) and is filled in by scripts/booking.ts.

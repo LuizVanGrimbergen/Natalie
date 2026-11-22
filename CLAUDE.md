@@ -40,12 +40,14 @@ No UI framework. If interactivity is ever needed: an Astro island.
 
 ```
 src/
-  layouts/Base.astro                # <html>, fonts, meta/OG, sets html.motion (or not) before paint
+  layouts/Base.astro                # <html>, fonts, meta/OG/Twitter, JSON-LD, sets html.motion (or not) before paint
   pages/
     index.astro                     # the story: header + the five scenes, starts the scene script
     booking.astro                   # booking page
     gift.astro                      # gift voucher page (/gift)
     about.astro                     # Natalie's story (/about), in her own words
+    robots.txt.ts, sitemap.xml.ts   # all crawlers welcome; the four pages
+    llms.txt.ts                     # plain summary for AI assistants (llmstxt.org), built from the data files
   components/
     SiteHeader.astro                # wordmark + one link; on the story it fades out after the hero
     BookPill.astro                  # "Boek een sessie": small pill top right on the middle scenes, to /booking
@@ -70,9 +72,9 @@ src/
       BookingLegal.astro            # registered office + enterprise number, small, under the contact; renders only once both are filled in
       BookingCalendar.astro         # Google Calendar embed (per session) + full-screen link, or placeholder card
     about/
-      AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, then the room in the autumn forest, wider than the column
+      AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, then the room in the autumn forest, as wide as the column
       AboutChapter.astro            # one chapter: years label, title, her paragraphs; rises on scroll (CSS only)
-      AboutPhoto.astro              # a photo between chapters, wider than the column
+      AboutPhoto.astro              # a photo between chapters, as wide as the column
       AboutPhotoPair.astro          # two photos side by side inside a chapter (the build), stacked on small phones
       AboutClosing.astro            # her last sentence large in copper, signature, Kies je sessie / of geef het cadeau
     gift/
@@ -81,6 +83,9 @@ src/
       GiftOrder.astro               # Kies je cadeaubon (card + 1/2/3 personen) and Hoe werkt het? + order via WhatsApp or e-mail
       GiftContact.astro             # name, e-mail, WhatsApp, registered office + enterprise number
   data/contact.ts                   # Natalie's email + phone, website (mereon.org), whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
+  data/sessions.ts                  # the two sessions (name, text, price, 50 minutes): /booking step 1, JSON-LD, llms.txt
+  data/schema.ts                    # the schema.org graph (WebSite, page, Person, LocalBusiness with offers), town only
+  data/pages.ts                     # the public pages, for the sitemap and llms.txt
   data/booking.ts                   # formAsksSongs: songs + persons via the Google form (true) or WhatsApp after booking (false, for now)
   data/gift.ts                      # voucher prices (35 + 25 per extra person, max 3), the order message + mailto
   data/sound.ts                     # the optional soundtrack path (public/audio/) + its credit/licence
@@ -259,7 +264,7 @@ The page that matters most, built phone-first. **One calm column on every screen
 
 ### Natalie's story (`/about`, also `/verhaal`)
 Her own text of November, **verbatim** (paragraph breaks restored from the PDF wrapping); only the chapter labels with the years are added. A reading page, not a scene: one 640px column, Figtree 18px / 1.8, ivory.
-- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then Natalie's photo of the room in the autumn forest (`dome-autumn.jpg`, 22 November; 4:3, wider than the column; 4:5 edge to edge on phones).
+- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then Natalie's photo of the room in the autumn forest (`dome-autumn.jpg`, 22 November; 4:3; 4:5 on phones). Every photo on the page is exactly as wide as the text column (phones included), so text and photos share one edge.
 - Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting**, with two of Natalie's build photos side by side after the 2025 paragraph (`AboutPhotoPair`: the build from above, Natalie in the workshop; the latter is only 326px wide) · her photo of the inside looking out through an opening to the trees · *Vandaag* **Een plek om verder te ontdekken**.
 - Close: her last sentence (*Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.*) large in copper italic, her signature + THE MEREON LEGACY, then **Kies je sessie** (CtaLink) and *of geef het cadeau*.
 - Chapters rise in as they scroll into view with CSS scroll-driven animations (`animation-timeline: view()`, under `@supports` and no reduced motion); without support they are simply there. No JS on this page.
@@ -304,7 +309,7 @@ Test at least: 320×568, 390×844, 768×1024, 834×1194, 1024×1366 (portrait), 
   - A scene that arrives in another color and then lifts (perspectives: copper-brown → ivory) also has `data-tint-enter` and `data-tint-lift` (where the lift ends in its build timeline; keep in sync with the scene's `.ts`). The bars then follow the build frame by frame.
   - Pages pass `tint` to `Base` for the first paint (default `#12100D`, the hero's edge).
 - Security: static site, no forms, cookies or user data. Security headers (CSP, HSTS, nosniff, frame-ancestors, Referrer- and Permissions-Policy) live in `netlify.toml`. No inline scripts (the motion/mode check is `public/motion.js`), so `script-src` stays `'self'`; `style-src` allows inline because of `style` attributes (`z-index`, `--i`, `--tint`) and Astro's inlined styles. Everything under `/_astro/*` (hashed names) is cached for a year (`immutable`); the two first fonts (Cormorant 300, Figtree 300) are preloaded in `Base.astro`. `media-src 'self'` lets the soundtrack play from `public/audio/`; `vite.build.assetsInlineLimit: 0` keeps Astro from inlining small scripts (which the CSP would block). Any other external service must be added to the CSP. The booking embed is allowed via `frame-src https://calendar.google.com`.
-- SEO: `lang="nl"`, title + meta description, canonical, Open Graph image (hero). Set `SITE_URL` once the domain is known.
+- SEO/GEO: `lang="nl"`, a title + meta description of its own per page (alternating soundroom/ruimteschip), canonical without trailing slash (`build.format: 'file'`, so Netlify serves `/about` without a 301), Open Graph + Twitter image (hero; /about uses `dome-autumn.jpg`), JSON-LD graph (`data/schema.ts`; a data block, not blocked by the CSP), `robots.txt`, `sitemap.xml`, `llms.txt`. The site URL falls back to `https://natalie-soundroom.netlify.app` (never localhost: the site is built on this machine and deployed with `netlify deploy`); set `SITE_URL` once the domain is known.
 
 ---
 

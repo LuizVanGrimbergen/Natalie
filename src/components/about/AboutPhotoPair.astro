@@ -1,5 +1,5 @@
 ---
-// Two photos side by side inside a chapter (the build): a little wider than the text, stacked on small phones.
+// Two photos side by side inside a chapter (the build): as wide as the text, stacked on small phones.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -20,7 +20,7 @@ const { photos } = Astro.props;
           fallbackFormat="jpg"
           alt={photo.alt}
           widths={[360, 720].filter((w) => w <= photo.src.width).concat(photo.src.width < 360 ? [photo.src.width] : [])}
-          sizes="(max-width: 420px) 100vw, 360px"
+          sizes="(max-width: 420px) calc(100vw - 40px), 320px"
           style={photo.position ? `object-position: ${photo.position}` : undefined}
         />
       </figure>
@@ -33,9 +33,7 @@ const { photos } = Astro.props;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
-    width: min(720px, calc(100vw - 48px));
-    margin: 18px 0 18px 50%;
-    transform: translateX(-50%);
+    margin: 18px 0;
   }
   .pair__photo {
     aspect-ratio: 3 / 4;
@@ -51,9 +49,6 @@ const { photos } = Astro.props;
   @media (max-width: 420px) {
     .pair {
       grid-template-columns: 1fr;
-      width: 100%;
-      margin-left: 0;
-      transform: none;
     }
   }
 </style>

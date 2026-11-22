@@ -15,7 +15,7 @@ import domeAutumn from '../../assets/dome-autumn.jpg';
       fallbackFormat="jpg"
       alt="Het ruimteschip met koperen panelen tussen de herfstbomen, de trap naar de ingang vol bladeren"
       widths={[640, 960, 1200]}
-      sizes="(max-width: 600px) 100vw, 880px"
+      sizes="(max-width: 600px) calc(100vw - 40px), 640px"
       loading="eager"
     />
   </figure>
@@ -37,12 +37,10 @@ import domeAutumn from '../../assets/dome-autumn.jpg';
   .intro__h em {
     color: var(--color-copper-700);
   }
-  /* Wider than the reading column, so the page opens on the place itself. Centred with margins, not a
-     transform: the rise animation owns transform. */
+  /* As wide as the reading column: text and photos share one edge. */
   .intro__photo {
-    --w: min(880px, calc(100vw - 48px));
-    width: var(--w);
-    margin: 34px 0 0 calc(50% - var(--w) / 2);
+    width: 100%;
+    margin-top: 34px;
     aspect-ratio: 4 / 3;
     overflow: hidden;
     box-shadow: 0 40px 80px -40px rgb(62 52 44 / 0.45);
@@ -55,9 +53,8 @@ import domeAutumn from '../../assets/dome-autumn.jpg';
     object-position: 50% 48%;
   }
   @media (max-width: 600px) {
-    /* Edge to edge on a phone, taller so the whole room fits. */
+    /* Taller on a phone, so the whole room fits. */
     .intro__photo {
-      --w: 100vw;
       margin-top: 24px;
       aspect-ratio: 4 / 5;
       box-shadow: none;
