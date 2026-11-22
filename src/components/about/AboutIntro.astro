@@ -1,7 +1,7 @@
 ---
-// The top of Natalie's story: her name, the title, and the room in the forest as the first image.
+// The top of Natalie's story: her name, the title, then the soundroom in the autumn forest (her photo of November).
 import { Picture } from 'astro:assets';
-import hero from '../../assets/hero.avif';
+import domeAutumn from '../../assets/dome-autumn.jpg';
 ---
 
 <header class="intro">
@@ -10,11 +10,11 @@ import hero from '../../assets/hero.avif';
   <figure class="intro__photo" data-rise style="--i: 2">
     <Picture
       class="intro__img"
-      src={hero}
+      src={domeAutumn}
       formats={['avif', 'webp']}
       fallbackFormat="jpg"
-      alt="Het houten ruimteschip tussen de bomen in het bos"
-      widths={[640, 960, 1280]}
+      alt="Het ruimteschip met koperen panelen tussen de herfstbomen, de trap naar de ingang vol bladeren"
+      widths={[640, 960, 1200]}
       sizes="(max-width: 600px) 100vw, 880px"
       loading="eager"
     />
@@ -37,12 +37,13 @@ import hero from '../../assets/hero.avif';
   .intro__h em {
     color: var(--color-copper-700);
   }
-  /* Wider than the reading column, so the page opens on the place itself. */
+  /* Wider than the reading column, so the page opens on the place itself. Centred with margins, not a
+     transform: the rise animation owns transform. */
   .intro__photo {
-    width: min(880px, calc(100vw - 48px));
-    margin: 34px 0 0 50%;
-    transform: translateX(-50%);
-    aspect-ratio: 16 / 10;
+    --w: min(880px, calc(100vw - 48px));
+    width: var(--w);
+    margin: 34px 0 0 calc(50% - var(--w) / 2);
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     box-shadow: 0 40px 80px -40px rgb(62 52 44 / 0.45);
   }
@@ -51,14 +52,14 @@ import hero from '../../assets/hero.avif';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 45% 55%;
+    object-position: 50% 48%;
   }
   @media (max-width: 600px) {
-    /* Edge to edge on a phone. */
+    /* Edge to edge on a phone, taller so the whole room fits. */
     .intro__photo {
-      width: 100vw;
+      --w: 100vw;
       margin-top: 24px;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 4 / 5;
       box-shadow: none;
     }
   }

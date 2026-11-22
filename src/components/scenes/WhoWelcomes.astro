@@ -1,8 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
 import QuietLink from '../QuietLink.astro';
-// TODO(Natalie): her portrait is still to be taken; until then the dome in the forest stands in.
-import portrait from '../../assets/forest.avif';
+import { website } from '../../data/contact';
+// TODO(Natalie): her portrait is still to be taken; until then her photo of the room seen through the autumn trees stands in.
+import portrait from '../../assets/forest-autumn.jpg';
 ---
 
 <section class="scene welcomes" style="z-index: 4" data-tint="#F5F1E9" data-scene="welcomes" data-enter="light" aria-labelledby="welcomes-title">
@@ -35,7 +36,7 @@ import portrait from '../../assets/forest.avif';
           <div class="text__end" data-reveal="4">
             <p class="text__sign">
               <em class="display">Natalie Van der Voort</em>
-              <span class="label text__org">The Mereon Legacy</span>
+              <a class="label text__org" href={website.url} target="_blank" rel="noopener">{website.label}</a>
             </p>
             <QuietLink href="/about">Lees mijn verhaal</QuietLink>
           </div>
@@ -47,7 +48,7 @@ import portrait from '../../assets/forest.avif';
               fallbackFormat="jpg"
               class="portrait__img"
               src={portrait}
-              alt="Het houten ruimteschip tussen de bomen in het bos"
+              alt="De soundroom in de verte, tussen de herfstbomen in het bos"
               widths={[480, 720, 960]}
               sizes="(max-width: 820px) 80vw, 40vw"
             />
@@ -117,10 +118,30 @@ import portrait from '../../assets/forest.avif';
     display: block;
     letter-spacing: 0;
   }
+  /* The domain of The Mereon Legacy, linked: lowercase like a web address, a larger tap area than it shows. */
   .text__org {
+    position: relative;
     display: block;
+    width: fit-content;
     margin-top: 4px;
     color: var(--color-muted);
+    text-transform: none;
+    letter-spacing: 0.12em;
+    text-decoration: underline;
+    text-decoration-color: rgb(156 85 48 / 0.35);
+    text-underline-offset: 4px;
+    transition: color 0.25s, text-decoration-color 0.25s;
+  }
+  .text__org::after {
+    content: '';
+    position: absolute;
+    inset: -14px -8px;
+  }
+  @media (hover: hover) {
+    .text__org:hover {
+      color: var(--color-copper-700);
+      text-decoration-color: currentColor;
+    }
   }
   /* Her signature beside the way to her whole story (/about). */
   .text__end {
@@ -151,7 +172,7 @@ import portrait from '../../assets/forest.avif';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 44% 50%;
+    object-position: 50% 60%;
   }
 
   /* Phones and narrow portrait screens: the text alone, top to bottom (the photo stands in for a portrait
@@ -227,8 +248,8 @@ import portrait from '../../assets/forest.avif';
       white-space: nowrap;
     }
     .text__org {
-      font-size: 9px;
-      letter-spacing: 0.22em;
+      font-size: 10px;
+      letter-spacing: 0.1em;
     }
     .text__end :global(.quiet) {
       gap: 8px;

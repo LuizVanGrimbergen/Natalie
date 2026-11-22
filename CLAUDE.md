@@ -13,6 +13,7 @@ The original HTML prototype has been fully rebuilt in this codebase; **the code 
 - **Everything is in English** — file names, folders, identifiers, ids, comments, docs.
 - **Only the visitor-facing text on the website is Dutch** (copy, labels, page titles, alt/aria text). Copy is given below and must be used **verbatim**.
 - **Never use the word "koepel"** in Dutch copy (site, meta, social posts). Say *soundroom*, *ruimte* or *geometrische ruimte* instead. ("Dome" in English code and docs is fine.)
+- **Alternate *soundroom* and *ruimteschip*** for the dome in Dutch copy we write ourselves (labels, meta, alt texts), so it speaks to sound lovers and the space-curious alike (e.g. the gift card: SOUNDROOM on the panel, *Ruimteschip · 50 minuten · Schoten* under it). Natalie's own texts stay verbatim; "Soundroom" stays the session name where it carries a price.
 
 ---
 
@@ -69,7 +70,7 @@ src/
       BookingLegal.astro            # registered office + enterprise number, small, under the contact; renders only once both are filled in
       BookingCalendar.astro         # Google Calendar embed (per session) + full-screen link, or placeholder card
     about/
-      AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, the hero photo wider than the column
+      AboutIntro.astro              # label (her name), h1 Mijn *verhaal*, then the room in the autumn forest, wider than the column
       AboutChapter.astro            # one chapter: years label, title, her paragraphs; rises on scroll (CSS only)
       AboutPhoto.astro              # a photo between chapters, wider than the column
       AboutPhotoPair.astro          # two photos side by side inside a chapter (the build), stacked on small phones
@@ -79,7 +80,7 @@ src/
       GiftCard.astro                # the voucher as a gift card (copper panel with her star, perforated seam), follows the choice
       GiftOrder.astro               # Kies je cadeaubon (card + 1/2/3 personen) and Hoe werkt het? + order via WhatsApp or e-mail
       GiftContact.astro             # name, e-mail, WhatsApp, registered office + enterprise number
-  data/contact.ts                   # Natalie's email + phone, whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
+  data/contact.ts                   # Natalie's email + phone, website (mereon.org), whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
   data/booking.ts                   # formAsksSongs: songs + persons via the Google form (true) or WhatsApp after booking (false, for now)
   data/gift.ts                      # voucher prices (35 + 25 per extra person, max 3), the order message + mailto
   data/sound.ts                     # the optional soundtrack path (public/audio/) + its credit/licence
@@ -103,7 +104,7 @@ src/
     tokens.css                      # design tokens (@theme)
     base.css                        # base elements, .display / .label, reduced motion
     scenes.css                      # scene/stage pinning mechanics
-  assets/                           # hero.avif, interior.avif, forest.avif, autumn-glow.jpg (scene 06); interior-window.jpg, build-overhead.jpg, build-workshop.jpg (story)
+  assets/                           # hero.avif, interior.avif, forest-autumn.jpg (scene 05), autumn-glow.jpg (scene 06); dome-autumn.jpg, interior-window.jpg, build-overhead.jpg, build-workshop.jpg (story)
 ```
 
 Conventions: one component per file; styles live scoped in the component that owns them; global CSS only for tokens, base and shared scene mechanics. Animated elements are found via `data-*` attributes (`data-scene`, `data-reveal="n"`, `data-unveil`, …), never via styling classes.
@@ -207,13 +208,13 @@ Deliberately removed. Do not bring back.
 ### 05 · Who welcomes you
 - Ivory, soft window light on the wall (blurred diagonal patch of light).
 - Desktop: text left (7fr), portrait right (4fr, 4:5). Tablet portrait: small portrait on top, text below. Phones and phone landscape: no portrait (the long text needs the room); phone landscape sets the text in two columns; short phones (≤700px high) drop the label and put signature and link on one row. Type scales with the viewport height so the three paragraphs always fit one screen (checked from 320×568 to 1920×1080).
-- Portrait: the dome in the forest (`forest.avif`) stands in until there is a real photo of Natalie.
+- Portrait: Natalie's photo of the room seen through the autumn trees (`forest-autumn.jpg`, 22 November) stands in until there is a real photo of Natalie.
 - Copy:
   - label: EEN LUISTEREND OOR
   - h2: **Ik ben er niet om je de weg te wijzen.** *Wel om de deur open te houden.* (second sentence italic in copper)
   - Natalie's text "Deur open" (28 October; she took out "diep" on 16 November), verbatim, three paragraphs (it replaced the earlier sample about "gerepareerd"): *Ik geloof dat jonge mensen behoefte hebben aan veilige plekken waar ze even kunnen vertragen, …* / *Vanuit die overtuiging heb ik deze ruimte met veel liefde gecreëerd. …* / *Het mooiste compliment dat ik kan krijgen, … opnieuw echt thuiskomen bij zichzelf.*
   - *Natalie Van der Voort* (signature, Cormorant italic)
-  - THE MEREON LEGACY (under the signature, small label in `muted`)
+  - *mereon.org* (under the signature, small, lowercase, `muted`; links to https://mereon.org in a new tab — `website` in `data/contact.ts`; never "The Mereon Legacy" as link text)
   - Beside the signature (under it on tall phones): *Lees mijn verhaal* (`QuietLink`, arrow) to `/about`
 - Animation: the photo reveals bottom-up (`clip-path: inset(100% 0 0 0)` → 0, slight scale 1.06 → 1), then label, title, text, signature.
 
@@ -258,7 +259,7 @@ The page that matters most, built phone-first. **One calm column on every screen
 
 ### Natalie's story (`/about`, also `/verhaal`)
 Her own text of November, **verbatim** (paragraph breaks restored from the PDF wrapping); only the chapter labels with the years are added. A reading page, not a scene: one 640px column, Figtree 18px / 1.8, ivory.
-- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then the hero photo (16:10, wider than the column; edge to edge on phones).
+- Header: wordmark + "← Terug". Label NATALIE VAN DER VOORT, h1 **Mijn** *verhaal*, then Natalie's photo of the room in the autumn forest (`dome-autumn.jpg`, 22 November; 4:3, wider than the column; 4:5 edge to edge on phones).
 - Three chapters: *2018 — 2023* **Waar het begon** (opens with a copper initial) · *2024 — 2025* **Een nieuwe richting**, with two of Natalie's build photos side by side after the 2025 paragraph (`AboutPhotoPair`: the build from above, Natalie in the workshop; the latter is only 326px wide) · her photo of the inside looking out through an opening to the trees · *Vandaag* **Een plek om verder te ontdekken**.
 - Close: her last sentence (*Een klein ruimteschip van waaruit we samen verder kunnen ontdekken wat het universum voor ons in petto heeft.*) large in copper italic, her signature + THE MEREON LEGACY, then **Kies je sessie** (CtaLink) and *of geef het cadeau*.
 - Chapters rise in as they scroll into view with CSS scroll-driven animations (`animation-timeline: view()`, under `@supports` and no reduced motion); without support they are simply there. No JS on this page.
@@ -268,7 +269,7 @@ Her own text of November, **verbatim** (paragraph breaks restored from the PDF w
 Added in November on Natalie's request: a gift for December, "een experience kasootje", **for young and old** (the sessions are 18–35; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie. Copy: Natalie's text of November, verbatim.
 - Header: wordmark + "← Terug". h1 **Geef een moment** *cadeau.*, *Geen spullen, maar een bijzondere ervaring. Even weg van de drukte, midden in het bos.*, then: In de Soundroom word je vijftig minuten lang omringd door klank, in een unieke geometrische ruimte tussen de bomen. Een moment om te luisteren, te voelen en gewoon te zijn. / Voor iemand die je graag ziet. Om alleen te beleven of samen te delen. Voor jong en oud.
 - Each part below opens with a thin copper rule and a Cormorant h2.
-- **Kies je cadeaubon**: the voucher (`GiftCard`, `aria-hidden`), a gift card in Natalie's Instagram style: a copper panel left (on top on phones) with her star mark (`StarMark`) in thin ivory lines and SOUNDROOM under it, a dashed seam with half-moon notches, *Cadeaubon*, *Een bijzondere klankervaring* *in het bos.*, Soundroom · 50 minuten · Schoten, *Voor 1 persoon* + price. Then three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice. Under them, italic: *Kies voor hoeveel personen je deze ervaring cadeau wilt doen.*
+- **Kies je cadeaubon**: the voucher (`GiftCard`, `aria-hidden`), a gift card in Natalie's Instagram style: a copper panel left (on top on phones) with her star mark (`StarMark`) in thin ivory lines and SOUNDROOM under it, a dashed seam with half-moon notches, *Cadeaubon*, *Een bijzondere klankervaring* *in het bos.*, Ruimteschip · 50 minuten · Schoten, *Voor 1 persoon* + price. Then three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice. Under them, italic: *Kies voor hoeveel personen je deze ervaring cadeau wilt doen.*
 - **Hoe werkt het?** (copper numbered circles, title on its own line): **Bestel je cadeaubon** Stuur Natalie een berichtje via WhatsApp of e-mail. Ze maakt de bon persoonlijk op naam, met een eigen boodschap als je dat graag wilt. — **Geef hem cadeau** Je ontvangt de cadeaubon digitaal. Klaar om door te sturen of mooi af te drukken. — **Laat de ervaring beginnen** Wie de bon krijgt, kiest zelf een geschikt moment in de agenda. De cadeaubon is één jaar geldig.
 - **Bestel via WhatsApp →** (dark pill, wa.me with *Hoi Natalie, ik wil graag een cadeaubon geven voor de soundroom, voor 2 personen (€60).*) and *Of bestel via e-mail.* (`QuietLink`, mailto, subject *Cadeaubon soundroom*).
 - **Contact** (`GiftContact`): **Natalie Van der Voort**, e-mail, WhatsApp, then small: Paalstraat 149, 2900 Schoten / Ondernemingsnummer BE 0882.177.881.
