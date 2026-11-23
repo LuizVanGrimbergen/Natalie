@@ -92,6 +92,7 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
                       </span>
                     )
                   }
+                  {session.age && <span class="option__age">{session.age.text}</span>}
                 </span>
               </label>
             ))
@@ -493,6 +494,13 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
     color: var(--color-muted-2);
   }
   .option__extra {
+    font-size: 15px;
+    line-height: 1.5;
+    font-variant-numeric: lining-nums;
+    color: var(--color-body-on-ivory);
+  }
+
+  .option__age {
     font-size: 15px;
     line-height: 1.5;
     font-variant-numeric: lining-nums;

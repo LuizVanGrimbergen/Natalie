@@ -1,7 +1,7 @@
 # Natalie — website
 
 A story of five full-screen scenes, one scroll or swipe per screen, plus a separate booking page, a gift page and Natalie's story, for Natalie Van der Voort.
-Natalie invites young people (18–35) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
+Natalie invites people (coaching: 18–35) to an experience of **immersive music inside a wooden, geometric dome in the forest**, followed by **personal guidance** (lying down inside the dome). She wants to help people discover their own perspective, **not "fix" them**.
 
 > Build a beautiful story, not a commercial landing page.
 > Less technology, more feeling. The technology should be invisible.
@@ -66,9 +66,9 @@ src/
       WhoWelcomes.astro             # 05 Natalie
       Invitation.astro              # 06 invitation (the end; no footer)
     booking/
-      BookingIntro.astro            # title, intro, "Schoten" + Maps link, the age (18–35)
+      BookingIntro.astro            # title, intro, "Schoten" + Maps link, the gift link
       BookingSteps.astro            # the three steps (session, music, moment), one open at a time; holds the agenda
-      BookingContact.astro          # Natalie's email and WhatsApp, below the calendar (mailto / wa.me links)
+      BookingContact.astro          # Natalie's email, WhatsApp and Instagram, below the calendar (mailto / wa.me links)
       BookingLegal.astro            # registered office + enterprise number, small, under the contact; renders only once both are filled in
       BookingCalendar.astro         # Google Calendar embed (per session) + full-screen link, or placeholder card
     about/
@@ -81,8 +81,8 @@ src/
       GiftIntro.astro               # title, lead, what the gift is ("Voor jong en oud")
       GiftCard.astro                # the voucher as a gift card (copper panel with her star, perforated seam), follows the choice
       GiftOrder.astro               # Kies je cadeaubon (card + 1/2/3 personen) and Hoe werkt het? + order via WhatsApp or e-mail
-      GiftContact.astro             # name, e-mail, WhatsApp, registered office + enterprise number
-  data/contact.ts                   # Natalie's email + phone, website (mereon.org), whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
+      GiftContact.astro             # name, e-mail, WhatsApp, Instagram, registered office + enterprise number
+  data/contact.ts                   # Natalie's email + phone, website (mereon.org), instagram (@soundroom1797), whatsapp(text?) link, address + Google Maps link, business (legal details); the one place they live
   data/sessions.ts                  # the two sessions (name, text, price, 50 minutes): /booking step 1, JSON-LD, llms.txt
   data/schema.ts                    # the schema.org graph (WebSite, page, Person, LocalBusiness with offers), town only
   data/pages.ts                     # the public pages, for the sitemap and llms.txt
@@ -241,11 +241,11 @@ Deliberately removed. Do not bring back.
 The page that matters most, built phone-first. **One calm column on every screen** (max 720px, centred): intro, the three steps, contact. Booking goes through the agenda, not WhatsApp (meeting of November); WhatsApp and e-mail stay as contact. No form is sent from the site, no English version, no reviews (for now).
 
 - Header: wordmark + "← Terug".
-- **Intro** (`BookingIntro.astro`): h1 **Afspraak** *maken*, *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Schoten** (the town only, no street; copper) + *Bekijk op Google Maps →* (under the town on phones; no embedded map), *Van 18 tot 35 jaar* (the whole site is for 18–35).
+- **Intro** (`BookingIntro.astro`): h1 **Afspraak** *maken*, *Sommige ervaringen vragen geen woorden, maar ruimte.*, **Schoten** (the town only, no street; copper) + *Bekijk op Google Maps →* (under the town on phones; no embedded map), then the gift link. No age here: *Van 18 tot 35 jaar* is for **coaching only** (23 November) and stands on the coaching card in step 1 (`age` in `data/sessions.ts`, also its JSON-LD audience); the soundroom has no age.
 - **Three steps** (`BookingSteps.astro` + `scripts/booking.ts`), one open at a time, **nothing chosen at first**:
   - A progress line above them: three numbered dots *Sessie — Muziek — Moment* joined by lines; the step you are on has a copper ring, finished ones are filled copper (labels hidden under 360px).
   - Each step is a rounded card (18px) with a numbered circle and a Cormorant title. The open one is brighter with a soft shadow; steps still to come are there but faded (`is-locked`).
-  - **1 Kies je sessie**: two tappable option cards: **Soundroom** — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **€35** · 50 minuten — **+ €25** per bijkomende persoon · max. 3 personen; **Coaching** — … met begeleiding van Natalie. — **€65** · 50 minuten (Natalie can have only one Google schedule, so every session is 50 minutes). Prices in `copper-700`, Figtree lining numerals.
+  - **1 Kies je sessie**: two tappable option cards: **Soundroom** — In verbinding gaan met klank & ruimte, op jouw tempo, zonder begeleiding. — **€35** · 50 minuten — **+ €25** per bijkomende persoon · max. 3 personen; **Coaching** — … met begeleiding van Natalie. — **€65** · 50 minuten — *Van 18 tot 35 jaar* (Natalie can have only one Google schedule, so every session is 50 minutes). Prices in `copper-700`, Figtree lining numerals.
   - **2 Jouw muziek**: there is always music; the choice is who picks it. Two option cards (side by side from 600px): **Ik kies zelf liedjes** — *Geef bij het boeken de liedjes door die je graag wil horen (tot 13 liedjes).* (2 for coaching, following the session); **Ik kies liever niet** — *Natalie kiest de muziek voor je. Je hoeft niets voor te bereiden.* Folded summaries: *Eigen liedjes* / *Natalie kiest*.
   - **3 Kies een moment**: the Google agenda of the chosen session; *Open de agenda op volledig scherm ↗*; *Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.* The songs and the number of people depend on `formAsksSongs` (`data/booking.ts`):
     - `false` (now: Natalie's Google form doesn't ask for them yet): above the agenda *Kies hieronder je moment. Stuur Natalie daarna je liedjes via WhatsApp: tot 13 liedjes.* (2 for coaching), or with 2–3 people and Natalie's music *Kies hieronder je moment. Laat Natalie daarna via WhatsApp weten dat jullie met 2 komen.*; under the agenda a soft panel *NA HET BOEKEN* with a dark pill **Stuur je liedjes via WhatsApp →** (or **Laat het Natalie weten via WhatsApp →**), a wa.me message ready: session, number of people, and a numbered list to fill in. Step 2's own-songs card says *Stuur na het boeken de liedjes door…*.
@@ -258,7 +258,7 @@ The page that matters most, built phone-first. **One calm column on every screen
   - ⚠️ Nothing in a step may stick out past its card: on a phone Chrome then widens the whole page (`innerHeight` jumped 844 → 925 with an earlier negative-margin summary), the view shifts and taps land ~80px too low.
   - Without JavaScript (`[data-booking-ready]` missing) every step is open and the agenda shows at once.
 - **Agenda** (`BookingCalendar.astro`): Google Calendar appointment schedule, one per session (`PUBLIC_BOOKING_URL_SOUNDROOM` / `_COACHING`, each falling back to `PUBLIC_BOOKING_URL`), `hl=nl`, loaded only once step 3 opens (the iframe has no `src` until then, so no Google cookies before; a `<noscript>` iframe shows it without JavaScript). 720px high on desktop, 1180px on phones so the month and the times fit without the box scrolling by itself; rounded 12px.
-- **Contact** below: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me, new tab); then the legal line (name · sociale zetel · ondernemingsnummer, 13px, `muted`): a Belgian self-employed person must show the business address — the registered office, never the home address. Natalie Van der Voort · Paalstraat 149, 2900 Schoten · ondernemingsnummer BE 0882.177.881 (`business` in `data/contact.ts`; hidden if emptied).
+- **Contact** below: nvandervoort@mereon.org (mailto) · WhatsApp +32 478 51 76 57 (wa.me, new tab) · Instagram @soundroom1797 (new tab); then the legal line (name · sociale zetel · ondernemingsnummer, 13px, `muted`): a Belgian self-employed person must show the business address — the registered office, never the home address. Natalie Van der Voort · Paalstraat 149, 2900 Schoten · ondernemingsnummer BE 0882.177.881 (`business` in `data/contact.ts`; hidden if emptied).
 - Animation on load (CSS only, `data-rise` + `--i` in `base.css`): intro, progress, the three steps and contact rise one after another.
 - Checked with real touch taps (mobile emulation) at 320×568 and 390×844, and with a mouse at 1440×900: no sideways scroll, all targets ≥ 44px.
 
@@ -271,14 +271,14 @@ Her own text of November, **verbatim** (paragraph breaks restored from the PDF w
 - Linked from scene 05 (*Lees mijn verhaal →*).
 
 ### Gift page (`/gift`, also `/cadeau`)
-Added in November on Natalie's request: a gift for December, "een experience kasootje", **for young and old** (the sessions are 18–35; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie. Copy: Natalie's text of November, verbatim.
+Added in November on Natalie's request: a gift for December, "een experience kasootje", **for young and old** (coaching is 18–35, the soundroom has no age; a voucher can go to anyone). Same calm 720px column and ivory background as the booking page; the site sends nothing, ordering goes through Natalie. Copy: Natalie's text of November, verbatim.
 - Header: wordmark + "← Terug". h1 **Geef een moment** *cadeau.*, *Geen spullen, maar een bijzondere ervaring. Even weg van de drukte, midden in het bos.*, then: In de Soundroom word je vijftig minuten lang omringd door klank, in een unieke geometrische ruimte tussen de bomen. Een moment om te luisteren, te voelen en gewoon te zijn. / Voor iemand die je graag ziet. Om alleen te beleven of samen te delen. Voor jong en oud.
 - Each part below opens with a thin copper rule and a Cormorant h2.
 - **Kies je cadeaubon**: the voucher (`GiftCard`, `aria-hidden`), a gift card in Natalie's Instagram style: a copper panel left (on top on phones) with her star mark (`StarMark`) in thin ivory lines and SOUNDROOM under it, a dashed seam with half-moon notches, *Cadeaubon*, *Een bijzondere klankervaring* *in het bos.*, Ruimteschip · 50 minuten · Schoten, *Voor 1 persoon* + price. Then three option cards (1 persoon €35 · 2 personen €60 · 3 personen €85), one person chosen from the start so it works without JS; the card and the links follow the choice. Under them, italic: *Kies voor hoeveel personen je deze ervaring cadeau wilt doen.*
 - **Hoe werkt het?** (copper numbered circles, title on its own line): **Bestel je cadeaubon** Stuur Natalie een berichtje via WhatsApp of e-mail. Ze maakt de bon persoonlijk op naam, met een eigen boodschap als je dat graag wilt. — **Geef hem cadeau** Je ontvangt de cadeaubon digitaal. Klaar om door te sturen of mooi af te drukken. — **Laat de ervaring beginnen** Wie de bon krijgt, kiest zelf een geschikt moment in de agenda. De cadeaubon is één jaar geldig.
 - **Bestel via WhatsApp →** (dark pill, wa.me with *Hoi Natalie, ik wil graag een cadeaubon geven voor de soundroom, voor 2 personen (€60).*) and *Of bestel via e-mail.* (`QuietLink`, mailto, subject *Cadeaubon soundroom*).
-- **Contact** (`GiftContact`): **Natalie Van der Voort**, e-mail, WhatsApp, then small: Paalstraat 149, 2900 Schoten / Ondernemingsnummer BE 0882.177.881.
-- Ways in: on the invitation scene *of geef het cadeau* (`QuietLink`, gift icon) beside the button; on /booking *Iemand anders verrassen? Geef een cadeaubon →* right under the age; at the end of Natalie's story.
+- **Contact** (`GiftContact`): **Natalie Van der Voort**, e-mail, WhatsApp, Instagram @soundroom1797, then small: Paalstraat 149, 2900 Schoten / Ondernemingsnummer BE 0882.177.881.
+- Ways in: on the invitation scene *of geef het cadeau* (`QuietLink`, gift icon) beside the button; on /booking *Iemand anders verrassen? Geef een cadeaubon →* under the town; at the end of Natalie's story.
 
 ---
 

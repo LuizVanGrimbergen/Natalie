@@ -3,7 +3,7 @@
  * who Natalie is, where the room stands, what a session costs. Built from the same data the pages show,
  * so the two never drift apart. Only the town, never the street (Natalie gives the exact spot herself).
  */
-import { email, phone, website } from './contact';
+import { email, instagram, phone, website } from './contact';
 import { sessions, MINUTES } from './sessions';
 import { BASE as GIFT_FROM } from './gift';
 
@@ -11,7 +11,7 @@ export const SITE_NAME = 'Natalie Van der Voort';
 
 export const BUSINESS_DESCRIPTION =
   'Een geometrisch ruimteschip van hout in het bos in Schoten, bij Antwerpen: een soundroom met unieke luidsprekers, ' +
-  'waar muziek je van alle kanten omringt. Sessies van 50 minuten, alleen of met begeleiding van Natalie, voor jongeren van 18 tot 35.';
+  'waar muziek je van alle kanten omringt. Sessies van 50 minuten, alleen in de soundroom of met begeleiding van Natalie (coaching voor 18 tot 35 jaar).';
 
 interface Page {
   url: URL;
@@ -68,6 +68,7 @@ export function graph(site: URL, page: Page) {
         email,
         telephone: phone.replace(/\s/g, ''),
         founder: { '@id': id('natalie') },
+        sameAs: [instagram.url],
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Schoten',
@@ -77,7 +78,6 @@ export function graph(site: URL, page: Page) {
         },
         areaServed: ['Schoten', 'Antwerpen', 'Vlaanderen'],
         priceRange: `€${Math.min(...sessions.map((s) => s.amount))}–€${Math.max(...sessions.map((s) => s.amount))}`,
-        audience: { '@type': 'PeopleAudience', suggestedMinAge: 18, suggestedMaxAge: 35 },
         makesOffer: [
           ...sessions.map((session) => ({
             '@type': 'Offer',
@@ -89,6 +89,9 @@ export function graph(site: URL, page: Page) {
               name: session.name,
               description: session.text,
               duration: `PT${MINUTES}M`,
+              ...(session.age && {
+                audience: { '@type': 'PeopleAudience', suggestedMinAge: session.age.min, suggestedMaxAge: session.age.max },
+              }),
             },
           })),
           {

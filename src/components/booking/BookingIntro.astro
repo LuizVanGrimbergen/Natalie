@@ -1,7 +1,6 @@
 ---
-// The top of the booking page: title, intro, where the dome stands, and who it is for.
-// The whole site is for 18 to 35 (21 October), so the age stands once, here; a gift voucher has no age, so its
-// link sits right under it.
+// The top of the booking page: title, intro, where the dome stands, and a way to the gift voucher.
+// The age (18 to 35) is for coaching only, so it stands on the coaching card in step 1, not here.
 import { address, maps } from '../../data/contact';
 ---
 
@@ -13,7 +12,6 @@ import { address, maps } from '../../data/contact';
     <a class="intro__map" href={maps} target="_blank" rel="noopener">Bekijk op Google Maps&nbsp;→</a>
   </p>
   <p class="intro__who" data-rise style="--i: 2">
-    Van 18 tot 35 jaar
     <a class="intro__gift" href="/gift">Iemand anders verrassen? Geef een cadeaubon&nbsp;→</a>
   </p>
 </header>
@@ -70,11 +68,7 @@ import { address, maps } from '../../data/contact';
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--color-bronze-900);
   }
-  /* A voucher has no age on it, so it stands right under the age. */
   .intro__gift {
     display: inline-flex;
     align-items: center;

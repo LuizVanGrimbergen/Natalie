@@ -25,5 +25,7 @@ export const sessions = [
     duration: `${MINUTES} minuten`,
     songs: 2,
     amount: 65,
+    // Coaching is for 18 to 35; the soundroom is for everyone (23 November).
+    age: { text: 'Van 18 tot 35 jaar', min: 18, max: 35 },
   },
 ];

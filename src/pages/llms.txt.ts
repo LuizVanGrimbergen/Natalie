@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { pages } from '../data/pages';
 import { sessions } from '../data/sessions';
 import { BASE as GIFT_FROM, MAX as GIFT_MAX, price } from '../data/gift';
-import { email, phone, website } from '../data/contact';
+import { email, instagram, phone, website } from '../data/contact';
 import { BUSINESS_DESCRIPTION, SITE_NAME } from '../data/schema';
 
 // llms.txt (llmstxt.org): a plain summary of the site, so AI assistants answer about it correctly.
@@ -24,10 +24,9 @@ Natalie wil jonge mensen helpen hun eigen perspectief te ontdekken, niet hen "he
 ## Sessies (${sessions[0].duration})
 
 ${sessions
-  .map((s) => `- ${s.name} — ${s.price}: ${s.text}${s.extra ? ` ${s.extra.price} ${s.extra.text}.` : ''}`)
+  .map((s) => `- ${s.name} — ${s.price}: ${s.text}${s.extra ? ` ${s.extra.price} ${s.extra.text}.` : ''}${s.age ? ` ${s.age.text}.` : ''}`)
   .join('\n')}
 - Boeken via de agenda op ${url('/booking')}. Annuleren kan tot 24 uur op voorhand. Betalen met Bancontact.
-- Voor jongeren van 18 tot 35 jaar.
 
 ## Cadeaubon
 
@@ -43,6 +42,7 @@ ${pages.map((p) => `- [${p.name}](${url(p.path)}): ${p.about}`).join('\n')}
 - ${SITE_NAME}, Schoten (België)
 - E-mail: ${email}
 - WhatsApp: ${phone}
+- Instagram: @${instagram.handle} (${instagram.url})
 - Natalie werkt samen met The Mereon Legacy: ${website.url}
 `;
   return new Response(text, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
