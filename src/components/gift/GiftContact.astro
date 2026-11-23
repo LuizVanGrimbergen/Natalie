@@ -1,7 +1,7 @@
 ---
-// Contact at the end of the gift page: Natalie's name, e-mail and WhatsApp, then her registered office and
+// Contact at the end of the gift page: Natalie's name, e-mail, WhatsApp and Instagram, then her registered office and
 // enterprise number (a Belgian self-employed person shows them; never her home address).
-import { business, email, phone, whatsapp } from '../../data/contact';
+import { business, email, instagram, phone, whatsapp } from '../../data/contact';
 ---
 
 <section class="contact" aria-labelledby="gift-contact-title">
@@ -9,6 +9,7 @@ import { business, email, phone, whatsapp } from '../../data/contact';
   <p class="contact__name">{business.name}</p>
   <a class="contact__link" href={`mailto:${email}`}>{email}</a>
   <a class="contact__link" href={whatsapp()} target="_blank" rel="noopener">WhatsApp {phone}</a>
+  <a class="contact__link" href={instagram.url} target="_blank" rel="noopener">Instagram @{instagram.handle}</a>
   {business.seat && <p class="contact__legal">{business.seat}</p>}
   {business.enterpriseNumber && <p class="contact__legal">Ondernemingsnummer {business.enterpriseNumber}</p>}
 </section>

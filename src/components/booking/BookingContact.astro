@@ -1,12 +1,13 @@
 ---
-// Natalie's own contact details, below the calendar. The number opens a WhatsApp chat.
-import { email, phone, whatsapp } from '../../data/contact';
+// Natalie's own contact details, below the calendar. The number opens a WhatsApp chat; then the soundroom's Instagram.
+import { email, instagram, phone, whatsapp } from '../../data/contact';
 ---
 
 <section class="contact" aria-labelledby="contact-title">
   <h2 id="contact-title" class="label contact__label">Contact</h2>
   <a class="contact__link" href={`mailto:${email}`}>{email}</a>
   <a class="contact__link" href={whatsapp()} target="_blank" rel="noopener">WhatsApp {phone}</a>
+  <a class="contact__link" href={instagram.url} target="_blank" rel="noopener">Instagram @{instagram.handle}</a>
 </section>
 
 <style>

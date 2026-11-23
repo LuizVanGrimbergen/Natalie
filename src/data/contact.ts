@@ -5,6 +5,9 @@ export const phone = '+32 478 51 76 57';
 /** The Mereon Legacy, the team Natalie works with: shown as its bare domain, linked. */
 export const website = { label: 'mereon.org', url: 'https://mereon.org' };
 
+/** The soundroom's Instagram account. */
+export const instagram = { handle: 'soundroom1797', url: 'https://www.instagram.com/soundroom1797/' };
+
 /** A WhatsApp chat with Natalie, optionally with a message ready to send. */
 export function whatsapp(text?: string) {
   const url = `https://wa.me/${phone.replace(/\D/g, '')}`;
