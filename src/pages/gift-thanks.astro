@@ -1,7 +1,7 @@
 ---
 /**
  * Where Mollie sends a buyer after paying for a voucher (the redirect URL on each payment link, with ?n=1|2|3).
- * The one thing left to do: tell Natalie who the voucher is for, so she can make it. Not in the sitemap.
+ * The one thing left to do: a short message, so Natalie can send the voucher with its code. Not in the sitemap.
  */
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
@@ -12,7 +12,7 @@ import { thanksMessage, thanksMail } from '../data/gift';
 
 <Base
   title="Bedankt voor je cadeaubon · Soundroom"
-  description="Je cadeaubon voor de soundroom is betaald. Laat Natalie weten voor wie hij is."
+  description="Je cadeaubon voor de soundroom is betaald. Stuur Natalie een berichtje en je krijgt de bon met een code."
   tint="#F5F1E9"
   noindex
 >
@@ -22,9 +22,8 @@ import { thanksMessage, thanksMail } from '../data/gift';
       <p class="label" data-rise style="--i: 0">Cadeaubon</p>
       <h1 class="display title" data-rise style="--i: 1">Bedankt, <em>je bon is betaald.</em></h1>
       <p class="lead" data-rise style="--i: 2">
-        Nog één ding: laat Natalie weten voor wie de cadeaubon is, en welke boodschap erop mag. Ze maakt hem
-        persoonlijk op naam en stuurt hem je digitaal, met een eigen code. Met die code boekt de ontvanger
-        zelf een moment in de agenda.
+        Nog één ding: stuur Natalie even een berichtje, dan krijg je de cadeaubon digitaal, met een eigen
+        code. Met die code boekt wie de bon krijgt zelf een moment in de agenda.
       </p>
       <div class="actions" data-rise style="--i: 3">
         <a class="wa" href={whatsapp(thanksMessage(1))} target="_blank" rel="noopener" data-thanks-whatsapp>

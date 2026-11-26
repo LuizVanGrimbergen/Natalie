@@ -16,8 +16,8 @@ export const personsText = (persons: number) => `${persons} ${persons === 1 ? 'p
 
 /**
  * Mollie payment links (live, reusable, made in Natalie's Mollie dashboard on 26 November), one per number of
- * people. Each returns to /gift-thanks?n=1|2|3 after paying, which asks to send Natalie who the voucher is for
- * (paying doesn't tell her). Links can't be edited in Mollie: a change means new links here.
+ * people. Each returns to /gift-thanks?n=1|2|3 after paying, which asks for one short message so Natalie
+ * can send the voucher with its code (Mollie doesn't give her the buyer's contact). Links can't be edited in Mollie: a change means new links here.
  */
 const payLinks: Record<number, string> = {
   1: 'https://payment-links.mollie.com/payment/JxUbv4xiMJCa8XFYSJPSP',
@@ -34,9 +34,9 @@ export const orderMessage = (persons: number) =>
 export const orderMail = (persons: number) =>
   `mailto:${email}?subject=${encodeURIComponent('Cadeaubon soundroom')}&body=${encodeURIComponent(orderMessage(persons))}`;
 
-/** After paying (the thank-you page): who the voucher is for, so Natalie can make it. */
+/** After paying (the thank-you page): one short message, so Natalie knows where to send the voucher with its code. */
 export const thanksMessage = (persons: number) =>
-  `Hoi Natalie, ik heb net een cadeaubon betaald voor de soundroom, voor ${personsText(persons)} (€${price(persons)}).\n\nVoor: \nMijn boodschap: \nMijn naam: `;
+  `Hoi Natalie, ik heb net een cadeaubon betaald voor de soundroom, voor ${personsText(persons)} (€${price(persons)}). Mag ik de bon met de code ontvangen?`;
 
 export const thanksMail = (persons: number) =>
   `mailto:${email}?subject=${encodeURIComponent('Cadeaubon soundroom (betaald)')}&body=${encodeURIComponent(thanksMessage(persons))}`;
