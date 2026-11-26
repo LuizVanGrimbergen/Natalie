@@ -1,0 +1,114 @@
+---
+/**
+ * Where Mollie sends a buyer after paying for a voucher (the redirect URL on each payment link, with ?n=1|2|3).
+ * The one thing left to do: tell Natalie who the voucher is for, so she can make it. Not in the sitemap.
+ */
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import QuietLink from '../components/QuietLink.astro';
+import { whatsapp } from '../data/contact';
+import { thanksMessage, thanksMail } from '../data/gift';
+---
+
+<Base
+  title="Bedankt voor je cadeaubon · Soundroom"
+  description="Je cadeaubon voor de soundroom is betaald. Laat Natalie weten voor wie hij is."
+  tint="#F5F1E9"
+  noindex
+>
+  <div class="page">
+    <SiteHeader href="/" tone="dark">←&nbsp;Terug</SiteHeader>
+    <main class="layout" data-thanks>
+      <p class="label" data-rise style="--i: 0">Cadeaubon</p>
+      <h1 class="display title" data-rise style="--i: 1">Bedankt, <em>je bon is betaald.</em></h1>
+      <p class="lead" data-rise style="--i: 2">
+        Nog één ding: laat Natalie weten voor wie de cadeaubon is, en welke boodschap erop mag. Ze maakt hem
+        persoonlijk op naam en stuurt hem je digitaal, met een eigen code. Met die code boekt de ontvanger
+        zelf een moment in de agenda.
+      </p>
+      <div class="actions" data-rise style="--i: 3">
+        <a class="wa" href={whatsapp(thanksMessage(1))} target="_blank" rel="noopener" data-thanks-whatsapp>
+          Stuur het via WhatsApp<span aria-hidden="true">&nbsp;→</span>
+        </a>
+        <QuietLink href={thanksMail(1)} data-thanks-mail>Of via e-mail.</QuietLink>
+      </div>
+    </main>
+  </div>
+</Base>
+
+<script>
+  import { whatsapp } from '../data/contact';
+  import { thanksMail, thanksMessage, MAX } from '../data/gift';
+  // The number of people comes from the payment link's redirect (?n=2); anything else counts as one.
+  const n = Number(new URLSearchParams(location.search).get('n'));
+  const persons = Number.isInteger(n) && n >= 1 && n <= MAX ? n : 1;
+  const wa = document.querySelector<HTMLAnchorElement>('[data-thanks-whatsapp]');
+  const mail = document.querySelector<HTMLAnchorElement>('[data-thanks-mail]');
+  if (wa) wa.href = whatsapp(thanksMessage(persons));
+  if (mail) mail.href = thanksMail(persons);
+</script>
+
+<style>
+  .page {
+    min-height: 100svh;
+    background: linear-gradient(180deg, var(--color-ivory) 0%, var(--color-ivory-warm) 50%, var(--color-ivory) 100%);
+    color: var(--color-bronze-900);
+  }
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(120px, 18vh, 190px) 24px 80px;
+  }
+  .label {
+    color: var(--color-copper-700);
+  }
+  .title {
+    font-size: clamp(40px, 5.4vw, 64px);
+    line-height: 1.05;
+  }
+  .title em {
+    color: var(--color-copper-700);
+  }
+  .lead {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--color-body-on-ivory);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    margin-top: 8px;
+  }
+  .wa {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border-radius: 999px;
+    background: var(--color-bronze-900);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--color-ivory);
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  @media (hover: hover) {
+    .wa:hover {
+      background: var(--color-copper-700);
+    }
+  }
+  @media (max-width: 600px) {
+    .layout {
+      padding: 96px 16px 56px;
+    }
+    .wa {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

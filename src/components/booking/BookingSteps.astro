@@ -8,7 +8,7 @@
  * Prices and sessions: Natalie's feedback of 19 October and the meeting of November (soundroom €35).
  */
 import BookingCalendar from './BookingCalendar.astro';
-import { formAsksSongs } from '../../data/booking';
+import { formAsksSongs, formAsksVoucher } from '../../data/booking';
 import { whatsapp } from '../../data/contact';
 import { sessions } from '../../data/sessions';
 
@@ -202,6 +202,19 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
           )
         }
         <p class="step__note step__note--quiet">Annuleren kan tot 24 uur op voorhand. Je betaalt met Bancontact.</p>
+        {/* Voucher holders: the code on their voucher, in the form or on WhatsApp (data/booking.ts). */}
+        <p class="step__note step__note--quiet">
+          {
+            formAsksVoucher ? (
+              'Heb je een cadeaubon? Vul de code van je bon in het formulier in.'
+            ) : (
+              <>
+                Heb je een cadeaubon? Stuur Natalie na het boeken de code van je bon via{' '}
+                <a href={whatsapp('Hoi Natalie, ik heb een moment geboekt met een cadeaubon. De code is: ')} target="_blank" rel="noopener">WhatsApp</a>.
+              </>
+            )
+          }
+        </p>
       </div>
     </div>
   </section>
@@ -693,6 +706,10 @@ const steps = ['Sessie', 'Muziek', 'Moment'];
   .step__note--quiet {
     margin-top: 18px;
     font-size: 19px;
+  }
+  .step__note a {
+    color: var(--color-copper-700);
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 600px) {
