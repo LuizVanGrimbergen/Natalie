@@ -14,6 +14,17 @@ export const price = (persons: number) => BASE + EXTRA * (persons - 1);
 
 export const personsText = (persons: number) => `${persons} ${persons === 1 ? 'persoon' : 'personen'}`;
 
+/**
+ * Mollie payment links (live, reusable, made in Natalie's Mollie dashboard on 26 November), one per number of
+ * people. Paying here doesn't tell Natalie who the voucher is for: the page asks to send the name afterwards.
+ */
+const payLinks: Record<number, string> = {
+  1: 'https://payment-links.mollie.com/payment/W7uRptSN3XysshTDLstcM',
+  2: 'https://payment-links.mollie.com/payment/PoYjkwUZ6xpsXVJgQD9i7',
+  3: 'https://payment-links.mollie.com/payment/bo7x8wm5YMZhKaySz5TX2',
+};
+export const payLink = (persons: number) => payLinks[persons];
+
 /** The message to Natalie, ready to send. */
 export const orderMessage = (persons: number) =>
   `Hoi Natalie, ik wil graag een cadeaubon geven voor de soundroom, voor ${personsText(persons)} (€${price(persons)}).`;

@@ -5,9 +5,8 @@
  * and both links in step with the choice.
  */
 import { whatsapp } from '../../data/contact';
-import { MAX, orderMail, orderMessage, personsText, price } from '../../data/gift';
+import { MAX, orderMail, payLink, orderMessage, personsText, price } from '../../data/gift';
 import GiftCard from './GiftCard.astro';
-import QuietLink from '../QuietLink.astro';
 
 const options = Array.from({ length: MAX }, (_, i) => i + 1);
 const steps = [
@@ -65,11 +64,15 @@ const steps = [
       }
     </ol>
     <div class="actions" data-rise style="--i: 7">
-      <a class="order__wa" href={whatsapp(orderMessage(1))} target="_blank" rel="noopener" data-gift-whatsapp>
-        Bestel via WhatsApp<span aria-hidden="true">&nbsp;→</span>
+      <a class="order__wa" href={payLink(1)} target="_blank" rel="noopener" data-gift-pay>
+        Betaal je cadeaubon<span aria-hidden="true">&nbsp;→</span>
       </a>
-      <QuietLink href={orderMail(1)} data-gift-mail>Of bestel via e-mail.</QuietLink>
     </div>
+    <p class="order__after" data-rise style="--i: 7">
+      Na je betaling: laat Natalie weten voor wie de bon is, via{' '}
+      <a href={whatsapp(orderMessage(1))} target="_blank" rel="noopener" data-gift-whatsapp>WhatsApp</a> of{' '}
+      <a href={orderMail(1)} data-gift-mail>e-mail</a>.
+    </p>
   </section>
 </div>
 
@@ -249,6 +252,15 @@ const steps = [
     color: var(--color-ivory);
     text-decoration: none;
     transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .order__after {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-body-on-ivory);
+  }
+  .order__after a {
+    color: var(--color-copper-700);
+    text-underline-offset: 3px;
   }
   .order__wa:active {
     transform: scale(0.98);
